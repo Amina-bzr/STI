@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-class Switch(models.Model): #on peut creer les ports d'un switch a partir d'un objet "switch" : switch_objet.port_set.create(num_port=...,type_port=...etc)
+class switch(models.Model): #on peut creer les ports d'un switch a partir d'un objet "switch" : switch_objet.port_set.create(num_port=...,type_port=...etc)
     nom = models.CharField(max_length=50)
     marque = models.CharField(max_length=50)
     modele = models.CharField(max_length=50)
@@ -26,7 +26,7 @@ class Switch(models.Model): #on peut creer les ports d'un switch a partir d'un o
         return self.nom
 
 
-class Vlan(models.Model):
+class vlan(models.Model):
     num_Vlan = models.IntegerField(default=0)
     nom = models.CharField(max_length=50)
     ip = models.GenericIPAddressField()
@@ -38,7 +38,7 @@ class Vlan(models.Model):
 
 
 class Port(models.Model): 
-    switch= models.ForeignKey(Switch, on_delete=models.CASCADE) #afin que django va supprimer tous les ports associé à un switch si le switch est supprimé
+    switch= models.ForeignKey(switch, on_delete=models.CASCADE) #afin que django va supprimer tous les ports associé à un switch si le switch est supprimé
     num_port = models.IntegerField(default=0)
     type_port = models.CharField(max_length=50)
     etat = models.CharField(max_length=50)
