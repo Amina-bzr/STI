@@ -18,8 +18,7 @@ class switch(models.Model): #on peut creer les ports d'un switch a partir d'un o
     nbr_port_SFP = models.IntegerField(default=0)
     # l'element qui precede le switch (le nom du switch precendeant ou data center ou routeurs)
     preced = models.CharField(max_length=50)
-    Vlans_associe = models.CharField(max_length=500)
-    date_achat = models.DateTimeField('date d''achat')
+    date_achat = models.DateTimeField(blank=True,null=True)
 
     def __str__(self):
         return self.nom
@@ -37,7 +36,7 @@ class vlan(models.Model):
 
 
 class Port(models.Model): 
-    switch= models.ForeignKey(switch, on_delete=models.CASCADE) #afin que django va supprimer tous les ports associé à un switch si le switch est supprimé
+    switch= models.ForeignKey(switch, on_delete=models.CASCADE, null=True) #afin que django va supprimer tous les ports associé à un switch si le switch est supprimé
     num_port = models.IntegerField(default=0)
     type_port = models.CharField(max_length=50)
     etat = models.CharField(max_length=50)
