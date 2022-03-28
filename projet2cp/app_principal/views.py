@@ -44,7 +44,7 @@ def modifierswitch(request, switch_id):
         if form.is_valid():
             # mise à jour du `switch` existant dans la base de données
             form.save()
-            # redirect vers la page du tableau switch ---à faire
+            # redirect vers le switch/ (le tableau de switchs) ou bien le form de ports---à faire
     else:
         form = switchform(instance=s)
 
@@ -53,3 +53,5 @@ def modifierswitch(request, switch_id):
                 {'form':form, 'choix':'switch','operation':'Modification',})	
 	
 	
+def switchtab(request):
+	return render(request, 'app_principal/table_switch.html')

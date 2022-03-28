@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mise à jour switch</title>
 </head>
 
 <body style="background-color: rgb(97, 97, 172);">
@@ -12,7 +12,7 @@
         <h1>{{ operation }} du {{ choix }}</h1>
        
     
-            <form  method="post" >
+            <form  action="../../switch/" method="post" >
                 {% csrf_token %}
     
                 {{ form.as_p }}
