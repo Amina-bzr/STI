@@ -8,6 +8,7 @@ class switch(models.Model): #on peut creer les ports d'un switch a partir d'un o
     marque = models.CharField(max_length=50)
     modele = models.CharField(max_length=50)
     bloc = models.CharField(max_length=10)
+    local = models.CharField(max_length=20,default="magazin")
     armoire = models.CharField(max_length=10)
     inventaire = models.CharField(max_length=50)
     serie = models.CharField(max_length=20)

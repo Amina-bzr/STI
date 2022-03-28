@@ -53,5 +53,8 @@ def modifierswitch(request, switch_id):
                 {'form':form, 'choix':'switch','operation':'Modification',})	
 	
 	
+
 def switchtab(request):
-	return render(request, 'app_principal/table_switch.html')
+	switchs = switch.objects.all()
+	context={'switchs':switchs,}
+	return render(request, 'app_principal/table_switch.html',context)
