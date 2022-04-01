@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mise à jour switch</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'form.css' %}">
+    <title>{{ operation }}</title>
 </head>
 
-<body style="background-color: rgb(97, 97, 172);">
-    <center>
-        <h1>{{ operation }} du {{ choix }}</h1>
+<body>
+
+    <div class="form-container">
+        <h1>{{ operation }} {{ choix }}</h1>
        
     
-            <form  action="../../switch/" method="post" >
+            <form method="post" >
                 {% csrf_token %}
     
                 {{ form.as_p }}
@@ -21,7 +24,8 @@
 
                 <input type="submit" value="Submit">
             </form>
-        </center>       
+
+    </div>
 </body>
 
 
