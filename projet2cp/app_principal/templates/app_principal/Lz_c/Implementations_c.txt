@@ -1,0 +1,1122 @@
+*** Z MODULO
+
+  int Mod( int a, int b)
+    { return ( a % b ); }
+
+*** Z MIN
+
+  int Min (int a, int b)
+    {
+      if (a < b) return(a);
+      else return(b);
+    }
+
+*** Z MAX
+
+  int Max (int a, int b)
+    {
+      if (a > b) return(a);
+      else return(b);
+    }
+
+*** Z EXP
+
+  int Exp (int a, int b)
+    {
+     int i; int Ex ;
+     Ex = 1;
+     for (i= 1; i<=b; i++)
+       Ex = Ex * a  ;
+     return (Ex);
+    }
+
+*** Z ALEANOMBRE
+
+  int Aleanombre( int N )
+    { return ( rand() % N ); }
+
+*** Z ALEACHAINE
+
+  char  *Aleachaine ( int N )
+    {
+      int k;
+      char  * Chaine = malloc(N+1);
+
+      char Chr1[26] = "abcdefghijklmnopqrstuvwxyz";
+      char Chr2[26] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+      for (k=0;k<N; k++)
+        switch ( rand() % 2 ){
+        case 0 :  *(Chaine+k) = Chr1[rand() % 26] ; break ;
+        case 1 :  *(Chaine+k) = Chr2[rand() % 26] ; break ;
+        }
+      Chaine[k] =  '\0' ;
+
+      return (Chaine);
+    }
+
+*** Z LONGCHAINE
+
+  int Longchaine ( string255 Ch  )
+    {
+      return strlen(Ch);
+    }
+
+*** Z CARACT
+
+  char *Caract ( string255 Ch , int I )
+    {
+      char *s = malloc(2);
+      s[0] = Ch[I-1];
+      s[1] = '\0';
+      return  s;
+    }
+
+*** Traitement des fichiers ouverts
+
+  /* Traitement des fichiers ouverts */
+
+  struct _Noeud
+    {
+      FILE * Var_fich ;
+      char * Nom_fich ;
+      int Sauv_pos;
+      struct _Noeud *Suiv ;
+    } ;
+
+  typedef struct _Noeud * _Ptr_Noeud;
+
+  _Ptr_Noeud  _Pile_ouverts  = NULL;
+
+  /* Teste si un fichier est ouvert */
+  _Ptr_Noeud _Ouvert ( char * Fp)
+    {
+      _Ptr_Noeud P;
+      bool Trouv ;
+      P = _Pile_ouverts; Trouv = False ;
+      while ((P != NULL) && ! Trouv )
+        if ( strcmp(P->Nom_fich, Fp) == 0)
+        Trouv = True;
+        else P = P->Suiv;
+      return P;
+    }
+
+  /* Ajouter un fichier ouvert */
+  void _Empiler_ouvert ( char *Fp, FILE *Fl)
+    {
+      _Ptr_Noeud  P ;
+      P = (_Ptr_Noeud) malloc( sizeof( struct _Noeud)) ;
+      P->Nom_fich = Fp;
+      P->Var_fich = Fl;
+      P->Suiv = _Pile_ouverts;
+      _Pile_ouverts = P;
+    }
+
+  /* Supprimer un fichier ouvert et rendre son nom*/
+  char * _Depiler_ouvert ( FILE *Fl)
+    {
+      char * Fp = malloc (100);
+      _Ptr_Noeud P,  Prec  ;
+      P= _Pile_ouverts;
+      Prec = NULL;
+      while (P->Var_fich != Fl )
+        { Prec = P ; P = P->Suiv ;}
+      strcpy(Fp, P->Nom_fich);
+      if (Prec != NULL)
+        Prec->Suiv = P->Suiv;
+      else _Pile_ouverts = P->Suiv;
+      free (P);
+      return Fp ;
+    }
+
+*** Y Fichiers avec entete
+
+  /** Fichiers **/
+
+1typedef %Type_champI% Typechamp%I%_%Type_fichier%;
+2typedef %Type_enteteI% Typeentete%I%_%Type_fichier% ;
+
+  /** Type du bloc de données du fichier **/
+  typedef struct
+    {
+0      Typechamp%I%_%Type_fichier% Champ%I% ;
+    }  Typestruct1_%Type_fichier%_Buf;
+
+  /** Type de la structure du bloc de données du fichier **/
+  typedef struct
+    {
+3      Typechamp%I%_%Type_fichier% Champ%I% ;
+    }  Typestruct1_%Type_fichier%_;
+  typedef Typestruct1_%Type_fichier%_  * Typestruct1_%Type_fichier% ;
+
+9  LIGNE_TYPEDEF
+
+  /** Type du bloc des caractéristiques du fichier **/
+  typedef struct
+    {
+4      Typeentete%I%_%Type_fichier% Entete%I%   ;
+    } Typestruct2_%Type_fichier% ;
+
+7 Typechamp%I%_%Type_fichier% Struct%I%_%Types% ( Typestruct1_%Type_fichier% Buf )
+    {
+       return  Buf->Champ%I%;
+    }
+
+8 void Aff_struct%I%_%Types% ( Typestruct1_%Type_fichier% Buf, Typechamp%I%_%Type_fichier% Val )
+    {
+      $AFF Buf->Champ%I% $$=$$ Val $AFF;
+    }
+
+  /** Déclaration du buffer de l'en-tête **/
+
+  Typestruct2_%Type_fichier% Bloc_caract_%Type_fichier%;
+
+  /** Opérations sur les fichiers **/
+
+  void Ouvrir_%Type_fichier% ( FILE **%Type_fichier% , char *Fp , char * Mode )
+    {
+$       _Ptr_Noeud P = _Ouvert(Fp);
+$       if ( P != NULL )
+$       /* Le fichier est déjà ouvert */
+$         {
+$          P->Sauv_pos = ftell (P->Var_fich);
+$          fseek( P->Var_fich, 0, 0);
+$          fwrite(&Bloc_caract_%Type_fichier%, sizeof(Typestruct2_%Type_fichier%), 1, P->Var_fich);
+$          fclose(P->Var_fich);
+$         }
+$       /* Le fichier est non ouvert */
+       if ( strcmp(Mode,"A") == 0)
+         {
+           *%Type_fichier% = fopen(Fp, "r+b");
+           fread(&Bloc_caract_%Type_fichier%, sizeof(Typestruct2_%Type_fichier%), 1, *%Type_fichier%);
+         }
+         else
+         {
+           *%Type_fichier% = fopen(Fp, "w+b");
+           fwrite(&Bloc_caract_%Type_fichier%, sizeof(Typestruct2_%Type_fichier%), 1, *%Type_fichier%)  ;
+         }
+$         _Empiler_ouvert( Fp, *%Type_fichier%);
+    }
+
+  void Fermer_%Type_fichier% ( FILE * %Type_fichier% )
+    {
+$      char * Fp = malloc(100);
+$      _Ptr_Noeud P  ;
+$      strcpy(Fp, _Depiler_ouvert(%Type_fichier%));
+      fseek( %Type_fichier%, 0, 0);
+      fwrite(&Bloc_caract_%Type_fichier%, sizeof(Typestruct2_%Type_fichier%), 1, %Type_fichier%);
+      fclose(%Type_fichier%) ;
+$      /* Ya-til un fichier ouvert avec le même nom ?  */
+$      /* Si Oui, le Réouvrir à la position sauvegardée */
+$      P =  _Ouvert (Fp);
+$      if ( P != NULL)
+$      {
+$        %Type_fichier% = fopen(P->Nom_fich, "r+b");
+$        fread(&Bloc_caract_%Type_fichier%, sizeof(Typestruct2_%Type_fichier%), 1, %Type_fichier%);
+$        fseek(%Type_fichier%, P->Sauv_pos, 0);
+$      }
+    }
+
+5  Typeentete%I%_%Type_fichier% Entete%I%_%Type_fichier%(  FILE * %Type_fichier%)
+    {
+      return  Bloc_caract_%Type_fichier%.Entete%I%;
+    }
+
+6  void Aff_entete%I%_%Type_fichier% ( FILE * %Type_fichier%, Typeentete%I%_%Type_fichier% VAL)
+    {
+      $AFF Bloc_caract_%Type_fichier%.Entete%I% $$=$$ VAL $AFF;
+    }
+
+  void Ecrireseq_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf  )
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+E     Buffer <-- Buf
+      fwrite(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%)  ;
+    }
+
+  void Ecriredir_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf, int N )
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+E     Buffer <-- Buf
+      fseek(%Type_fichier%, (long) ((N-1)* sizeof( Typestruct1_%Type_fichier%_Buf) +
+             sizeof( Typestruct2_%Type_fichier%)), 0 );
+      fwrite(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%)  ;
+    }
+
+  void Lireseq_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf )
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+      if (fread(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%)!=0){
+L     Buf <-- Buffer
+      }
+    }
+
+  void Liredir_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf, int N)
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+      fseek(%Type_fichier%, (long) ((N-1)* sizeof( Typestruct1_%Type_fichier%_Buf) +
+             sizeof( Typestruct2_%Type_fichier%)), 0 );
+      fread(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%);
+L     Buf <-- Buffer
+    }
+
+  void Rajouter_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf )
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+E     Buffer <-- Buf
+      fseek(%Type_fichier%, 0, 2); /* Fin du fichier */
+      fwrite(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%)  ;
+    }
+
+  bool Finfich_%Type_fichier% (FILE * %Type_fichier%)
+    {
+      long K = ftell(%Type_fichier%);
+      fseek(%Type_fichier%, 0, 2); /* Fin du fichier */
+      long K2 = ftell(%Type_fichier%);   /* position à partir du debut */
+      if  (K==K2)
+        { fseek(%Type_fichier%, K, 0); return 1;}
+      else
+        { fseek(%Type_fichier%, K, 0); return 0;}
+    }
+
+  int Alloc_bloc_%Type_fichier% (FILE * %Type_fichier%)
+    {
+      long K;
+      fseek(%Type_fichier%, 0, 2); /* Fin du fichier */
+      K = ftell(%Type_fichier%);   /* position à partir du debut */
+      K = K - sizeof( Typestruct2_%Type_fichier%); /* Ignorer l'en_tête */
+      K = K / sizeof (Typestruct1_%Type_fichier%_Buf);
+      K ++;
+      return(K);
+    }
+
+*** Q Fichiers sans entete
+
+  /** Fichiers **/
+
+1typedef %Type_champI% Typechamp%I%_%Type_fichier%;
+
+  /** Type du bloc de données du fichier **/
+  typedef struct
+    {
+0      Typechamp%I%_%Type_fichier% Champ%I% ;
+    }  Typestruct1_%Type_fichier%_Buf;
+
+  /** Type de la structure du bloc de données du fichier **/
+  typedef struct
+    {
+3      Typechamp%I%_%Type_fichier% Champ%I% ;
+    }  Typestruct1_%Type_fichier%_;
+
+  typedef Typestruct1_%Type_fichier%_  * Typestruct1_%Type_fichier% ;
+
+9  LIGNE_TYPEDEF
+
+4  Typechamp%I%_%Type_fichier% Struct%I%_%Types% ( Typestruct1_%Type_fichier% Buf )
+    {
+      return Buf->Champ%I%;
+    }
+
+5  void Aff_struct%I%_%Types% ( Typestruct1_%Type_fichier% Buf, Typechamp%I%_%Type_fichier% Val )
+    {
+     $AFF Buf->Champ%I% $$=$$ Val $AFF;
+    }
+
+  /** Machine abstaite sur les fichiers **/
+
+  void Ouvrir_%Type_fichier% ( FILE **%Type_fichier% , char *Fp , char * Mode )
+    {
+$      _Ptr_Noeud P = _Ouvert(Fp);
+$      if ( P != NULL )
+$      /* Le fichier est déjà ouvert */
+$        {
+$         P->Sauv_pos = ftell (P->Var_fich);
+$         fclose(P->Var_fich);
+$        }
+$      /* Le fichier est non ouvert */
+      if ( strcmp(Mode,"A") == 0)
+        *%Type_fichier% = fopen(Fp, "r+b");
+      else
+        *%Type_fichier% = fopen(Fp, "w+b");
+$      _Empiler_ouvert( Fp, *%Type_fichier%);
+    }
+
+  void Fermer_%Type_fichier% ( FILE * %Type_fichier% )
+    {
+$      char * Fp = malloc(100);
+$      _Ptr_Noeud P;
+$      strcpy(Fp, _Depiler_ouvert(%Type_fichier%));
+      fclose(%Type_fichier%) ;
+$      /* Ya-til un fichier ouvert avec le même nom ?  */
+$      /* Si Oui, le Réouvrir à la position sauvegardée */
+$      P =  _Ouvert (Fp);
+$      if ( P != NULL)
+$      {
+$        %Type_fichier% = fopen(P->Nom_fich, "r+b");
+$        fseek(%Type_fichier%, P->Sauv_pos, 0);
+$      }
+    }
+
+  void Ecrireseq_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf  )
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+E     Buffer <-- Buf
+      fwrite(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%)  ;
+    }
+
+  void Ecriredir_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf, int N )
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+E     Buffer <-- Buf
+      fseek(%Type_fichier%, (long) (N-1)* sizeof(  Typestruct1_%Type_fichier%_Buf), 0);
+      fwrite(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%)  ;
+    }
+
+  void Lireseq_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf )
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+      if (fread(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%) != 0) {
+L       Buf <-- Buffer
+      }
+    }
+
+  void Liredir_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf, int N)
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+      fseek(%Type_fichier%, (long) (N-1)* sizeof( Typestruct1_%Type_fichier%_Buf), 0 );
+      fread(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%);
+L     Buf <-- Buffer
+    }
+
+  void Rajouter_%Type_fichier% ( FILE * %Type_fichier%, Typestruct1_%Type_fichier% Buf )
+    {
+      Typestruct1_%Type_fichier%_Buf Buffer ;
+      int I, J;
+E     Buffer <-- Buf
+      fseek(%Type_fichier%, 0, 2); /* Fin du fichier */
+      fwrite(&Buffer, sizeof( Typestruct1_%Type_fichier%_Buf), 1, %Type_fichier%)  ;
+    }
+
+  bool Finfich_%Type_fichier% (FILE * %Type_fichier%)
+    {
+      long K = ftell(%Type_fichier%);
+      fseek(%Type_fichier%, 0, 2); /* Fin du fichier */
+      long K2 = ftell(%Type_fichier%);   /* position à partir du debut */
+      if  (K==K2)
+        { fseek(%Type_fichier%, K, 0); return 1;}
+      else
+        { fseek(%Type_fichier%, K, 0); return 0;}
+    }
+
+  int Alloc_bloc_%Type_fichier% (FILE * %Type_fichier%)
+    {
+      long K;
+      fseek(%Type_fichier%, 0, 2); /* Fin du fichier */
+      K = ftell(%Type_fichier%);   /* position à partir du debut */
+      K = K / sizeof (Typestruct1_%Type_fichier%_Buf);
+      K ++;
+      return(K);
+    }
+
+*** Structures statiques
+
+  /** Structures statiques **/
+
+0  typedef struct %Types% %Typestruct%  ;
+0  typedef %Typestruct% * Typestr_%Types% ;
+1  typedef %Type_champI% Type%I%_%Types%  ;
+2  struct %Types%
+    {
+3      Type%I%_%Types% Champ%I% ;
+    };
+
+4  Type%I%_%Types% Struct%I%_%Types% ( Typestr_%Types% S)
+     {
+      return  S->Champ%I% ;
+     }
+
+5  void Aff_struct%I%_%Types% ( Typestr_%Types% S, Type%I%_%Types% Val )
+     {
+      $AFF S->Champ%I% $$=$$ Val $AFF;
+     }
+
+*** Structures dynamiques
+
+  /** Structures dynamiques **/
+
+0  typedef struct %Types% * %Pointeur%  ;
+1  typedef %Type_champI% Type%I%_%Types% ;
+
+2  struct %Types%
+    {
+3      Type%I%_%Types% Champ%I% ;
+    };
+
+4  Type%I%_%Types% Struct%I%_%Types% ( %Pointeur% S)
+     {
+       return  S->Champ%I% ;
+     }
+
+5  void Aff_struct%I%_%Types% ( %Pointeur% S, Type%I%_%Types% Val )
+     {
+      $AFF S->Champ%I% $$=$$ Val $AFF;
+     }
+
+6  void Alloc_struct_%Types%( %Pointeur% *S)
+     {
+7      *S = (struct %Types% *) malloc( sizeof( struct %Types%))   ;
+     }
+
+6  void Liber_struct_%Types%( %Pointeur% S )
+     { free(S); }
+
+*** Tableaux statiques
+
+  /** Tableaux **/
+
+  typedef %% Typeelem_%Codevecteur% ;
+  typedef Typeelem_%Codevecteur% * Typevect_%Codevecteur% ;
+
+  Typeelem_%Codevecteur% Element_%Codevecteur% ( Typevect_%Codevecteur% V , int I1 AUTRES1 )
+    {
+      return  *(V + AUTRES2 ) ;
+    }
+
+  void Aff_element_%Codevecteur% ( Typevect_%Codevecteur% V  , int I1 AUTRES1,  Typeelem_%Codevecteur% Val )
+    {
+//   Affectation  eventuelle si Val est de type structure ou Tableaau
+     $AFF *(V + AUTRES2 ) $$=$$ Val $AFF;
+    }
+
+*** Tableaux dynamiques
+
+  /** Tableaux dynamiques **/
+  typedef %% Typeelem_%Codevecteur% ;
+  typedef Typeelem_%Codevecteur% *  %Pointeur%;
+
+  void Alloc_tab_%Codevecteur% ( %Pointeur% *T )
+    { *T = malloc(PROD); }
+
+  void Liber_tab_%Codevecteur% ( %Pointeur% T)
+    { free(T) ;}
+
+  Typeelem_%Codevecteur% Element_%Codevecteur% ( %Pointeur% V  , int I1 AUTRES1 )
+    {
+      return *(V + AUTRES2 );
+    }
+
+  void Aff_element_%Codevecteur% ( %Pointeur% V,  int I1 AUTRES1,  Typeelem_%Codevecteur% Val )
+    {
+     $AFF *(V + AUTRES2 ) $$=$$ Val $AFF;
+    }
+
+*** Listes linéaires chaînées
+
+  /** Listes linéaires chaînées **/
+
+  typedef %% %Typeelem%   ;
+  typedef struct %Maillon% * %Pointeur% ;
+
+  struct %Maillon%
+    {
+      %Typeelem%  Val ;
+      %Pointeur% Suiv ;
+    } ;
+
+  %Pointeur% %Allouer% (%Pointeur% *P)
+    {
+      *P = (struct %Maillon% *) malloc( sizeof( struct %Maillon%)) ;
+      (*P)->Suiv = NULL;
+    }
+
+  void %Aff_val%(%Pointeur% P, %Typeelem% Val)
+    {
+     $AFF P->Val $$=$$ Val $AFF;
+    }
+
+  void %Aff_adr%( %Pointeur% P,  %Pointeur% Q)
+    {
+      P->Suiv = Q ;
+    }
+
+  %Pointeur% %Suivant%(  %Pointeur% P)
+    { return( P->Suiv ) ;  }
+
+  %Typeelem% %Valeur%( %Pointeur% P)
+    { return( P->Val) ; }
+
+  void %Liberer% ( %Pointeur% P)
+    { free (P);}
+
+*** R Listes bidirectionnelles
+
+  /** Listes bidirectionnelles **/
+
+  typedef %% %Typeelem%   ;
+  typedef struct %Maillon% * %Pointeur% ;
+
+  struct %Maillon%
+    {
+      %Typeelem%  Val ;
+      %Pointeur% Suiv ;
+      %Pointeur% Prec ;
+    } ;
+
+  %Pointeur% %Allouer% (%Pointeur% *P)
+    {
+    *P = (struct %Maillon% *) malloc( sizeof( struct %Maillon%))   ;
+    (*P)->Suiv = NULL;
+    (*P)->Prec = NULL;
+    }
+
+  void %Aff_val%(%Pointeur% P, %Typeelem% Val)
+    {
+    $AFF P->Val $$=$$ Val $AFF;
+    }
+
+  void %Aff_adrd%( %Pointeur% P,  %Pointeur% Q)
+    { P->Suiv = Q; }
+
+  void %Aff_adrg%( %Pointeur% P,  %Pointeur% Q)
+    { P->Prec = Q; }
+
+  %Pointeur% %Suivant%(  %Pointeur% P)
+    { return( P->Suiv );  }
+
+  %Pointeur% %Precedent%(  %Pointeur% P)
+    { return( P->Prec );  }
+
+  %Typeelem% %Valeur%( %Pointeur% P)
+    { return( P->Val) ; }
+
+  void %Liberer% ( %Pointeur% P)
+   { free (P) ; }
+
+*** Files d'attente
+
+  typedef %% %Typeelem% ;
+  typedef  struct %Filedattente% * %Pointeur% ;
+  typedef  struct %Maillon% * %Ptliste% ;
+
+  struct %Maillon%
+    {
+      %Typeelem% Val ;
+      %Ptliste% Suiv  ;
+    };
+
+  struct %Filedattente%
+    {
+      %Ptliste% Tete, Queue ;
+    };
+
+  void %Creerfile% ( %Pointeur% *Fil   )
+    {
+      *Fil = (struct %Filedattente% *) malloc( sizeof( struct %Filedattente%)) ;
+      (*Fil)->Tete = NULL ;
+      (*Fil)->Queue = NULL ;
+    }
+
+  bool %Filevide% (%Pointeur% Fil  )
+    { return  Fil->Tete == NULL ;}
+
+  void %Enfiler% ( %Pointeur% Fil , %Typeelem% Val   )
+    {
+      %Ptliste% Q;
+
+      Q = (struct %Maillon% *) malloc( sizeof( struct %Maillon%))   ;
+     $AFF Q->Val $$=$$ Val $AFF;
+      Q->Suiv = NULL;
+      if ( ! %Filevide%(Fil) )
+        Fil->Queue->Suiv = Q ;
+      else Fil->Tete = Q;
+        Fil->Queue = Q;
+    }
+
+  void %Defiler% (%Pointeur% Fil, %Typeelem% *Val )
+    {
+      if (! %Filevide%(Fil) )
+        {
+         $AFF *Val $$=$$ Fil->Tete->Val $AFF;
+          Fil->Tete =  Fil->Tete->Suiv;
+        }
+      else printf ("$s \n", "File d'attente vide");
+    }
+
+*** Piles
+
+  typedef %% %Typeelem% ;
+  typedef struct %Maillon% * %Pointeur% ;
+  typedef   %Pointeur%  %Typepile%  ;
+
+  struct %Maillon%
+    {
+      %Typeelem%  Val ;
+      %Pointeur% Suiv ;
+    } ;
+
+  void %Creerpile%( %Pointeur% *P )
+    { *P = NULL ; }
+
+  bool %Pilevide% ( %Pointeur% P )
+    { return  (P == NULL ); }
+
+  void %Empiler% ( %Pointeur% *P,  %Typeelem% Val )
+    {
+      %Pointeur% Q;
+
+      Q = (struct %Maillon% *) malloc( sizeof( struct %Maillon%))   ;
+     $AFF Q->Val $$=$$ Val $AFF;
+      Q->Suiv = *P;
+      *P = Q;
+    }
+
+  void %Depiler% ( %Pointeur% *P,  %Typeelem% *Val )
+    {
+      %Pointeur% Sauv;
+
+      if (! %Pilevide% (*P) )
+        {
+         $AFF *Val $$=$$ (*P)->Val $AFF;
+          Sauv = *P;
+          *P = (*P)->Suiv;
+          free(Sauv);
+        }
+      else printf ("$s \n", "Pile vide");
+    }
+
+*** Arbres de recherche binaire
+
+  /** Arbres de recherche binaire **/
+
+  typedef %% %Typeelem%   ;
+  typedef struct %Noeud% * %Pointeur% ;
+
+  struct %Noeud%
+    {
+      %Typeelem%  Val ;
+      %Pointeur% Fg ;
+      %Pointeur% Fd ;
+      %Pointeur% Pere ;
+     } ;
+
+  %Typeelem% %Info%( %Pointeur% P )
+    { return P->Val;   }
+
+  %Pointeur% %Fg%( %Pointeur% P)
+    { return P->Fg ; }
+
+  %Pointeur% %Fd%( %Pointeur% P)
+    { return P->Fd ; }
+
+  %Pointeur% %Pere%( %Pointeur% P)
+    { return P->Pere ; }
+
+  void %Aff_info% ( %Pointeur% P, %Typeelem% Val)
+    {
+      $AFF P->Val $$=$$ Val $AFF;
+    }
+
+  void %Aff_fg%( %Pointeur% P, %Pointeur% Q)
+    { P->Fg =  Q;  }
+
+  void %Aff_fd%( %Pointeur% P, %Pointeur% Q)
+    { P->Fd =  Q ; }
+
+  void %Aff_pere%( %Pointeur% P, %Pointeur% Q)
+    { P->Pere =  Q ; }
+
+  void %Creernoeud%( %Pointeur% *P)
+    {
+      *P = (struct %Noeud% *) malloc( sizeof( struct %Noeud%))   ;
+      (*P)->Fg = NULL;
+      (*P)->Fd = NULL;
+      (*P)->Pere = NULL;
+    }
+
+  void %Liberernoeud%( %Pointeur% P)
+    { free( P ) ; }
+
+*** M Arbres de recherche m-aire
+
+  /** Arbres de recherche m-aire **/
+
+  typedef %% %Typeelem%   ;
+  typedef struct %Noeud% * %Pointeur% ;
+
+  struct %Noeud%
+    {
+      int Degre ;
+      %Pointeur% Fils[(Ordre_arm)] ;
+      %Typeelem% Infor[(Ordre_arm)] ;
+      %Pointeur% Parent ;
+     } ;
+
+  %Typeelem% %Infor%(%Pointeur% P, int I)
+    { return P->Infor[I-1] ;  }
+
+  %Pointeur% %Fils%( %Pointeur% P, int I)
+    { return P->Fils[I-1] ; }
+
+  %Pointeur% %Parent%( %Pointeur% P)
+    { return P->Parent ; }
+
+  void %Aff_infor% ( %Pointeur% P, int I, %Typeelem% Val)
+    {
+    $AFF P->Infor[I-1] $$=$$ Val $AFF;
+    }
+
+  void %Aff_fils%( %Pointeur% P, int I, %Pointeur% Q)
+    { P->Fils[I-1] =  Q ; }
+
+  void %Aff_parent%( %Pointeur% P, %Pointeur% Q)
+    { P->Parent =  Q ; }
+
+  void %Creernoeud%(  %Pointeur% *P )
+    {
+      int I ;
+
+      *P = (struct %Noeud% *) malloc( sizeof( struct %Noeud%))   ;
+      for (I=0; I< (Ordre_arm); ++I) (*P)->Fils[I] = NULL;
+      (*P)->Degre = 0 ;
+    }
+
+  int %Degre% ( %Pointeur% P )
+    { return P->Degre ; }
+
+  void %Aff_degre% ( %Pointeur% P, int N)
+    { P->Degre = N ; }
+
+  void %Liberernoeud%(%Pointeur% P)
+    { free  ( P );}
+
+*** W Init_struct Statique
+
+  /** Initialisation d'une structure **/
+  void %Init_struct% ( Typestr_%Types% S, %Typestruct% S_ )
+    {
+1     $AFF S->Champ%I% $$=$$ S_.Champ%I% $AFF;
+    }
+
+*** W Init_struct Dynamique
+
+  /** Initialisation d'une structure dynamique **/
+  void %Init_struct% (  %Pointeur% S, %Typestruct% S_ )
+    {
+1    $AFF S->Champ%I% $$=$$ S_.Champ%I% $AFF;
+    }
+
+*** W Init_vect Statique
+
+  /** Initialisation d'un tableau **/
+  void %Init_vect% (  %Typevect% T , %Typetab% Tab , int N)
+    {
+      int K=-1;
+1     int I1 AUTRES1;
+2     for (%I%=0; %I%< %N%; ++%I%)
+        {
+          K++;
+3        $AFF *(T + AUTRES2 ) $$=$$ Tab [K] $AFF;
+        }
+    }
+
+*** W Init_vect Dynamique
+
+  /** Initialisation d'un tableau dynamique **/
+  void %Init_vect% ( %Pointeur% T , %Typetab% Tab , int N)
+    {
+      int K=-1;
+1     int I1 AUTRES1;
+2     for (%I%=0; %I%< %N%; ++%I%)
+        {
+          K++;
+3        $AFF *(T + AUTRES2 ) $$=$$ Tab [K] $AFF;
+        }
+    }
+
+*** W Creer_pile
+
+  /** Création d'une pile **/
+  void %Creer_pile% ( %Pointeur% *P, %Typetab% Tab , int N)
+    {
+      int I;
+      %Pointeur% Q;
+      Q = *P;
+      %Creerpile% ( &Q );
+      for (I=1; I<=N; ++I)
+        %Empiler% (&Q, Tab[I-1]) ;
+      *P = Q;
+    }
+
+*** W Creer_file
+
+  /** Création d'une file d'attente **/
+
+  void %Creer_file% ( %Pointeur% *F,  %Typetab% Tab, int N)
+    {
+      int I;
+      %Pointeur% Q;
+      %Creerfile% ( &Q );
+      for (I=1;I<=N;++I)
+        %Enfiler% (Q, Tab[I-1]) ;
+      *F = Q;
+    }
+
+*** W Creer_liste
+
+  /** Création d'une liste **/
+  void %Creer_liste% ( %Pointeur% *L, %Typetab% Tab, int N)
+    {
+      int I ;
+      %Pointeur% P, Q ;
+
+      *L =NULL;
+      for( I=1;I<=N;++I)
+        {
+          %Allouer%( &Q ) ;
+          %Aff_val% (Q, Tab[I-1]);
+          %Aff_adr% (Q, NULL);
+          if (*L == NULL)
+            *L = Q ;
+          else %Aff_adr% (P, Q);
+          P = Q ;
+        }
+    }
+
+*** W Creer_listebi
+
+  /** Création d'une liste bidirectionnelle **/
+
+  void %Creer_listebi% ( %Pointeur% *L, %Typetab% Tab, int N)
+    {
+      int I;
+      %Pointeur% P, Q ;
+
+      *L = NULL;
+      for (I=1; I<=N;++I)
+        {
+          %Allouer%( &Q ) ;
+          %Aff_val% (Q, Tab[I-1]);
+          %Aff_adrg% (Q, NULL);
+          %Aff_adrd% (Q, NULL);
+          if (*L == NULL)
+            *L = Q ;
+          else
+            {
+              %Aff_adrd% (P, Q);
+              %Aff_adrg% (Q, P);
+            }
+          P = Q;
+        }
+    }
+
+*** W Creer_arb Simple
+
+  /** Création d'un arbre de recherche binaire **/
+
+  void %Creer_arb% ( %Pointeur% *Arbre, %Typetab% Tab, int  N)
+    {
+      int I;
+      %Pointeur% P, Q ;
+
+      /* Creation De La Racine */
+      %Creernoeud% ( &P ) ;
+      *Arbre = P ;
+      %Aff_info% ( P , Tab[0] ) ;
+      for(I=2;I<=N;++I)
+        {
+          P = *Arbre ;
+          Q = *Arbre ;
+          while (( $COMPARTab[I-1] $$!=$$ %Info% ( P )$) && ( Q != NULL ))
+            {
+              P = Q ;
+              if ($COMPAR Tab[I-1] $$< $$ %Info% ( P )$)
+                Q = %Fg% ( P );
+              else Q = %Fd% ( P ) ;
+            }
+          if ($COMPAR Tab[I-1] $$==$$ %Info% ( P )$)
+            printf ("$s \n", "Un double existe");
+          else
+            {
+              %Creernoeud% ( &Q ) ;
+              %Aff_info% ( Q , Tab[I-1] ) ;
+              if ($COMPAR Tab[I-1] $$< $$ %Info% ( P )$)
+                %Aff_fg% ( P , Q ) ;
+              else %Aff_fd% ( P , Q );
+              %Aff_pere% (Q, P);
+            }
+
+        }
+    }
+
+*** W Creer_arb Structure
+
+  /** Création d'un arbre de recherche binaire **/
+
+  void %Creer_arb% ( %Pointeur% *Arbre, %Typetab% Tab , int  N)
+    {
+      int I;
+      %Pointeur% P, Q ;
+
+      /* Creation De La Racine */
+      %Creernoeud% ( &P ) ;
+      *Arbre = P ;
+      %Aff_info% ( P , Tab[0] ) ;
+      for(I=2;I<=N;++I)
+        {
+          P = *Arbre ;
+          Q = *Arbre ;
+          while (( $COMPAR Tab[I-1]->Champ1 $$!=$$ Struct1_%Type_element%(%Info% ( P ) )$) && ( Q != NULL ))
+            {
+              P = Q ;
+              if ($COMPAR Tab[I-1]->Champ1 $$< $$ Struct1_%Type_element%(%Info% ( P ) )$)
+                Q = %Fg% ( P );
+              else Q = %Fd% ( P ) ;
+            }
+          if ($COMPAR Tab[I-1]->Champ1 $$==$$ Struct1_%Type_element%(%Info% ( P ) )$)
+            printf ("$s \n", "Un double existe");
+          else
+            {
+              %Creernoeud% ( &Q ) ;
+              %Aff_info% ( Q , Tab[I-1] ) ;
+              if ($COMPAR Tab[I-1]->Champ1 $$< $$ Struct1_%Type_element%(%Info% ( P ) )$)
+                %Aff_fg% ( P , Q ) ;
+              else %Aff_fd% ( P , Q );
+              %Aff_pere% (Q, P);
+            }
+        }
+    }
+
+*** Creer_arm Simple
+
+  /** Création d'un arbre de recherche m-aire **/
+  void %Creer_arm% (%Pointeur% *Arbre, %Typetab% Tab, int  N)
+    {
+      int Ordre = %%;
+      bool Trouv1, Trouv2;
+      int I, J, Pos, Nt;
+      %Pointeur% P, Q, R ;
+
+      /** Première Donnée **/
+      %Creernoeud% ( &P ) ;
+      *Arbre = P ;
+      %Aff_degre% ( P , 1 ) ;
+      %Aff_infor% ( P , 1 , Tab[0] ) ;
+      for (I=2; I<=N; ++I )
+        {
+          /** Recherche de la donnée dans L'arbre **/
+          P = *Arbre ;
+          Trouv1 = False ;
+          while ( !Trouv1 && ( P != NULL ) )
+            {
+               /** Recherche dans le noeud **/
+               Trouv2 = False ;
+               Pos = 1 ;
+               while ( !Trouv2 && ( Pos <= %Degre% ( P ) ) )
+                   if ( $COMPAR %Infor% ( P , Pos ) $$>=$$ Tab[I-1] $)
+                     Trouv2 = True;
+                   else Pos++;
+
+               Q = P ;
+               if (Trouv2)
+                 if ($COMPARTab[I-1] $$==$$ %Infor% ( P , Pos )$)
+                   Trouv1 = True ;
+                 else P = %Fils% ( P , Pos ) ;
+               else
+                 P = %Fils% ( P , Pos ) ;
+
+            }
+          if (!Trouv1)
+             if (%Degre% ( Q ) < Ordre - 1 )
+                 {
+                   Nt = %Degre% ( Q ) ;
+                   %Aff_degre% ( Q , Nt + 1 ) ;
+                   for (J = Nt; J>=Pos; --J )
+                       %Aff_infor% ( Q , J + 1 , %Infor% ( Q , J ) ) ;
+
+                   %Aff_infor% ( Q , Pos , Tab[I-1] ) ;
+                 }
+             else
+               {
+                   %Creernoeud% ( &R ) ;
+                   %Aff_degre% ( R , 1 ) ;
+                   %Aff_infor% ( R , 1 , Tab[I-1] ) ;
+                   %Aff_fils% ( Q , Pos , R ) ;
+                   %Aff_parent% (R, Q);
+               }
+           else
+               printf ("$s \n", "Un double existe");
+        }
+    }
+
+*** Creer_arm Structure
+
+  /** Création d'un arbre de recherche m-aire **/
+  void %Creer_arm% (%Pointeur% *Arbre, %Typetab% Tab, int  N)
+    {
+      int Ordre = %%;
+      bool Trouv1, Trouv2;
+      int I, J, Pos, Nt;
+      %Pointeur% P, Q, R ;
+
+      /** Première Donnée **/
+      %Creernoeud% ( &P ) ;
+      *Arbre = P ;
+      %Aff_degre% ( P , 1 ) ;
+      %Aff_infor% ( P , 1 , Tab[0] ) ;
+      for (I=2; I<=N; ++I )
+        {
+          /** Recherche de la donnée dans L'arbre **/
+          P = *Arbre ;
+          Trouv1 = False ;
+          while ( !Trouv1 && ( P != NULL ) )
+            {
+               /** Recherche dans le noeud **/
+               Trouv2 = False ;
+               Pos = 1 ;
+               while ( !Trouv2 && ( Pos <= %Degre% ( P ) ) )
+                   if ( $COMPAR Struct1_%Type_element%(%Infor% ( P , Pos )) $$>=$$ Tab[I-1]->Champ1 $)
+                     Trouv2 = True;
+                   else Pos++;
+
+               Q = P ;
+               if (Trouv2)
+                 if ($COMPAR Tab[I-1]->Champ1 $$==$$ Struct1_%Type_element%(%Infor% ( P , Pos ))$)
+                   Trouv1 = True ;
+                 else P = %Fils% ( P , Pos ) ;
+               else
+                 P = %Fils% ( P , Pos ) ;
+
+            }
+          if (!Trouv1)
+             if (%Degre% ( Q ) < Ordre - 1 )
+                 {
+                   Nt = %Degre% ( Q ) ;
+                   %Aff_degre% ( Q , Nt + 1 ) ;
+                   for (J = Nt; J>=Pos; --J )
+                       %Aff_infor% ( Q , J + 1 , %Infor% ( Q , J )) ;
+
+                   %Aff_infor% ( Q , Pos , Tab[I-1] ) ;
+                 }
+             else
+               {
+                   %Creernoeud% ( &R ) ;
+                   %Aff_degre% ( R , 1 ) ;
+                   %Aff_infor% ( R , 1 , Tab[I-1] ) ;
+                   %Aff_fils% ( Q , Pos , R ) ;
+                   %Aff_parent% (R, Q);
+               }
+           else
+               printf ("$s \n", "Un double existe");
+        }
+    }
+
+***
