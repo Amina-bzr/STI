@@ -12,6 +12,9 @@ class switchform(forms.ModelForm):
         #    'Vlans_associe': forms.Select(attrs={}),
         #}
 
+    class Media:
+        css= 'static/form.css'
+
 class switchConfigForm(forms.ModelForm):
     
     class Meta: 

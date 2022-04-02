@@ -2,12 +2,34 @@
 .form-container {
     text-align: center;
     margin: 5% auto;
-    border-radius: 10%;
-    width:35%;
-    padding:25px;
+    width:80%;
+    padding:0;
     display:flex;
-    align-items: center;
-    justify-items: center;
     flex-direction: column;
-    background-color: rgb(104, 165, 113);
+    background-color: rgb(255, 255, 255);
+    border: 1px solid grey;
+}
+
+h1 {
+    margin-top: 0;
+    text-align: left;
+    padding: 13px;
+    background-color: darkgray;
+}
+.form-btn {
+    background-color: rgb(50, 252, 134);
+    border-radius: 15%;
+    border: none;
+    padding: 15px 35px;
+    color: white;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+p input {
+    height: 35px;
+    width: 90%;
+    background-color: rgb(255, 255, 255);
+    border-width: 1px;
+    border-color: grey;
 }
