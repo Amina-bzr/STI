@@ -4,7 +4,7 @@ from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
-from .forms import switchform, vlanform
+from .forms import switchform, vlanform,portform
 from .models import switch, vlan, Port
 
 
@@ -32,4 +32,16 @@ def ajoutvlan(request):
 			form.save()
 			
 	context = {'form':form, 'choix':'vlan',}
+	return render (request ,'app_principal/index.html',context)
+
+def ajoutport(request):
+
+	form=portform()
+
+	if request.method == 'POST':
+		form = portform(request.POST)
+		if form.is_valid():
+			form.save()
+			
+	context = {'form':form, 'choix':'port',}
 	return render (request ,'app_principal/index.html',context)

@@ -1,6 +1,6 @@
 from django import forms
 from .models import switch, vlan, Port
-
+from django.utils.translation import gettext_lazy as _
 class switchform(forms.ModelForm):
 
     class Meta: 
@@ -8,12 +8,31 @@ class switchform(forms.ModelForm):
 
         fields = "__all__"
 
-        #widgets = {
-        #    'Vlans_associe': forms.Select(attrs={}),
-        #}
+        
 
 class vlanform(forms.ModelForm):
-    class Meta: 
-        model=vlan
+    
+    class Meta:
+        model = vlan
+        fields = "__all__"   
+        
+class portform(forms.ModelForm):
+    
+    class Meta:
+        model = Port
+        fields = "__all__"   
+         
 
-        fields = "__all__"
+    
+           
+
+
+
+
+
+        
+        # custom validation for the name field
+        
+        
+       
+

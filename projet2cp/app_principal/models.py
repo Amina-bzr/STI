@@ -5,6 +5,7 @@ from django.db import models
 
 class switch(models.Model): #on peut creer les ports d'un switch a partir d'un objet "switch" : switch_objet.port_set.create(num_port=...,type_port=...etc)
     nom = models.CharField(max_length=50)
+   # statut=models.CharField(max_length=50)
     marque = models.CharField(max_length=50)
     modele = models.CharField(max_length=50)
     bloc = models.CharField(max_length=10)
@@ -44,3 +45,4 @@ class Port(models.Model):
     vlan_associe = models.CharField(max_length=50)
     elm_suiv = models.CharField(max_length=100)
     # l'elment au quel le port est relié(prise, switch, point d'accès)
+

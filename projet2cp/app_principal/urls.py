@@ -9,4 +9,5 @@ urlpatterns = [
   #path('switch/',views.index,name='switch'),
   path('switch/ajout',views.ajoutswitch,name='add'),
   path('vlan/ajout',views.ajoutvlan,name='add'),
+   path('port/ajout',views.ajoutport,name='add'),
 ]
