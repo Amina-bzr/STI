@@ -1,4 +1,4 @@
-from email import message
+
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.views import generic
 from .forms import switchform, vlanform, switchConfigForm
 from .models import switch, vlan, Port
-from django.contrib import messages
 
 
 def ajoutswitch(request):

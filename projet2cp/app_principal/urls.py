@@ -3,6 +3,7 @@ from django.urls import path
 
 from .import views
 
+
 app_name="app_principal"
 
 urlpatterns = [
@@ -10,4 +11,5 @@ urlpatterns = [
   path('switch/ajout',views.ajoutswitch,name='add'),
   path('vlan/ajout',views.ajoutvlan,name='add'),
   path('switch/<int:switch_id>/configurer',views.switchConfig,name='add'),
+  
 ]
