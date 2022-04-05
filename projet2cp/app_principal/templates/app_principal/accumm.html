@@ -2,9 +2,10 @@
 <html lang="en">
 
 <head>
+  {% load static %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="accul.css">
+  <link rel="stylesheet" href="{% static 'css/accul.css' %}">
   <title>My Website</title>
 </head>
 
@@ -15,7 +16,7 @@
       <div class="nav-bar">
         <div class="brand">
           <a href="">
-            <h1><span>S</span>T </span>A<span> </h1>
+            <h1><span>S</span>T </span><span> </h1>
           </a>
         </div>
         <div class="nav-list">
@@ -50,7 +51,7 @@
   <!-- End Hero Section  -->
 
   
-  <script src="./accc.js"></script>
+  <script src="{% static 'js/accc.js' %}"></script>
 </body>
 
 </html>

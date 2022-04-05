@@ -2,37 +2,44 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-  <title>Dashio - Bootstrap Admin Template</title>
-
+  <title>{% block title %}  {% endblock %}</title>
+  {% load static %}
   <!-- Favicons -->
-  <link href="img/favicon.png" rel="icon">
-  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <!--external css-->
+  {% block css %}{% endblock %}
   <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
-  <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-datepicker/css/datepicker.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-daterangepicker/daterangepicker.css' %}" />
   <!-- Custom styles for this template -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
 
- 
+  <!-- =======================================================
+    Template Name: Dashio
+    Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
+    Author: TemplateMag.com
+    License: https://templatemag.com/license/
+  ======================================================= -->
 </head>
 
-<body>
-  <section id="container">
+<body >
+  <section id="container" >
     <!-- **********************************************************************************************************************************************************
-        Barre de Navigation
+        TOP BAR CONTENT & NOTIFICATIONS
         *********************************************************************************************************************************************************** -->
     <!--header start-->
-    <header class="header black-bg">
+     <!--header start-->
+     <header class="header black-bg" style="top:0;">
       <div class="sidebar-toggle-box">
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
@@ -118,12 +125,12 @@
             <ul class="dropdown-menu extended inbox">
               <div class="notify-arrow notify-arrow-green"></div>
               <li>
-                <p class="green">vous avez 5 nouveaux notifications</p>
+                <p class="green">vous avez 5 nouvelles notifications</p>
               </li>
               <li>
                 
                 <a href="index.html#">
-                  <span class="photo"><img alt="avatar" src="img/ui-divya.jpg"></span>
+                  <span class="photo"><img alt="avatar" src="{% static 'img/ui-divya.jpg' %}"></span>
                   <span class="subject">
                   <span class="from">Mohamed</span>
                   <span class="time">40 mins.</span>
@@ -161,35 +168,40 @@
       </div>
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
-          <li><a class="logout" href=""> se déconnecter</a></li > <!--lien page login-->
+          <li><a class="logout" href=""> 
+            {% if user.is_authentificated %}
+              se déconnecter
+            {% else %}
+              se connecter
+            {% endif %}
+
+          </a></li > <!--lien page login-->
         </ul>
       </div>
     </header>
     <!--header end-->
-    <!-- **********************************************************************************************************************************************************
-        MAIN SIDEBAR MENU
-        *********************************************************************************************************************************************************** -->
-    <!--sidebar start-->
+    <!-- **********************************************************************************************************************************************************-->
+        <!--sidebar start-->
     <aside>
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.html"><img src="img/ui-sam.jpg" class="img-circle" width="80"></a></p>
+          <p class="centered"><a href="p"><img src=""" class="img-circle" width="80"></a></p>
           <h5 class="centered">Chef Service de Réseau</h5>
           <li class="mt">
-            <a href="index.html">
+            <a href="i">
               <i class="fa fa-dashboard"></i>
               <span>Accueil</span>
               </a>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;">
+            <a>
               <i class="fa fa-desktop"></i>
               <span>Switch</span>
               </a>
             <ul class="sub">
-              <li><a href="">chercher</a></li>
-              <li><a href="">Ajouter</a></li>
+              <li><a href="{% url 'app_principal:switch' %}">chercher</a></li>
+              <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
              
             </ul>
           </li>
@@ -200,36 +212,36 @@
               </a>
             <ul class="sub">
               <li><a href="">Grids</a></li>
-              <li><a href="calendar.html">Chercher </a></li>
-              <li><a href="gallery.html">Ajouter</a></li>
+              <li><a href="{% url 'app_principal:vlan' %}">Chercher </a></li>
+              <li><a href="">Ajouter</a></li> <!--lien vers ajout vlan-->
               
             </ul>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;">
+            <a href="javascript:;"><!--lien vers contact form-->
               <i class="fa fa-book"></i>
-              <span> Contactez-nous</span>
+              <span> Contactez-nous</span> 
               </a>
             
           </li>
           <li class="sub-menu">
-            <a class="active" href="javascript:;">
+            <a class="active" href="javascript:;"><!--lien vers la page d'aide-->
               <i class="fa fa-tasks"></i>
               <span>Aide</span>
             </a>
           <li class="sub-menu">
-            <a href="javascript:;">
+            <a href="javascript:;"><!--lien vers page about (infos sur lapp) -->
               <i class="fa fa-th"></i>
               <span>A propos </span>
              
          
-            <a href="inbox.html">
+            <a href="inbox.html"> <!--lien vers gestion des utilisateurs-->
               <i class="fa fa-envelope"></i>
               <span>gestion des utilisateurs </span>
               <span class="label label-theme pull-right mail-info">2</span>
               </a>
           </li>
-          <li class="sub-menu">
+          <li class="sub-menu"> <!--lien vers nos services-->
             <a href="javascript:;">
               <i class=" fa fa-bar-chart-o"></i>
               <span>Nos service</span>
@@ -238,105 +250,46 @@
           
         <!-- sidebar menu end-->
       </div>
-    </aside>
-    <!--sidebar end-->
-    <!-- **********************************************************************************************************************************************************
-        MAIN CONTENT
-        *********************************************************************************************************************************************************** -->
-    <!--main content start-->
-    <section id="main-content">
-      <section class="wrapper">
-        <h3><i class="fa fa-angle-right"></i> Contactez-nous</h3>
-        <!-- BASIC FORM ELELEMNTS -->
-        <div class="row mt">
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <h4 class="title">Formulaire de Contact</h4>
-            <div id="message"></div>
-            <form class="contact-form php-mail-form" role="form" action="contactform/contactform.php" method="POST">
-
-              <div class="form-group">
-                <input type="name" name="name" class="form-control" id="contact-name" placeholder="votre nom" data-rule="minlen:4"  >
-                <div class="validate"></div>
-              </div>
-              <div class="form-group">
-                <input type="email" name="email" class="form-control" id="contact-email" placeholder="votre  Email" data-rule="email" data-msg="l'email n'est pas valide">
-                <div class="validate"></div>
-              </div>
-              <div class="form-group">
-                <input type="text" name="subject" class="form-control" id="contact-subject" placeholder="Sujet" data-rule="minlen:4" >
-                <div class="validate"></div>
-              </div>
-
-              <div class="form-group">
-                <textarea class="form-control" name="message" id="contact-message" placeholder="Message" rows="5" data-rule="required" data-msg="Ecrivez quelques chose pour nous"></textarea>
-                <div class="validate"></div>
-              </div>
-
-              <div class="loading"></div>
-              <div class="error-message"></div>
-              <div class="sent-message">votre Message est envoiyée. Merci!</div>
-
-              <div class="form-send">
-                <button type="submit" class="btn"> Envoiyez Message</button>
-              </div>
-
-            </form>
+     </aside>
+     <section id="main-content">
+        {% block content %} 
+        {% endblock %}
+    
+        <footer class="site-footer">
+          <div class="text-center">
+            <p>
+              &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
+            </p>
+            <div class="credits">
+              <!--
+                You are NOT allowed to delete the credit link to TemplateMag with free version.
+                You can delete the credit link only if you bought the pro version.
+                Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
+                Licensing information: https://templatemag.com/license/
+              -->
+              Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
+            </div>
+            <a href="" class="go-top">
+              <i class="fa fa-angle-up"></i>
+              </a>
           </div>
-
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <h4 class="title">Contact Info</h4>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry"s standard dummy text ever since the 1500s. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-            <ul class="contact_details">
-              <li><i class="fa fa-envelope-o"></i> info@yoursite.com</li>
-              <li><i class="fa fa-phone-square"></i> +34 5565 6555</li>
-              <li><i class="fa fa-home"></i> Some Fine Address, 887, Madrid, Spain.</li>
-            </ul>
-            <!-- contact_details -->
-          </div>
-        </div>
-        <!-- /row -->
-
-
-        <!-- /row -->
+        </footer>
       </section>
-      <!-- /wrapper -->
-    </section>
-    <!-- /MAIN CONTENT -->
-    <!--main content end-->
-    <!--footer start-->
-    <footer class="site-footer">
-      <div class="text-center">
-        <p>
-          &copy; Copyrights <strong></strong>. All Rights Reserved
-        </p>
-        <div class="credits">
-          
-        </div>
-        <a href="form_component.html#" class="go-top">
-          <i class="fa fa-angle-up"></i>
-          </a>
-      </div>
-    </footer>
-    <!--footer end-->
   </section>
-  <!-- js placed at the end of the document so the pages load faster -->
-  <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
-  <script class="include" type="text/javascript" src="{% sattic 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
-  <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
-  <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
-  <!--common script for all pages-->
-  <script src="{% static 'lib/common-scripts.js' %}"></script>
-  <!--script for this page-->
-  <script src="{% static 'lib/jquery-ui-1.9.2.custom.min.js' %}"></script>
-  <!--custom switch-->
-  <script src="{% static 'lib/bootstrap-switch.js' %}"></script>
-  <!--custom tagsinput-->
-  <script src="{% static 'lib/jquery.tagsinput.js' %}"></script>
-
-  <!--Contactform Validation-->
-  <script src="{% static 'lib/php-mail-form/validate.js' %}"></script>
-
+      <!--footer end-->
+    
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
+    <script src="{% static 'lib/jquery.scrollTo.min.js' %}"></script>
+    <script src="{% static 'lib/jquery.nicescroll.js' %}" type="text/javascript"></script>
+    <!--common script for all pages-->
+    <script src="{% static 'lib/common-scripts.js' %}"></script>
+    <!--script for this page-->
+    {% block js %}{% endblock %}
+    
 </body>
-
+  
 </html>
+  

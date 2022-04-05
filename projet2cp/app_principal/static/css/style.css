@@ -1618,10 +1618,7 @@ PANELS CONFIGURATIONS
 	margin-right: 8px;
 }
 
-/* Grid Showcase*/
 
-	margin-bottom: 15px;
-}
 
 .show-grid [class^=col-] {
 	padding-top: 10px;
@@ -3356,10 +3353,6 @@ ul.chat-available-user li a:hover {
 
 #contact {
   padding: 40px 0;
-}
-
-.contact-form {
-
 }
 
 .contact-form label {

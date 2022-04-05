@@ -1,3 +1,4 @@
+from unittest.mock import DEFAULT
 from django.db import models
 
 # Create your models here.
@@ -19,19 +20,26 @@ class switch(models.Model): #on peut creer les ports d'un switch a partir d'un o
     nom = models.CharField(max_length=50,unique=True)
     marque = models.CharField(max_length=50,default='Cisco')
     modele = models.CharField('Modèle',max_length=40)
-    bloc = models.CharField(max_length=10,default="pas configuré")
-    local = models.CharField(max_length=20,default="magazin")
-    armoire = models.CharField(max_length=10,default="pas configuré")
+    bloc = models.CharField(max_length=25,default="pas configuré")
+    local = models.CharField(max_length=25,default="magazin")
+    armoire = models.CharField(max_length=25,default="pas configuré")
     inventaire = models.CharField(max_length=50,unique=True,)
-    serie = models.CharField(max_length=20,unique=True,)
-    mac = models.CharField(max_length=17,unique=True,)
+    serie = models.CharField(max_length=25,unique=True,)
+    mac = models.CharField(max_length=25,unique=True,)
     #nbr_port = models.IntegerField(default=0,)
     #nbr_port_FE = models.IntegerField(default=0,)
     #nbr_port_GE = models.IntegerField(default=0,)
     #nbr_port_SFP = models.IntegerField(default=0,)
     # l'element qui precede le switch (le nom du switch precendeant ou data center ou routeurs)
     preced = models.CharField('Cascade depuis',max_length=50,blank=True,default="pas en cascade")
-    date_achat = models.DateTimeField("Date d'achat",blank=True,null=True)
+    date_achat = models.DateField("Date d'achat",
+        blank=True,
+        null=True,
+        #validators=[
+        #    RegexValidator(r'^/d/d-/d/d-/d/d/d/d$', 
+        #    message="Veuillez respecter le format") 
+        #    ]
+        )
     etat= models.CharField(
         max_length=10,
         choices=choix_etat,
@@ -42,7 +50,7 @@ class switch(models.Model): #on peut creer les ports d'un switch a partir d'un o
 
 
 class vlan(models.Model):
-    num_Vlan = models.IntegerField(default=0)
+    num_Vlan = models.PositiveIntegerField(default=0)
     nom = models.CharField(max_length=50)
     ip = models.GenericIPAddressField()
     masque = models.CharField(max_length=50)
@@ -95,6 +103,7 @@ class Port(models.Model):
 
 
 class ModeleSwitch(models.Model): 
+    nom=models.CharField('Nom du modèle',max_length=50,default='',unique=True) # on propose à l'utilisateur de remplir la table des modeles avant creer un nv switch
     nbr_port = models.PositiveIntegerField(default=0)
     nbr_port_FE = models.PositiveIntegerField(default=0)
     nbr_port_GE = models.PositiveIntegerField(default=0)

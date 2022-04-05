@@ -1,5 +1,6 @@
 from django import forms
 from .models import switch, vlan, Port, ModeleSwitch
+import datetime
 
 class switchform(forms.ModelForm):
 
@@ -8,10 +9,16 @@ class switchform(forms.ModelForm):
 
         fields = ['nom','mac','inventaire','serie','marque','modele','date_achat']
 
-        
+        widgets = {
+            'nom': forms.TextInput(attrs={'class':'form-control'},),
+            'mac': forms.TextInput(attrs={'class':'form-control'},),
+            'inventaire': forms.TextInput(attrs={'class':'form-control'},),
+            'serie': forms.TextInput(attrs={'class':'form-control'},),
+            'marque': forms.TextInput(attrs={'class':'form-control'},),
+            'modele': forms.TextInput(attrs={'class':'form-control'},),
+            'date_achat':forms.DateInput(attrs={'placeholder': 'jour/mois/année','class':'form-control',},),
+        }
 
-    class Media:
-        css= 'static/form.css'
 
 class switchConfigForm(forms.ModelForm):
     
@@ -20,16 +27,20 @@ class switchConfigForm(forms.ModelForm):
 
         fields = ['bloc','local','armoire','preced']
 
-        #widgets = {
-        #    'Vlans_associe': forms.Select(attrs={}),
-        #}
+        widgets = {
+            'bloc': forms.TextInput(attrs={'class':'form-control'},),
+            'local': forms.TextInput(attrs={'class':'form-control'},),
+            'armoire': forms.TextInput(attrs={'class':'form-control'},),
+            'preced': forms.TextInput(attrs={'class':'form-control'},),
+        }
 
 
 class vlanform(forms.ModelForm):
     
     class Meta:
         model = vlan
-        fields = "__all__"   
+        fields = "__all__" 
+
         
 class portform(forms.ModelForm):
     
@@ -39,15 +50,22 @@ class portform(forms.ModelForm):
          
 
     
-           
+class modeleform(forms.ModelForm):
+    
+    class Meta: 
+        model=ModeleSwitch
 
+        fields = "__all__" 
 
-
-
-
-        
-        # custom validation for the name field
-        
+        widgets = {
+            'nbr_port': forms.TextInput(attrs={'class':'form-control'},),
+            'nbr_port_FE': forms.TextInput(attrs={'class':'form-control'},),
+            'nbr_port_GE': forms.TextInput(attrs={'class':'form-control'},),
+            'nbr_port_SFP': forms.TextInput(attrs={'class':'form-control'},),
+            'premier_port_FE': forms.TextInput(attrs={'class':'form-control'},),
+            'premier_port_GE': forms.TextInput(attrs={'class':'form-control'},),
+            'premier_port_SFP':forms.TextInput(attrs={'class':'form-control',},),
+        }           
         
        
 
