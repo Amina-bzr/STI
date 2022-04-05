@@ -1,13 +1,23 @@
+<<<<<<< HEAD
 from email import message
 from django.shortcuts import redirect, render
+=======
+
+from django.shortcuts import render
+>>>>>>> 8fdf46e582e86a59c2002673587197bbbfed6512
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
+<<<<<<< HEAD
 from .forms import switchform, vlanform, switchConfigForm, modeleform
 from .models import switch, vlan, Port, ModeleSwitch
 from django.contrib import messages
+=======
+from .forms import switchform, vlanform, switchConfigForm
+from .models import switch, vlan, Port
+>>>>>>> 8fdf46e582e86a59c2002673587197bbbfed6512
 
 
 def ajoutswitch(request):

@@ -1,6 +1,13 @@
 from django import forms
 from .models import switch, vlan, Port, ModeleSwitch
+<<<<<<< HEAD
 import datetime
+=======
+from django.shortcuts import render, redirect
+
+	
+
+>>>>>>> 8fdf46e582e86a59c2002673587197bbbfed6512
 
 class switchform(forms.ModelForm):
 
