@@ -1,8 +1,9 @@
 from django import forms
 from .models import switch, vlan, Port, ModeleSwitch
-from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm  
-from django.contrib.auth.models import User	
+from django.contrib.auth.models import User, Group
+from django.forms.fields import EmailField
+
 
 
 class switchform(forms.ModelForm):
@@ -72,9 +73,15 @@ class modeleform(forms.ModelForm):
         
        
 
-class signupForm(UserCreationForm):
+class CreateSuperUserForm(UserCreationForm):
 
-    class Meta:
-        model=User
+    email=forms.EmailField(max_length=20)
 
-        fields= ['email']
+    def email_clean(self):  #pour traiter la donnee entrée par l'utilisateur et voir si elle est correcte
+        email = self.cleaned_data['email'].lower()  
+        new = User.objects.filter(email=email)  
+        if new.count():  
+            raise forms.ValidationError("Cet email existe déja.")  
+        return email  
+
+    

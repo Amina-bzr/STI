@@ -60,22 +60,11 @@
                       </a>
                   </li>
                 </ul>
-                <button> + Ajouter</button>
+                <a> + Ajouter</a>
                 <form method="post">
                   {% csrf_token %}
-
-                
-                {% for field in form %}
-                  <div class="form-group" >
-                    <div class="control-label col-lg-2" style="margin-left: 40px;">
-                    {{ field.label_tag }} 
-                    </div>
-                    <div class="col-lg-2">
-                      {{field}}
-                    </div>
-                  </div>
-                {% endfor %}
-                <input type="submit" value="ajouer">
+                  <label for="{{ form.email.id_for_label }}">Email:</label>
+                  {{ form.email }}
                 </form>
                 <div class="inbox-body text-center inbox-action">
                   
