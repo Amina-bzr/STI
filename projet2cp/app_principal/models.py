@@ -103,7 +103,7 @@ class Port(models.Model):
 
 
 class ModeleSwitch(models.Model): 
-    nom=models.CharField('Nom du modèle',max_length=50,default='',unique=True) # on propose à l'utilisateur de remplir la table des modeles avant creer un nv switch
+    nom=models.CharField('Nom du modèle',max_length=50,default='',unique=True) # on propose à l'utilisateur de remplir la table des modeles
     nbr_port = models.PositiveIntegerField(default=0)
     nbr_port_FE = models.PositiveIntegerField(default=0)
     nbr_port_GE = models.PositiveIntegerField(default=0)

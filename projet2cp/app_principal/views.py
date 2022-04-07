@@ -1,24 +1,25 @@
-<<<<<<< HEAD
 from email import message
 from django.shortcuts import redirect, render
-=======
-
-from django.shortcuts import render
->>>>>>> 8fdf46e582e86a59c2002673587197bbbfed6512
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
-<<<<<<< HEAD
-from .forms import switchform, vlanform, switchConfigForm, modeleform
+from .forms import switchform, vlanform, switchConfigForm, modeleform, signupForm
 from .models import switch, vlan, Port, ModeleSwitch
 from django.contrib import messages
-=======
-from .forms import switchform, vlanform, switchConfigForm
-from .models import switch, vlan, Port
->>>>>>> 8fdf46e582e86a59c2002673587197bbbfed6512
+from django.contrib.auth import decorators
+from django.contrib.auth.models import User, Group, Permission
 
+''' def user_of_stores(user):
+    if user.is_authenticated() and user.has_perm("stores.change_store"):
+        return True
+    else:
+        return False 
+        
+        @user_passes_test(user_of_stores)
+'''
+#@permission_required('app_principal.add_switch')
 
 def ajoutswitch(request):
 
@@ -35,18 +36,19 @@ def ajoutswitch(request):
         context = {'form':form, 'choix':'switch','operation':'Ajout',}
         return render (request ,'app_principal/form_validation.html',context)
 
+#@permission_required('app_principal.add_vlan')
+
 def ajoutvlan(request):
 
-        form=vlanform()
+        form=vlanform(request.POST or None)
 
         if request.method == 'POST':
-                form = vlanform(request.POST)
                 if form.is_valid():
                         form.save()
         context = {'form':form, 'choix':'vlan','operation':'Ajout',}
         return render (request ,'app_principal/form_validation.html',context)
 
-
+#@permission_required('app_principal.change_switch')
 
 def switchConfig(request, switch_id):
     s = get_object_or_404(switch, id=switch_id)
@@ -69,14 +71,16 @@ def switchConfig(request, switch_id):
                 'app_principal/form_validation.html',
                 {'form':form, 'choix':s.nom,'operation':'Configuration',})	
         
-        
-
+#@permission_required('app_principal.view_switch')
+       
 def switchtab(request):
         cols_principales=['nom','bloc','local','armoire','Cascade depuis']
         cols_detail=['Adresse MAC','Numero de Serie',"Numero d'inventaire","Date d'achat",'Marque','Modèle']
         switchs = switch.objects.all()
         context={'objet':'switchs','objets':switchs,'colsp':cols_principales,'colsd':cols_detail,}
         return render(request, 'app_principal/offictable.html',context)
+
+#@permission_required('app_principal.view_vlan')
 
 def vlan_tab(request):
         cols_principales=['num_Vlan ','nom','ip','masque','passerelle']
@@ -85,6 +89,7 @@ def vlan_tab(request):
         context={'objet':'vlans','objets':vlans,'colsp':cols_principales,'colsd':cols_detail,}
         return render(request, 'app_principal/offictable.html',context)
 
+#@permission_required('app_principal.view_port')
 def port_tab(request):
         cols_principales=['num_port','type_port','etat','vlan_associe','elm_suiv']
         cols_detail=[]
@@ -92,9 +97,18 @@ def port_tab(request):
         context={'objet':'ports','objets':ports,'colsp':cols_principales,'colsd':cols_detail,}
         return render(request, 'app_principal/offictable.html',context)
 
+#@permission_required('app_principal.view_modele')
 def modele_tab(request):
         cols_principales=['nbr_port','nbr_port_SFP','nbr_port_GE','nbr_port_FE']
         cols_detail=[]
         modeles = ModeleSwitch.objects.all()
         context={'objet':'modèles','objets':modeles,'colsp':cols_principales,'colsd':cols_detail,}
         return render(request, 'app_principal/offictable.html',context)
+
+#@user_passes_test(user.is_superuser)
+def gestion_utilisateur(request):
+        return render(request, 'app_principal/gestionuser.html',{})
+
+def signup(request):
+        form=signupForm(request.POST or None)
+        return render(request, 'app_principal/gestionuser.html',{'form':form})
