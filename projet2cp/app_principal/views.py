@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.contrib.auth import decorators
 from django.contrib.auth.models import User, Group, Permission
 import random
+from django.core.mail import send_mail
 
 ''' def user_of_stores(user):
     if user.is_authenticated() and user.has_perm("stores.change_store"):
@@ -109,7 +110,7 @@ def modele_tab(request):
 
 #@user_passes_test(user.is_superuser)
 
-def signup(request):
+def register_super_user(request):
         form=CreateSuperUserForm(request.POST or None)
         if request.method == 'POST': #ladmin a introduit lemail
                 
@@ -117,15 +118,17 @@ def signup(request):
                         form.password1= str(random.randint(11234,501312))+'@njj#'+str(random.randint(20030,5010312))
                         form.password2=form.password1
                         try:
-                                form.username =form.email_clean()
+                                username=form.email_clean()
                         except ValidationError:
                                 messages.error(request,("cet email existe déja"))
-                        form.save()
-                        messages.success(request,("Un nouveau superutilisateur a été creé avec succés!"))   
-                        user=User.objects.get(email=form.cleaned_data["email"])
-                        user.is_superuser=True #on le rend un superutilisateur
-                        user.is_active=False #il doit confirmer son email
-                        user.save() #on sauvegarde dans la bdd
+                        else:
+                                form.username =form.email_clean()
+                                form.save()
+                                messages.success(request,("Un nouveau superutilisateur a été creé avec succés!"))   
+                                user=User.objects.get(email=form.cleaned_data["email"])
+                                user.is_superuser=True #on le rend un superutilisateur
+                                user.is_active=False #il doit confirmer son email
+                                user.save() #on sauvegarde l'user dans la bdd
                          
                 else:
                         messages.error(request,("Echec! l'utilisateur n'a pas été creé."))            

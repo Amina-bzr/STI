@@ -22,6 +22,6 @@ urlpatterns = [
   path('modele/',views.modele_tab,name='modele'), #va afficher le tableau des modeles
 
   #signup
-  path('utilisateurs/',views.signup,name='users'),
+  path('utilisateurs/',views.register_super_user,name='users'),
 
 ]
