@@ -63,9 +63,17 @@
                 <a> + Ajouter</a>
                 <form method="post">
                   {% csrf_token %}
-                  <label for="{{ form.email.id_for_label }}">Email:</label>
                   {{ form.email }}
+                  <input type="submit" value="Ajouter" name="submit">
                 </form>
+                {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">  <!-- singular -->
+            <a class="close" data-dismiss="alert"></a>
+            {{ message }}
+        </div>
+    {% endfor %}
+  {% endif %}
                 <div class="inbox-body text-center inbox-action">
                   
                   <div class="btn-group">

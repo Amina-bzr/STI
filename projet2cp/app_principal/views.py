@@ -1,4 +1,5 @@
 from email import message
+from django.forms import ValidationError
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
@@ -10,7 +11,6 @@ from .models import switch, vlan, Port, ModeleSwitch
 from django.contrib import messages
 from django.contrib.auth import decorators
 from django.contrib.auth.models import User, Group, Permission
-from django.contrib.auth.forms import UserCreationForm  
 import random
 
 ''' def user_of_stores(user):
@@ -108,19 +108,26 @@ def modele_tab(request):
         return render(request, 'app_principal/offictable.html',context)
 
 #@user_passes_test(user.is_superuser)
-def gestion_utilisateur(request):
-        return render(request, 'app_principal/gestionuser.html',{})
 
 def signup(request):
         form=CreateSuperUserForm(request.POST or None)
         if request.method == 'POST': #ladmin a introduit lemail
-                form.password1= str(random.randint(11234,501312))+'@njj#'+str(random.randint(20030,5010312))
-                form.password2=form.password1
-                form.username='user'
+                
                 if form.is_valid():
-                        form.save().is_superuser=True
-                        form.save()                
-                # configuration du `switch` existant dans la base de données
-                # redirect vers le form de ports---à faire
-        return render(request,'app_principal/gestionuser.html',
-                {'form':form,})	
+                        form.password1= str(random.randint(11234,501312))+'@njj#'+str(random.randint(20030,5010312))
+                        form.password2=form.password1
+                        try:
+                                form.username =form.email_clean()
+                        except ValidationError:
+                                messages.error(request,("cet email existe déja"))
+                        form.save()
+                        messages.success(request,("Un nouveau superutilisateur a été creé avec succés!"))   
+                        user=User.objects.get(email=form.cleaned_data["email"])
+                        user.is_superuser=True #on le rend un superutilisateur
+                        user.is_active=False #il doit confirmer son email
+                        user.save() #on sauvegarde dans la bdd
+                         
+                else:
+                        messages.error(request,("Echec! l'utilisateur n'a pas été creé."))            
+               
+        return render(request,'app_principal/gestionuser.html',{'form':form})	
