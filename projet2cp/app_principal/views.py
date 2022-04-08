@@ -11,8 +11,9 @@ from .models import switch, vlan, Port, ModeleSwitch
 from django.contrib import messages
 from django.contrib.auth import decorators
 from django.contrib.auth.models import User, Group, Permission
-import random
-from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 
 ''' def user_of_stores(user):
     if user.is_authenticated() and user.has_perm("stores.change_store"):
@@ -115,22 +116,37 @@ def register_super_user(request):
         if request.method == 'POST': #ladmin a introduit lemail
                 
                 if form.is_valid():
-                        form.password1= str(random.randint(11234,501312))+'@njj#'+str(random.randint(20030,5010312))
+                        form.password1 = User.objects.make_random_password()
                         form.password2=form.password1
                         try:
                                 username=form.email_clean()
                         except ValidationError:
-                                messages.error(request,("cet email existe déja"))
+                                messages.warning(request,("cet email existe déja"))
                         else:
-                                form.username =form.email_clean()
+                                form.username =username
                                 form.save()
                                 messages.success(request,("Un nouveau superutilisateur a été creé avec succés!"))   
                                 user=User.objects.get(email=form.cleaned_data["email"])
                                 user.is_superuser=True #on le rend un superutilisateur
                                 user.is_active=False #il doit confirmer son email
                                 user.save() #on sauvegarde l'user dans la bdd
+                                #envoie d'un email
+                                msg_html = render_to_string('app_principal/email.html', {'user': user})
+                                EmailMultiAlternatives(
+                                        "activation de compte",
+                                        msg_html,
+                                        settings.EMAIL_HOST_USER,
+                                        [str(user.email)],
+                                )
+                                if i==0 :
+                                        messages.warning(request,('message not sent'))
+                                if i==1:
+                                        messages.success(request,('message sent'))
+
                          
                 else:
                         messages.error(request,("Echec! l'utilisateur n'a pas été creé."))            
                
         return render(request,'app_principal/gestionuser.html',{'form':form})	
+
+        
