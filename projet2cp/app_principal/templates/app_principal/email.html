@@ -1,9 +1,10 @@
-Bonjour {{user.username}}!
+Bonjour {{user.username}}!<br><br>
 
-Un compte portant votre addresse email vient d'étre créé par l'admin,
+Un compte portant votre addresse email vient d'étre créé par l'admin,<br>
 
-Veuillez urilisez ce <a href="">lien</a> pour activer et changer votre mot de passe.
+Veuillez urilisez ce lien {{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
+pour activer et changer votre mot de passe.<br><br>
 
-Merci pour avoir utiliser notre service, portez-vous bien!
+Merci d'avoir utiliser notre service, portez-vous bien!<br>
 
 Cordialement.

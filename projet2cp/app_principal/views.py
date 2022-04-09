@@ -1,4 +1,7 @@
+from base64 import urlsafe_b64encode
 from email import message
+from readline import get_current_history_length
+from django.contrib.sites.shortcuts import get_current_site
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
@@ -10,10 +13,14 @@ from .forms import switchform, vlanform, switchConfigForm, modeleform, CreateSup
 from .models import switch, vlan, Port, ModeleSwitch
 from django.contrib import messages
 from django.contrib.auth import decorators
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import User, Group, Permission
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.crypto import get_random_string
 
 ''' def user_of_stores(user):
     if user.is_authenticated() and user.has_perm("stores.change_store"):
@@ -109,14 +116,16 @@ def modele_tab(request):
         context={'objet':'modèles','objets':modeles,'colsp':cols_principales,'colsd':cols_detail,}
         return render(request, 'app_principal/offictable.html',context)
 
-#@user_passes_test(user.is_superuser)
+
+
 
 def register_super_user(request):
         form=CreateSuperUserForm(request.POST or None)
         if request.method == 'POST': #ladmin a introduit lemail
                 
                 if form.is_valid():
-                        form.password1 = User.objects.make_random_password()
+                        password=get_random_string(length=10)
+                        form.password1 = password
                         form.password2=form.password1
                         try:
                                 username=form.email_clean()
@@ -131,22 +140,30 @@ def register_super_user(request):
                                 user.is_active=False #il doit confirmer son email
                                 user.save() #on sauvegarde l'user dans la bdd
                                 #envoie d'un email
-                                msg_html = render_to_string('app_principal/email.html', {'user': user})
-                                EmailMultiAlternatives(
-                                        "activation de compte",
+
+                                #current_site = get_current_site(request)
+                                #domain = current_site.domain #le domaine de l'appliquation web
+                                
+                                context = { #contexte à passer dans l'html
+                                'user': user,
+                                'password':password,
+                                }
+                                msg_html = render_to_string('app_principal/registration/mail_activation_changement_passwd.html', context)
+                                msg=EmailMultiAlternatives( 
+                                        'activez votre compte!',
                                         msg_html,
                                         settings.EMAIL_HOST_USER,
                                         [str(user.email)],
                                 )
-                                if i==0 :
-                                        messages.warning(request,('message not sent'))
+                                msg.content_subtype = "html" #rendre le html comme principal
+                                i=msg.send() #returns  si l'email a été envoyé, 0 sinon
                                 if i==1:
-                                        messages.success(request,('message sent'))
-
-                         
+                                        messages.success(request,('un email de confirmation a été envoyé.'))
+                                if i==0:
+                                        messages.warning(request,('email pas envoyé.'))
+                                
                 else:
                         messages.error(request,("Echec! l'utilisateur n'a pas été creé."))            
                
         return render(request,'app_principal/gestionuser.html',{'form':form})	
 
-        
