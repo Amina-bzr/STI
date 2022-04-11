@@ -25,7 +25,9 @@ class switch(models.Model): #on peut creer les ports d'un switch a partir d'un o
     armoire = models.CharField(max_length=25,default="pas configuré")
     inventaire = models.CharField(max_length=50,unique=True,)
     serie = models.CharField(max_length=25,unique=True,)
+    password=models.CharField('mot de passe',max_length=254,default="pas de mot de passe")
     mac = models.CharField(max_length=25,unique=True,)
+    vlans= models.CharField(max_length=354,default="pas de VLANs associés")
     #nbr_port = models.IntegerField(default=0,)
     #nbr_port_FE = models.IntegerField(default=0,)
     #nbr_port_GE = models.IntegerField(default=0,)
@@ -55,7 +57,7 @@ class vlan(models.Model):
     ip = models.GenericIPAddressField()
     masque = models.CharField(max_length=50)
     passerelle = models.GenericIPAddressField()
-
+    #liste des ports
     def __str__(self):
         return self.nom
 
@@ -98,7 +100,8 @@ class Port(models.Model):
         choices=etat_port,
         default=nonutilise)
     vlan_associe = models.CharField('VLAN associé',max_length=50)
-    elm_suiv = models.CharField('Cascade vers',max_length=100)
+    elm_suiv = models.CharField('Cascade vers',max_length=100) #liste deroulante point_dacces/prise/...etc
+    # bureau + prise
     # l'elment au quel le port est relié(prise, switch, point d'accès)
 
 

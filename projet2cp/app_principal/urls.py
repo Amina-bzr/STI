@@ -23,5 +23,7 @@ urlpatterns = [
 
   #gestion_user
   path('utilisateurs/',views.register_super_user,name='users'),
+
+  #path('utilisateurs/ajouter_utilisateur',views.register_user,name='users'),
   
 ]

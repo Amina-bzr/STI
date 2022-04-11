@@ -167,3 +167,5 @@ def register_super_user(request):
                
         return render(request,'app_principal/gestionuser.html',{'form':form})	
 
+#def register_user(request):
+#        form= CreateUserForm(request.POST or None)
