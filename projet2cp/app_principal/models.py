@@ -113,3 +113,4 @@ class ModeleSwitch(models.Model):
     premier_port_SFP=models.PositiveIntegerField(default=1)
     #pour automatiquement remplir qlq champs du formulaire des ports et switch
 
+

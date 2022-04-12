@@ -1,23 +1,37 @@
-<<<<<<< HEAD
+
 from email import message
 from django.shortcuts import redirect, render
-=======
+ 
 
-from django.shortcuts import render
->>>>>>> 8fdf46e582e86a59c2002673587197bbbfed6512
+
+
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
-<<<<<<< HEAD
+
 from .forms import switchform, vlanform, switchConfigForm, modeleform
 from .models import switch, vlan, Port, ModeleSwitch
 from django.contrib import messages
-=======
-from .forms import switchform, vlanform, switchConfigForm
-from .models import switch, vlan, Port
->>>>>>> 8fdf46e582e86a59c2002673587197bbbfed6512
+from django.contrib.auth import login,authenticate
+from django.contrib.auth.forms import UserCreationForm
+def home(request):
+    return render(request,'app_principal/home.html')
+
+# User Register
+def register(request):
+    form=UserCreationForm
+    if request.method=='POST':
+        regForm=UserCreationForm(request.POST)
+        if regForm.is_valid():
+            regForm.save()
+            messages.success(request,'User has been registered.')
+    return render(request,'app_principal/register.html',{'form':form})
+
+def profil(request):
+    return render(request,'app_principal/Profil-user.html')
+
 
 
 def ajoutswitch(request):
@@ -98,3 +112,10 @@ def modele_tab(request):
         modeles = ModeleSwitch.objects.all()
         context={'objet':'modèles','objets':modeles,'colsp':cols_principales,'colsd':cols_detail,}
         return render(request, 'app_principal/offictable.html',context)
+    
+def login(request):
+        return render(request, 'app_principal/login.html')
+def profil(request):
+        return render(request, 'app_principal/Profil-user.html')      
+def formprofil(request):
+        return render(request, 'app_principal/form_user.html')               

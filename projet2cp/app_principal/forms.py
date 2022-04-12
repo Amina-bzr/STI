@@ -1,13 +1,22 @@
 from django import forms
 from .models import switch, vlan, Port, ModeleSwitch
-<<<<<<< HEAD
+
 import datetime
-=======
+
 from django.shortcuts import render, redirect
 
-	
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm	
 
->>>>>>> 8fdf46e582e86a59c2002673587197bbbfed6512
+
+
+
+
+
+
+
+
+	
 
 class switchform(forms.ModelForm):
 
@@ -42,6 +51,7 @@ class switchConfigForm(forms.ModelForm):
         }
 
 
+
 class vlanform(forms.ModelForm):
     
     class Meta:
@@ -54,6 +64,7 @@ class portform(forms.ModelForm):
     class Meta:
         model = Port
         fields = "__all__"   
+        
          
 
     
@@ -74,5 +85,10 @@ class modeleform(forms.ModelForm):
             'premier_port_SFP':forms.TextInput(attrs={'class':'form-control',},),
         }           
         
-       
+
+
+
+
+
+             
 
