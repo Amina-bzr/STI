@@ -1,3 +1,4 @@
+from unittest.util import _MAX_LENGTH
 from django import forms
 from .models import switch, vlan, Port, ModeleSwitch
 
@@ -17,6 +18,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 	
+from django.contrib.auth.forms import UserCreationForm  
+from django.contrib.auth.models import User, Group
+
+
 
 class switchform(forms.ModelForm):
 
@@ -85,10 +90,26 @@ class modeleform(forms.ModelForm):
             'premier_port_SFP':forms.TextInput(attrs={'class':'form-control',},),
         }           
         
+       
+class CreateSuperUserForm(UserCreationForm):
 
+    email = forms.EmailField()  
+    username=forms.CharField(required=False)
+    password1=forms.CharField(required=False)
+    password2=forms.CharField(required=False)
+    def email_clean(self):  #pour traiter la donnee entrée par l'utilisateur et voir si elle est correcte
+        email = self.cleaned_data['email'].lower()  
+        user = User.objects.filter(email=email)  
+        if user.count():   #voir s'il exite un utilisateur avec cet email dans la base de donnee
+            raise forms.ValidationError("Cet email existe déja.")  
+        return email  
 
+    def save(self, commit = True):  
+        user = User.objects.create_user(  
+            self.username,  
+            self.email_clean(),  
+            self.password1,
+        )  
+        return user  
 
-
-
-             
-
+    

@@ -5,11 +5,14 @@
   {% block content %}
 <div class="wrapper">
   
-    {% if messages %}
-        {% for message in messages %}
-          {{ message }}
-        {% endfor %}
-    {% endif %}
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">  <!-- singular -->
+            <a class="close" data-dismiss="alert"></a>
+            {{ message }}
+        </div>
+    {% endfor %}
+  {% endif %}
 
   <h3><i class="fa fa-angle-right"></i> {{ operation }} {{ choix }}</h3>
   <div class="row mt">
@@ -28,6 +31,8 @@
                     <div class="col-lg-7">
                       {{field}}
                     </div>
+                    <br>
+                    {{ field.errors }}
                   </div>
                 {% endfor %}
                 

@@ -20,8 +20,6 @@ urlpatterns = [
      path('port/',views.port_tab,name='port'), #va afficher le tableau des ports
 
  
-     path('modele/',views.modele_tab,name='modele'), #va afficher le tableau des modeles
-
      path('switch/<int:switch_id>/configurer',views.switchConfig,name='add'),
      path('home',views.home,name='home'),
      path('register/',views.register,name='register'),
@@ -29,16 +27,10 @@ urlpatterns = [
      path('user/',views.profil,name='add'),
      path('user_form/',views.formprofil,name='add'),
     
-    ]
+  #Modeles
+  path('modele/',views.modele_tab,name='modele'), #va afficher le tableau des modeles
 
-   
-	 
-
-    
+  #gestion_user
+  path('utilisateurs/',views.register_super_user,name='users'),
   
-
-
-
-
-
-  
+]
