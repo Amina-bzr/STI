@@ -1,6 +1,5 @@
 from base64 import urlsafe_b64encode
 from email import message
-from readline import get_current_history_length
 from django.contrib.sites.shortcuts import get_current_site
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
