@@ -8,7 +8,8 @@ from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import authenticate,logout
+from django.contrib.auth import login as authlogin
 from django.contrib.auth.forms import UserCreationForm
 from .forms import switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm
 from .models import switch, vlan, Port, ModeleSwitch
@@ -23,8 +24,10 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.crypto import get_random_string
 
-def home(request):
-    return render(request,'app_principal/home.html')
+def acul(request):
+    return render(request,'app_principal/accumm.html')
+def servicepage(request):
+    return render(request,'app_principal/service.html')
 
 # User Register
 def register(request):
@@ -193,3 +196,23 @@ def register_super_user(request):
                
         return render(request,'app_principal/gestionuser.html',{'form':form})	
 
+def connecter(request):
+	if request.method == "POST":
+		username = request.POST['username']
+		password = request.POST['password']
+		user = authenticate(request, username=username, password=password)
+		if user is not None:
+			authlogin(request, user)
+			return redirect('app_principal:switch')
+		else:
+			messages.success(request, ("There Was An Error Logging In, Try Again..."))	
+			return redirect('app_principal:login')	
+
+
+	else:
+		return render(request, 'app_principal/login.html', {})
+
+def logout_user(request):
+	logout(request)
+	messages.success(request, ("You Were Logged Out!"))
+	return redirect('app_principal:vlan') 

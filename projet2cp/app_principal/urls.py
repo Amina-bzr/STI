@@ -18,10 +18,11 @@ urlpatterns = [
 
 
      path('port/',views.port_tab,name='port'), #va afficher le tableau des ports
-
+     path('logout', views.logout_user, name='logout'),
  
      path('switch/<int:switch_id>/configurer',views.switchConfig,name='add'),
-     path('home',views.home,name='home'),
+     path('home',views.acul,name='home'),
+     path('Notre_serivce',views.servicepage,name='service'),
      path('register/',views.register,name='register'),
     # path('login/',views.login,name='register'),
      path('user/',views.profil,name='add'),
@@ -32,5 +33,6 @@ urlpatterns = [
 
   #gestion_user
   path('utilisateurs/',views.register_super_user,name='users'),
+  path('loginuser', views.connecter, name="login"),
   
 ]

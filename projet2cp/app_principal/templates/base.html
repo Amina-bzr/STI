@@ -170,12 +170,13 @@
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
           <li><a class="logout" href=""> 
-            {% if user.is_authentificated %}
-              se déconnecter
-            {% else %}
-              se connecter
-            {% endif %}
-
+            {% if user.is_authenticated %}
+            <button type="button" class="btn btn-outline-secondary "   href="{% url 'app_principal:logout' %}">Se Decconecter</a> 
+            <span class="nav-item nav-link"> <i class="fa fa-user"></i>  {{user.username}}</span>
+          {% else %}
+            
+            <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'app_principal:login_user' %}">Se connceter</a>
+          {% endif %}
           </a></li > <!--lien page login-->
         </ul>
       </div>

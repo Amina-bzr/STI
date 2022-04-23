@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
   {% load static %}
+<head>
+ 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'css/accul.css' %}">
+  
+  <link href="{% static 'accul.css' %}" rel="stylesheet">
   <title>My Website</title>
 </head>
 
@@ -25,9 +26,9 @@
           </div>
           <ul>
             <h2>
-            <li><a href="#hero" data-after="Accuel">Accueil</a></li>
-            <li><a href="#services" data-after="Service"> Nos Services</a></li>
-            <li><a href="#projects" data-after="Projects">Se Connecter</a></li>
+            <li><a >Accueil</a></li>
+            <li><a href="{% url 'app_principal:service' %}"> Nos Services</a></li>
+            <li><a href="{% url 'app_principal:login' %}" >Se Connecter</a></li>
           </h2>
           </ul>
         </div>
@@ -50,8 +51,8 @@
   </section>
   <!-- End Hero Section  -->
 
-  
-  <script src="{% static 'js/accc.js' %}"></script>
+  <script src="{% static 'accc.js' %}"></script>
+ 
 </body>
 
 </html>
