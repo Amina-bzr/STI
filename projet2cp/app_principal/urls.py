@@ -22,8 +22,11 @@ urlpatterns = [
   path('modele/',views.modele_tab,name='modele'), #va afficher le tableau des modeles
 
   #gestion_user
-  path('utilisateurs/',views.register_super_user,name='users'),
+  path('utilisateurs/',views.gestion_user,name='users'),
+  path('utilisateurs/ajouter_super_utilisateur',views.register_super_user,name='create_superuser'),
+  path('utilisateurs/ajouter_utilisateur',views.register_user,name='ajouter-user'),
+  path('utilisateurs/corbeille',views.corbeille,name='corbeille'),
+  path('utilisateurs/activer_utilisateur/<int:user_id>',views.activer_user,name='activer_user'),
+  path('utilisateurs/modifier_permissions/<int:user_id>',views.modif_permissions_user,name='modif_permissions_user'),
 
-  #path('utilisateurs/ajouter_utilisateur',views.register_user,name='users'),
-  
 ]

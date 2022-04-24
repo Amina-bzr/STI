@@ -17,9 +17,9 @@ class switch(models.Model): #on peut creer les ports d'un switch a partir d'un o
 
     #les attributs de la table des switchs
     
-    nom = models.CharField(max_length=50,unique=True)
+    nom = models.CharField(max_length=100,unique=True,default='')
     marque = models.CharField(max_length=50,default='Cisco')
-    modele = models.CharField('Modèle',max_length=40)
+    modele = models.CharField('Modèle',max_length=100)
     bloc = models.CharField(max_length=25,default="pas configuré")
     local = models.CharField(max_length=25,default="magazin")
     armoire = models.CharField(max_length=25,default="pas configuré")

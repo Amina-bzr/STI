@@ -28,7 +28,7 @@
           <!-- page start-->
           <div class="content-panel">
             <div class="adv-table">
-              <table cellpadding="0" cellspacing="0" border="0" class="display table table-bordered" id="hidden-table-info">
+              <table cellpadding="0" cellspacing="0" class="display table table-bordered" id="hidden-table-info">
                 <thead>
                   <tr>
                     {% for col in colsp %}
@@ -91,10 +91,9 @@
   {% endblock %}
 
   {% block js %}
-    <script type="text/javascript" language="javascript" src="{% static 'lib/advanced-datatable/js/jquery.js' %}"></script>
-    <script type="text/javascript" language="javascript" src="{% static 'lib/advanced-datatable/js/jquery.dataTables.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lib/advanced-datatable/js/DT_bootstrap.js' %}"></script>
-    
+    <script src="{% static 'lib/advanced-datatable/js/jquery.js' %}"></script>
+    <script src="{% static 'lib/advanced-datatable/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'lib/advanced-datatable/js/DT_bootstrap.js' %}"></script>
     
     {% if objet == "switchs" %}
     <script type="text/javascript">
@@ -111,6 +110,7 @@
 
         return sOut;
       }
+      
 
       $(document).ready(function() {
         /*
@@ -161,7 +161,6 @@
       });
     </script>
 
+   {% endif %} 
    
-  {% endif %}
-
  {% endblock %}
