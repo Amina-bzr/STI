@@ -165,7 +165,7 @@
         </div>
         <div class="top-menu">
           <ul class="nav pull-right top-menu">
-            <li><a class="logout" href=""> se déconnecter</a></li > <!--lien page login-->
+            <li><a class="{% url 'app_principal:logout' %}" href=""> se déconnecter</a></li > <!--lien page login-->
           </ul>
         </div>
       </header>
@@ -179,7 +179,7 @@
             <p class="centered"><a href="p"><img src=""" class="img-circle" width="80"></a></p>
             <h5 class="centered">Chef Service de Réseau</h5>
             <li class="mt">
-              <a href="i">
+              <a href="{% url 'app_principal:home' %}">
                 <i class="fa fa-dashboard"></i>
                 <span>Accueil</span>
                 </a>
@@ -191,18 +191,19 @@
                 </a>
               <ul class="sub">
                 <li><a href="">Afficher</a></li>
-                <li><a href="">Modifier</a></li>
+                <li><a href="{% url 'app_principal:user_form' %}">Modifier</a></li>
                
               </ul>
             </li>
             <li class="sub-menu">
+              <i class="fa fa-desktop"></i>
               <a href="javascript:;">
                 <i class="fa fa-desktop"></i>
                 <span>Switch</span>
                 </a>
               <ul class="sub">
-                <li><a href="">chercher</a></li>
-                <li><a href="">Ajouter</a></li>
+                <li><a href="{% url 'app_principal:switch' %}">chercher</a></li>
+                <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
                
               </ul>
             </li>

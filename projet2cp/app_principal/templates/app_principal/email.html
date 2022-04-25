@@ -2,7 +2,7 @@ Bonjour {{user.username}}!<br><br>
 
 Un compte portant votre addresse email vient d'étre créé par l'admin,<br>
 
-Veuillez urilisez ce lien {{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %}
+Veuillez urilisez ce lien {{ protocol }}://{{ domain }}{% url 'app_principal:password_reset_confirm' uidb64=uid token=token %}
 pour activer et changer votre mot de passe.<br><br>
 
 Merci d'avoir utiliser notre service, portez-vous bien!<br>

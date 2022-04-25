@@ -132,5 +132,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'suivi.switch.esi@gmail.com'
 EMAIL_HOST_PASSWORD = '-*/tracck/*-ecole@'
 
-LOGIN_REDIRECT_URL = 'switch'
-LOGOUT_REDIRECT_URL = 'switch'
+#reset password 
+GOOGLE_RECAPTCHA_SECRET_KEY= '6Ldq_9AZAAAAAEBLVbknRrtgQfTZVBcDZXNgG6jL'
+
+

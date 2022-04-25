@@ -1,5 +1,6 @@
 from unittest.mock import DEFAULT
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -113,4 +114,9 @@ class ModeleSwitch(models.Model):
     premier_port_SFP=models.PositiveIntegerField(default=1)
     #pour automatiquement remplir qlq champs du formulaire des ports et switch
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+  
 
+    def __str__(self):
+        return f'{self.user.username} Profile'

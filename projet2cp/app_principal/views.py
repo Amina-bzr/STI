@@ -1,5 +1,7 @@
 from base64 import urlsafe_b64encode
 from email import message
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
@@ -14,6 +16,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm
 from .models import switch, vlan, Port, ModeleSwitch
 from django.contrib import messages
+from django.template.loader import render_to_string
 from django.contrib.auth import decorators
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import User, Group, Permission
@@ -23,9 +26,21 @@ from django.conf import settings
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.crypto import get_random_string
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.forms import PasswordResetForm
+from django.db.models.query_utils import Q
+from django.utils.http import urlsafe_base64_encode
+from django.core.mail import send_mail, BadHeaderError
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
 
 def acul(request):
     return render(request,'app_principal/accumm.html')
+def res(request):
+    return render(request,'app_principal/password/reset.html')
+    
 def servicepage(request):
     return render(request,'app_principal/service.html')
 
@@ -138,14 +153,29 @@ def modele_tab(request):
         context={'objet':'modèles','objets':modeles,'colsp':cols_principales,'colsd':cols_detail,}
         return render(request, 'app_principal/offictable.html',context)
     
-def login(request):
-        return render(request, 'app_principal/login.html')
+def log(request):
+        return render(request, 'app_principal/log.html')
 def profil(request):
         return render(request, 'app_principal/Profil-user.html')      
 def formprofil(request):
         return render(request, 'app_principal/form_user.html')               
 
+def log(request):
 
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password =request.POST.get('password')
+
+		user = authenticate(request, username=username, password=password)
+
+		if user is not None:
+			login(request, user)
+			return redirect('app_principal:switch')
+		else:
+			messages.info(request, 'Username OR password is incorrect')
+
+	context = {}
+	return render(request, 'app_principal/log.html', context)
 
 
 def register_super_user(request):
@@ -215,4 +245,35 @@ def connecter(request):
 def logout_user(request):
 	logout(request)
 	messages.success(request, ("You Were Logged Out!"))
-	return redirect('app_principal:vlan') 
+	return redirect('app_principal:service') 
+
+
+#reset-change password
+class PasswordReset(PasswordResetView):
+    template_name = 'app_principal/password/password_reset.html'
+
+class PasswordResetDone(PasswordResetDoneView):
+    template_name = 'app_principal/password/password_reset_done.html'
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'app_principal/password/password_reset_confirm.html'
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    template_name = 'app_principal/password/password_reset_complete.html'
+
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request,"Your Password Change")
+            return redirect('app_principal:switch')
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    context ={
+        'form':form,
+    }
+    return render(request,'app_principal/password/changepassword.html',context)
+  

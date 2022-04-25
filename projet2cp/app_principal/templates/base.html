@@ -191,7 +191,7 @@
           <p class="centered"><a href="p"><img src=""" class="img-circle" width="80"></a></p>
           <h5 class="centered">Chef Service de Réseau</h5>
           <li class="mt">
-            <a href="i">
+            <a href="{% url 'app_principal:home' %}">
               <i class="fa fa-dashboard"></i>
               <span>Accueil</span>
               </a>
@@ -213,9 +213,9 @@
               <span>Vlan</span>
               </a>
             <ul class="sub">
-              <li><a href="">Grids</a></li>
+            
               <li><a href="{% url 'app_principal:vlan' %}">Chercher </a></li>
-              <li><a href="">Ajouter</a></li> <!--lien vers ajout vlan-->
+              <li><a href="{% url 'app_principal:add_vlan' %}">Ajouter</a></li> <!--lien vers ajout vlan-->
               
             </ul>
           </li>
@@ -237,7 +237,7 @@
               <span>A propos </span>
              
          
-            <a href="inbox.html"> <!--lien vers gestion des utilisateurs-->
+            <a href="{% url 'app_principal:users' %}"> <!--lien vers gestion des utilisateurs-->
               <i class="fa fa-envelope"></i>
               <span>gestion des utilisateurs </span>
               <span class="label label-theme pull-right mail-info">2</span>
