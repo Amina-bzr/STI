@@ -19,9 +19,10 @@ class switchform(forms.ModelForm):
     class Meta:
         model = switch
 
-        fields = ['mac','inventaire','serie','marque','modele','date_achat']
+        fields = ['mac','inventaire','serie','marque','modele','password','date_achat']
 
         widgets = {
+            'password': forms.PasswordInput(attrs={'class':'form-control'},),
             'mac': forms.TextInput(attrs={'class':'form-control'},),
             'inventaire': forms.TextInput(attrs={'class':'form-control'},),
             'serie': forms.TextInput(attrs={'class':'form-control'},),
@@ -32,16 +33,17 @@ class switchform(forms.ModelForm):
 
 
 class switchConfigForm(forms.ModelForm):
+        class Meta:
+            model= switch
+            fields = ['nom','bloc','local','armoire','preced']
 
-        fields = ['nom','bloc','local','armoire','preced']
-
-        widgets = {
-            'nom': forms.TextInput(attrs={'class':'form-control'},),
-            'bloc': forms.TextInput(attrs={'class':'form-control'},),
-            'local': forms.TextInput(attrs={'class':'form-control'},),
-            'armoire': forms.TextInput(attrs={'class':'form-control'},),
-            'preced': forms.TextInput(attrs={'class':'form-control'},),
-        }
+            widgets = {
+                'nom': forms.TextInput(attrs={'class':'form-control'},),
+                'bloc': forms.TextInput(attrs={'class':'form-control'},),
+                'local': forms.TextInput(attrs={'class':'form-control'},),
+                'armoire': forms.TextInput(attrs={'class':'form-control'},),
+                'preced': forms.TextInput(attrs={'class':'form-control'},),
+            }
 
 
 class vlanform(forms.ModelForm):

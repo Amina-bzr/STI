@@ -19,13 +19,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 urlpatterns = [
-<<<<<<< HEAD
     path('admin/', admin.site.urls),
     path('app_principal/',include('app_principal.urls')),
-=======
-     path('admin/', admin.site.urls),
-     path('app_principal/',include('app_principal.urls')),
-    
-    
->>>>>>> d6e818c983f7fa4ccc2d242176cfc4bff2275ea2
 ]

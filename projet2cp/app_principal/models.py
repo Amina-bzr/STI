@@ -18,7 +18,7 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
 
     # les attributs de la table des switchs
 
-    nom = models.CharField(max_length=50, unique=True)
+    nom = models.CharField(max_length=50)
     marque = models.CharField(max_length=50, default='Cisco')
     modele = models.CharField(max_length=50)
     bloc = models.CharField(max_length=25, default="pas configuré")
@@ -27,6 +27,7 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
     inventaire = models.CharField(max_length=50, unique=True,)
     serie = models.CharField(max_length=25, unique=True,)
     mac = models.CharField(max_length=25, unique=True,)
+    password=models.CharField('Mot de passe',max_length=100,default="")
    # nbr_port = models.IntegerField(default=0,)
     # nbr_port_FE = models.IntegerField(default=0,)
     # nbr_port_GE = models.IntegerField(default=0,)
@@ -37,16 +38,15 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
     date_achat = models.DateField("Date d'achat",
                                   blank=True,
                                   null=True,
-                                  # validators=[
-                                  #    RegexValidator(r'^/d/d-/d/d-/d/d/d/d$',
-                                  #    message="Veuillez respecter le format")
-                                  #    ]
+                                  
                                   )
     etat = models.CharField(
         max_length=10,
         choices=choix_etat,
         default=passif,
     )
+    vlans=models.CharField(
+        'VLANs associés', max_length=350, blank=True, default="Aucun")
 
     def __str__(self):
         return self.nom
@@ -66,13 +66,13 @@ class vlan(models.Model):
 class Port(models.Model):
 
     # les valeurs de la liste deroulante 'etat port'
-    defect = 'defectueux'
-    relie = 'utilisé'
-    nonutilise = 'non_utilisé'
+    defect = 'Défectueux'
+    relie = 'Utilisé'
+    nonutilise = 'Non utilisé'
 
     etat_port = [
-        (defect, 'Defectueux'),
-        (relie, 'utilisé'),
+        (defect, 'Défectueux'),
+        (relie, 'Utilisé'),
         (nonutilise, 'Non utilisé'),
     ]
 
@@ -115,11 +115,11 @@ class Port(models.Model):
         choices=etat_port,
         default=nonutilise)
     vlan_associe = models.CharField(
-        'VLAN associé', max_length=50, default="pas de vlan associé")
+        'VLAN associé', max_length=50, default= nonutilise)
     nom_suiv = models.CharField(
-        "nom de l'appareil relié", max_length=100, default="non relié")
+        "Nom de l'appareil relié", max_length=100, default="Non relié")
     type_suiv = models.CharField(
-        "type de l'appareil relié ", max_length=15, default="Aucun", choices=choix_type_suiv,)
+        "Type de l'appareil relié ", max_length=15, default="Aucun", choices=choix_type_suiv,)
     # l'elment au quel le port est relié(prise, switch, point d'accès)
 
 

@@ -127,6 +127,9 @@ def ajout_modele(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            messages.success(request,('Modèle créé avec succés!'))
+        else:
+            messages.warning(request,('Echec lors de la création, veuillez réessayer une autre fois.'))
     context = {'form': form, 'choix': 'modele', 'operation': 'Ajout', }
     return render(request, 'app_principal/form_validation.html', context)
 
@@ -141,7 +144,6 @@ def switchConfig(request, switch_id):
             if s.etat == switch.passif:
                 s.etat = switch.actif
                 s.save()
-            # return redirect('app_principal:switch')
             return redirect('./port_tab/', id)
             # configuration du `switch` existant dans la base de données
             # redirect vers le form de ports---à faire
@@ -215,8 +217,8 @@ def vlan_tab(request):
 
 def port_tab(request, switch_id):
 
-    cols_principales = ['port_num', 'type_port',
-                        'etat', 'vlan_associe', 'type_suivant', 'nom_suivant']
+    cols_principales = ['Numero du port', 'Type du port',
+                        'Etat', 'Vlan associé', "Type de l'appareil suivante", "nom de l'appareil suivante"]
     cols_detail = []
     # ports = Port.objects.all()
     Ports = Port.objects.filter(switch=switch_id)
@@ -389,7 +391,7 @@ def modif_permissions_user(request, user_id):
                
         return render(request,'app_principal/modif_user_permissions.html',{'form':form,'user':user,})
     
-    
+
 def connecter(request):
     if request.method == "POST":
         username = request.POST['username']
