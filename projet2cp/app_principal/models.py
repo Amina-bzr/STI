@@ -140,3 +140,11 @@ class ModeleSwitch(models.Model):
         default=1)  # type sont sequentiels
     premier_port_SFP = models.PositiveIntegerField(default=1)
     # pour automatiquement remplir qlq champs du formulaire des ports et switch
+class Contact(models.Model):
+    name = models.CharField(max_length=158)
+    email = models.EmailField()
+    subject = models.CharField(max_length=158)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.name

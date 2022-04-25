@@ -39,6 +39,8 @@ urlpatterns = [
     # gestion_user
     path('loginuser', views.connecter, name="login"),
 
+    path('contact/', views.contact, name='contact'),
+    path('switch/<int:switch_id>/reformer',views.switch_reforme,name='reformer_switch'),
   #gestion_user
   path('utilisateurs/',views.gestion_user,name='users'),
   path('utilisateurs/ajouter_super_utilisateur',views.register_super_user,name='create_superuser'),

@@ -15,7 +15,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as authlogin
 from django.contrib.auth.forms import UserCreationForm
 from .forms import EditUserPermissionsForm, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform
-from .models import switch, vlan, Port, ModeleSwitch
+from .models import switch, vlan, Port, ModeleSwitch, Contact
 from django.contrib import messages
 from django.contrib.auth import decorators
 from django.contrib.auth.forms import SetPasswordForm
@@ -27,6 +27,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.crypto import get_random_string
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
 
 
 def acul(request):
@@ -180,8 +181,10 @@ def portConfig(request, switch_id, port_num):
                 s.vlans = s.vlans + p.vlan_associe + " / "
                 s.save()
                 print(p.vlan_associe)
-
+            messages.success(request,('port numero '+str(p.num_port)+' configuré avec succés!'))
             return redirect('../port_tab/', switch_id)
+        else:
+            messages.warning(request,('echec lors de la configuration, veuillez réessayer une autre fois.'))
     else:
         form = portform(instance=p)
 
@@ -434,3 +437,42 @@ def logout_user(request):
     logout(request)
     messages.success(request, ("You Were Logged Out!"))
     return redirect('app_principal:vlan')
+
+def index(request):
+    return render(request, 'base.html')
+
+def contact(request):
+    if request.method == "POST":
+
+            
+        contact = Contact()
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        
+        contact.name = name
+        contact.email = email
+        contact.message = message
+        contact.save()
+        messages.success(request, ("Merci de nous avoir contacté"))
+
+        send_mail('Contact Form',message,settings.EMAIL_HOST_USER,['asma16.sebti@gmail.com'],fail_silently=False)
+
+        
+    return render(request, 'contact.html')
+
+def switch_reforme(request, switch_id):
+    s = get_object_or_404(switch, id=switch_id)
+    if request.method == 'POST': 
+            
+        s.etat = s.reforme
+        s.bloc = "reformé"
+        s.local = "reformé"
+        s.armoire = "magazin"
+        s.preced = "pas en cascade"
+        s.save()
+        return redirect('app_principal:switch')
+       
+    return render(request,
+                'app_principal/form_validation.html',
+                {'choix':s.nom,'operation':'réformation',})	
