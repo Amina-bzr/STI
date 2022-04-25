@@ -13,7 +13,7 @@ from django.views import generic
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as authlogin
 from django.contrib.auth.forms import UserCreationForm
-from .forms import switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, portform
+from .forms import EditUserPermissionsForm, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform
 from .models import switch, vlan, Port, ModeleSwitch, Contact
 from django.contrib import messages
 from django.contrib.auth import decorators
@@ -128,6 +128,9 @@ def ajout_modele(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
+            messages.success(request,('Modèle créé avec succés!'))
+        else:
+            messages.warning(request,('Echec lors de la création, veuillez réessayer une autre fois.'))
     context = {'form': form, 'choix': 'modele', 'operation': 'Ajout', }
     return render(request, 'app_principal/form_validation.html', context)
 
@@ -142,7 +145,6 @@ def switchConfig(request, switch_id):
             if s.etat == switch.passif:
                 s.etat = switch.actif
                 s.save()
-            # return redirect('app_principal:switch')
             return redirect('./port_tab/', id)
             # configuration du `switch` existant dans la base de données
             # redirect vers le form de ports---à faire
@@ -216,8 +218,8 @@ def vlan_tab(request):
 
 def port_tab(request, switch_id):
 
-    cols_principales = ['port_num', 'type_port',
-                        'etat', 'vlan_associe', 'type_suivant', 'nom_suivant']
+    cols_principales = ['Numero du port', 'Type du port',
+                        'Etat', 'Vlan associé', "Type de l'appareil suivante", "nom de l'appareil suivante"]
     cols_detail = []
     # ports = Port.objects.all()
     Ports = Port.objects.filter(switch=switch_id)
@@ -245,62 +247,151 @@ def login(request):
 def profil(request):
     return render(request, 'app_principal/Profil-user.html')
 
+def gestion_user(request):
+        users=User.objects.all()        
+        if request.method == 'POST': 
+                ids_selectionnes = [box[10:] for box in request.POST.keys() if box.startswith("selection_")]
+                users_selectiones= User.objects.filter(id__in=ids_selectionnes)
+                for user in users_selectiones.all():
+                        user.is_active = False        
+                        user.save()
+            
+        context={'users':users,}
+        return render(request, 'app_principal/gestionuser.html',context)
+
+def corbeille(request):
+        users=User.objects.all()        
+        context={'users':users,}
+        return render(request, 'app_principal/corbeille.html',context)
+
+
+def activer_user(request, user_id):
+        user = User.objects.get(pk=user_id)
+        user.is_active=True
+        user.save()
+        messages.success(request, ("l'utilisateur "+user.username+" a été activé avec succés!"))
+        return redirect('app_principal:corbeille')		
+
 
 def formprofil(request):
     return render(request, 'app_principal/form_user.html')
 
 
 def register_super_user(request):
-    form = CreateSuperUserForm(request.POST or None)
-    if request.method == 'POST':  # ladmin a introduit lemail
+        form=CreateSuperUserForm(request.POST or None)
+        if request.method == 'POST': #ladmin a introduit lemail
+                
+                if form.is_valid():
+                        password=get_random_string(length=10)
+                        form.password1 = password
+                        form.password2=form.password1
+                        try:
+                                username=form.email_clean()
+                        except ValidationError:
+                                messages.warning(request,("cet email existe déja"))
+                        else:
+                                form.username =username
+                                form.save()
+                                messages.success(request,("Un nouveau superutilisateur a été creé avec succés!"))   
+                                user=User.objects.get(email=form.cleaned_data["email"])
+                                user.is_superuser=True #on le rend un superutilisateur
+                                user.is_active=True #il doit confirmer son email
+                                user.save() #on sauvegarde l'user dans la bdd
+                                #envoie d'un email
 
-        if form.is_valid():
-            password = get_random_string(length=10)
-            form.password1 = password
-            form.password2 = form.password1
-            try:
-                username = form.email_clean()
-            except ValidationError:
-                messages.warning(request, ("cet email existe déja"))
-            else:
-                form.username = username
-                form.save()
-                messages.success(
-                    request, ("Un nouveau superutilisateur a été creé avec succés!"))
-                user = User.objects.get(email=form.cleaned_data["email"])
-                user.is_superuser = True  # on le rend un superutilisateur
-                user.is_active = False  # il doit confirmer son email
-                user.save()  # on sauvegarde l'user dans la bdd
-                # envoie d'un email
+                                #current_site = get_current_site(request)
+                                #domain = current_site.domain #le domaine de l'appliquation web
+                                
+                                context = { #contexte à passer dans l'html
+                                'user': user,
+                                'password':password,
+                                }
+                                msg_html = render_to_string('app_principal/registration/mail_activation_changement_passwd.html', context)
+                                msg=EmailMultiAlternatives( 
+                                        'Bienvenue sur STI esi !',
+                                        msg_html,
+                                        settings.EMAIL_HOST_USER,
+                                        [str(user.email)],
+                                ) 
+                                msg.content_subtype = "html" #rendre le html comme principal
+                                i=msg.send() #returns  si l'email a été envoyé, 0 sinon #gaierror exception si pas de cnx
+                                if i==1:
+                                        messages.success(request,('un email de confirmation a été envoyé.'))
+                                if i==0:
+                                        messages.warning(request,('email pas envoyé.'))
+                                
+                else:
+                        messages.warning(request,("Echec! l'utilisateur n'a pas été creé."))            
+               
+        return render(request,'app_principal/create_super_user.html',{'form':form})	
 
-                # current_site = get_current_site(request)
-                # domain = current_site.domain #le domaine de l'appliquation web
+def register_user(request):
+        form=CreateUserForm(request.POST or None)
+        if request.method == 'POST': #ladmin a introduit lemail
+                
+                if form.is_valid():
+                        password=get_random_string(length=10)
+                        form.password1 = password
+                        form.password2=form.password1
+                        try:
+                                username=form.email_clean()
+                        except ValidationError:
+                                messages.warning(request,("cet email existe déja"))
+                        else:
+                                form.username =username
+                                form.save()
+                                messages.success(request,("Un nouveau utilisateur a été creé avec succés!"))   
+                                user=User.objects.get(email=form.cleaned_data["email"])
+                                user.is_superuser=False #on le rend un superutilisateur
+                                user.is_active=True #il doit confirmer son email
+                                for group in form.cleaned_data['permissions']:
+                                        user_group = Group.objects.get(name=group) 
+                                        user.groups.add(user_group)
+                                user.save() #on sauvegarde l'user dans la bdd
+                                #envoie d'un email
 
-                context = {  # contexte à passer dans l'html
-                    'user': user,
-                    'password': password,
-                }
-                msg_html = render_to_string(
-                    'app_principal/registration/mail_activation_changement_passwd.html', context)
-                msg = EmailMultiAlternatives(
-                    'activez votre compte!',
-                    msg_html,
-                    settings.EMAIL_HOST_USER,
-                    [str(user.email)],
-                )
-                msg.content_subtype = "html"  # rendre le html comme principal
-                i = msg.send()  # returns  si l'email a été envoyé, 0 sinon
-                if i == 1:
-                    messages.success(
-                        request, ('un email de confirmation a été envoyé.'))
-                if i == 0:
-                    messages.warning(request, ('email pas envoyé.'))
+                                #current_site = get_current_site(request)
+                                #domain = current_site.domain #le domaine de l'appliquation web
+                                
+                                context = { #contexte à passer dans l'html
+                                'user': user,
+                                'password':password,
+                                }
+                                msg_html = render_to_string('app_principal/registration/mail_activation_changement_passwd.html', context)
+                                msg=EmailMultiAlternatives( 
+                                        'Bienvenue sur STI esi !',
+                                        msg_html,
+                                        settings.EMAIL_HOST_USER,
+                                        [str(user.email)],
+                                ) 
+                                msg.content_subtype = "html" #rendre le html comme principal
+                                i=msg.send() #returns  si l'email a été envoyé, 0 sinon #gaierror exception si pas de cnx
+                                if i==1:
+                                        messages.success(request,('un email de confirmation a été envoyé.'))
+                                if i==0:
+                                        messages.warning(request,('email pas envoyé.'))
+                                
+                else:
+                        messages.warning(request,("Echec! l'utilisateur n'a pas été creé."))            
+               
+        return render(request,'app_principal/form-creation-user.html',{'form':form,'operation':'Ajout','choix':'utilisateur'})
 
-        else:
-            messages.error(request, ("Echec! l'utilisateur n'a pas été creé."))
-
-    return render(request, 'app_principal/gestionuser.html', {'form': form})
-
+def modif_permissions_user(request, user_id):
+        form=EditUserPermissionsForm(request.POST or None)
+        user=get_object_or_404(User,id=user_id)
+        if request.method == 'POST': #ladmin a introduit les nouvelles permissions
+                if form.is_valid(): 
+                        user.groups.clear() 
+                        for group in form.cleaned_data['permissions']:
+                                user_group = Group.objects.get(name=group) 
+                                user.groups.add(user_group)
+                        user.save()
+                        messages.success(request,("permissions modifiées avec succés!"))                
+                else:
+                        messages.warning(request,("Echec! les permissions n'ont pas été modifiées."))            
+               
+        return render(request,'app_principal/modif_user_permissions.html',{'form':form,'user':user,})
+    
 
 def connecter(request):
     if request.method == "POST":

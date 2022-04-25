@@ -3,85 +3,47 @@
 
 {% block content %}
 
-    <section id="main-content">
+    <section id="main-content" style="margin-left: -5px;">
       <section class="wrapper">
         <!-- debut page -->
         <div class="row mt">
           <div class="col-sm-3">
             <section class="panel">
               <div class="panel-body">
-                <a href="mail_compose.html" class="btn btn-compose">
+                <a href="{% url 'app_principal:ajouter-user' %}" class="btn btn-compose">
                   <i class="fa fa-user-plus"></i> Ajouter un utilisateur
                   </a>
-                <ul class="nav nav-pills nav-stacked mail-nav">
-                  <li class="active"><a href="inbox.html"> <i class="fa fa-users"></i> Les utilisateurs  <span class="label label-theme pull-right inbox-notification">3</span></a></li>
+                <ul class="nav nav-pills nav-stacked mail-nav" style="display: flex;flex-direction: column;">
+                  <li class="active"><a href="{% url 'app_principal:users' %}"> <i class="fa fa-users"></i> Les utilisateurs  <!--<span class="label label-theme pull-right inbox-notification">3</span>--></a></li>
                   
                   <li><a href="#"> <i class="fa fa-exclamation-circle"></i> Important</a></li>
                   
                   </li>
-                  <li><a href="#"> <i class="fa fa-trash-o"></i> Corbeille</a></li>
+                  <li><a href="{% url 'app_principal:corbeille' %}"> <i class="fa fa-trash-o"></i> Corbeille</a></li>
                 </ul>
               </div>
             </section>
             <section class="panel">
               <div class="panel-body">
-                <ul class="nav nav-pills nav-stacked labels-info ">
+                <ul class="nav nav-pills nav-stacked labels-info " style="display:flex;flex-direction: column;">
                   <li>
                     <h4>Super utilisateurs</h4>
                   </li>
+                  {% for user in users %}
+                  {% if user.is_superuser == True %}
                   <li>
                     <a href="#">
-                        <img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="20">Laura
+                        <img src="{% static 'img/default-profile-pic.jpg'%}" style="margin-right:7px;" class="img-circle" width="20">{{user.username}}
                         
                       </a>
                   </li>
-                  <li>
-                    <a href="#">
-                        <img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="20">David
-                        
-                      </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                        <img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="20">Mark
-                        
-                      </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                        <img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="20">Phillip
-                        
-                      </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                        <img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="20">Joshua
-                        
-                      </a>
-                  </li>
+                  {% endif %}
+                  {% endfor %}
                 </ul>
-                <a> + Ajouter</a>
-                <form method="post">
-                  {% csrf_token %}
-                  {{ form.email }}
-                  <input type="submit" value="Ajouter" name="submit">
-                </form>
-                {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">  <!-- singular -->
-            <a class="close" data-dismiss="alert"></a>
-            {{ message }}
-        </div>
-    {% endfor %}
-  {% endif %}
-                <div class="inbox-body text-center inbox-action">
-                  
-                  <div class="btn-group">
-                    <a class="btn mini btn-default" href="javascript:;">
-                      <i class="fa fa-cog"></i>
-                      </a>
-                  </div>
-                </div>
+                <a href="{% url 'app_principal:create_superuser' %}"> + Ajouter</a>
+                
+                
+                
               </div>
             </section>
           </div>
@@ -90,211 +52,117 @@
               <header class="panel-heading wht-bg">
                 <h4 class="gen-case">
                    Les utilisateurs
-                    <form action="#" class="pull-right mail-src-position">
+                    <!-- <form action="#" class="pull-right mail-src-position">
                       <div class="input-append">
                         <input type="text" class="form-control " placeholder="Recherche utilisateur">
                       </div>
-                    </form>
+                    </form> -->
                   </h4>
               </header>
-              <div class="panel-body minimal">
-                <div class="mail-option">
-                  <div class="chk-all">
-                    <div class="pull-left mail-checkbox">
-                      <input type="checkbox" class="">
+              <form method="post" >
+                {% csrf_token %}
+                <div class="panel-body minimal">
+                  <div class="mail-option">
+                    <div class="chk-all">
+                      <div class="pull-left mail-checkbox">
+                        <input type="checkbox" onClick="toggle(this)">
+                      </div> 
+                      <div class="btn-group">
+                        <a data-toggle="dropdown" href="#" class="btn mini all">
+                          TOUT
+                          
+                          </a>
+                        
+                      </div>
                     </div>
                     <div class="btn-group">
-                      <a data-toggle="dropdown" href="#" class="btn mini all">
-                        TOUT
-                        
+                      <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="{% url 'app_principal:users' %}" class="btn mini tooltips">
+                        <i class=" fa fa-refresh"></i>
                         </a>
-                      
                     </div>
-                  </div>
-                  <div class="btn-group">
-                    <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips">
-                      <i class=" fa fa-refresh"></i>
-                      </a>
-                  </div>
-                  
-                  <div class="btn-group">
-                    <a data-toggle="dropdown" href="#" class="btn mini blue">
-                      Droit D'accés
-                      <i class="fa fa-angle-down "></i>
-                      </a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#"><i class="fa fa-pencil"></i>  Modification</a></li>
-                      <li><a href="#"><i class="fa fa-eraser"></i> Suppression</a></li>
-                      <li><a href="#"><i class="fa fa-book "></i> Lecture</a></li>
-                        
+                    
+                    <!--<div class="btn-group">
+                      <a data-toggle="dropdown" href="#" class="btn mini blue">
+                        Droit D'accés
+                        <i class="fa fa-angle-down "></i>
+                        </a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#"><i class="fa fa-pencil"></i>  Modification</a></li>
+                        <li><a href="#"><i class="fa fa-eraser"></i> Suppression</a></li>
+                        <li><a href="#"><i class="fa fa-book "></i> Lecture</a></li>
+                          
+                      </ul>
+                    </div> -->
+                      <button class="btn mini blue" style="background:#d9534f;color:black" type="button" data-toggle="modal" data-target="#exampleModal">Desactiver</button>
+                      <ul class="unstyled inbox-pagination">
+                      <li><span>1-3 parmi 3</span></li>
+                      <li>
+                        <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                      </li>
+                      <li>
+                        <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                      </li>
                     </ul>
                   </div>
-                  <div class="btn-group hidden-phone">
-                    <a data-toggle="dropdown"style="background:#d9534f;color:black" href="#" class="btn mini blue">
-                      Supprimer
+                  <div class="table-inbox-wrap ">
+                    <table class="table table-inbox table-hover">
+                      <tbody>
+                        <tr class=""style="background: #4ECDC4;color:white">
                       
-                      </a>
-                    
+                          <td class="inbox-small-cells" >
+                          </td>
+                          <td class="inbox-small-cells"></td>
+                          <td style="color:white" class="view-message  dont-show">Nom d'utilisateur</td>
+                          <td style="color:white" class="view-message ">Email</td>
+                          <td style="color:white" class="view-message  ">Droits d'accés</td>
+                          <!--<td style="color:white" class="view-message  text-center">Le Poste</td>-->
+                        </tr>
+                        
+                        
+                        {% for user in users %}
+                        {% if user.is_superuser == False and user.is_active == True %}
+                        <tr class="">
+                          <td><input type="checkbox" name="selection_{{ user.id }}" class="check mail-checkbox"></td>
+                          <td class="inbox-small-cells"></td>
+                          <td class="view-message dont-show"><img src="{% static 'img/default-profile-pic.jpg'%}" class="img-circle" width="30" style="margin-right:7px;">{{ user.username }}</td>
+                          <td class="view-message">{{ user.email }}</td>
+                          <td class="view-message ">
+                            {% for group in user.groups.all %}
+                              <span>{{ group.name }} / </span>
+                            {% endfor %}
+                              <span><a href="{% url 'app_principal:modif_permissions_user' user.id %}"><img src="{% static 'img/edit-pencil.png' %}" alt="modifier" style="width:13.5px;margin-left:3px;"/></a></span>
+                          </td>
+                          <!--<td class="view-message text-center">{{ user.poste }}</td>-->
+                        </tr>                    </div>
+                        {% endif %}
+                        {% endfor %}
+                      </tbody>
+                    </table>
                   </div>
-                  <ul class="unstyled inbox-pagination">
-                    <li><span>1-50 of 99</span></li>
-                    <li>
-                      <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
-                    </li>
-                    <li>
-                      <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
-                    </li>
-                  </ul>
                 </div>
-                <div class="table-inbox-wrap ">
-                  <table class="table table-inbox table-hover">
-                    <tbody>
-                      <tr class=""style="background: #4ECDC4;color:white">
-                     
-                        <td class="inbox-small-cells" >
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message  dont-show"><a style="color:white" href="mail_view.html">Nom/Prenom</a></td>
-                        <td class="view-message "><a  style="color:white" href="mail_view.html">Email</a></td>
-                        <td class="view-message  ">Droit d'accés</td>
-                        <td class="view-message  text-center">Le Poste</td>
-                      </tr>
-                      <tr class="unread">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>        
-                        <td class="view-message  dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30"><a href="mail_view.html">morad dodo</a></td>
-                        <td class="view-message "><a href="mail_view.html">moraddodo@esi.com</a></td>
-                        <td class="view-message  ">Modifier</td>
-                        <td class="view-message  text-center">chef service </td>
-                      </tr>
-                      <tr class="unread">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30"><a href="mail_view.html">Mark Thompson</a></td>
-                        <td class="view-message"> <a href="mail_view.html">Last project updates</a></td>
-                        <td class="view-message ">Modifier</td>
-                        <td class="view-message text-center">secretere</td>
-                      </tr>
-                      <tr class="unread">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30"><a href="mail_view.html"></a><a href="mail_view.html">Wonder Corp.</a></td>
-                        <td class="view-message"><a href="mail_view.html">moraddodo@esi.com</a></td>
-                        <td class="view-message ">Lire</td>
-                        <td class="view-message text-center">technicien</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></i></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30"><a href="mail_view.html">Facebook</a></td>
-                        <td class="view-message"><a href="mail_view.html">moraddodo@esi.com</a></td>
-                        <td class="view-message ">Modifier</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30"><a href="mail_view.html"></a><a href="mail_view.html">Mark Webber </a></td>
-                        <td class="view-message"><a href="mail_view.html">moraddodo@esi.com</a></td>
-                        <td class="view-message">Modifier</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></i></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30"><a href="mail_view.html">Facebook</a></td>
-                        <td class="view-message"><a href="mail_view.html">moraddodo@esi.com</a></td>
-                        <td class="view-message ">Lire</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30">Paypal inc.</td>
-                        <td class="view-message">moraddodo@esi.com</td>
-                        <td class="view-message ">Modifier</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30">Andrea </td>
-                        <td class="view-message view-message">moraddodo@esi.com</td>
-                        <td class="view-message ">Lire</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30">David Green</td>
-                        <td class="view-message view-message">moraddodo@esi.com</td>
-                        <td class="view-message ">Modifier</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30"><a href="mail_view.html"></a>Evelyn </td>
-                        <td class="view-message view-message">moraddodo@esi.com</td>
-                        <td class="view-message ">Lire</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"><img src="{% static 'img/friends/fr-03.jpg'%}" class="img-circle" width="30">Martin Moore</td>
-                        <td class="view-message">moraddodo@esi.com</td>
-                        <td class="view-message ">Lire</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="dont-show"><img src="{% static 'img/friends/fr-02.jpg' %}" class="img-circle" width="30">Facebook</td>
-                        <td class="view-message">moraddodo@esi.com</td>
-                        <td class="view-message ">Modifier</i></td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      <tr class="">
-                        <td class="inbox-small-cells">
-                          <input type="checkbox" class="mail-checkbox">
-                        </td>
-                        <td class="inbox-small-cells"></td>
-                        <td class="view-message dont-show"> <img src="{% static 'img/friends/fr-01.jpg' %}" class="img-circle" width="30">Steve Stoll</td>
-                        <td class="view-message">moraddodo@esi.com</td>
-                        <td class="view-message ">Modifier</td>
-                        <td class="view-message text-center">chef service</td>
-                      </tr>
-                      
-                      
-                    </tbody>
-                  </table>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Etes-vous sure?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Voulez-vous vraiment désactiver les utilisateur sélectionnés ? veuillez bien verifier ceux que vous avez selectionner avant de procéder à cette action.
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-theme" >Oui, je suis sure.</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+
+              <!--fin modal-->
+              </form>
             </section>
           </div>
         </div>
@@ -302,4 +170,15 @@
       <!-- /wrapper -->
     </section>
     
+    {% endblock %}
+
+    {% block js %}
+      <script>
+        function toggle(source) {
+          checkboxes = document.getElementsByClassName('check');
+          for(var i=0, n=checkboxes.length;i<n;i++) {
+            checkboxes[i].checked = source.checked;
+          }
+        }
+      </script>
     {% endblock %}

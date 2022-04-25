@@ -52,7 +52,7 @@
         <ul class="nav top-menu">
           <!-- settings start -->
           <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="">
               <i class="fa fa-tasks"></i>
               <span class="badge bg-theme">4</span>
               </a>
@@ -62,7 +62,7 @@
                 <p class="green">Voici les changement faites récamment</p>
               </li>
               <li>
-                <a href="index.html#">
+                <a href="">
                   <div class="task-info">
                     <div class="desc">Switch ajouté</div>
                     <div class="percent">30%</div>
@@ -75,7 +75,7 @@
                 </a>
               </li>
               <li>
-                <a href="index.html#">
+                <a href="">
                   <div class="task-info">
                     <div class="desc">Switch configuration</div>
                     <div class="percent">60%</div>
@@ -88,7 +88,7 @@
                 </a>
               </li>
               <li>
-                <a href="index.html#">
+                <a href="">
                   <div class="task-info">
                     <div class="desc">Switch activé</div>
                     <div class="percent">80%</div>
@@ -101,7 +101,7 @@
                 </a>
               </li>
               <li>
-                <a href="index.html#">
+                <a href="">
                   <div class="task-info">
                     <div class="desc">Switch Reformé</div>
                     <div class="percent">70%</div>
@@ -119,7 +119,7 @@
           <!-- settings end -->
           <!-- inbox dropdown start-->
           <li id="header_inbox_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="">
               <i class="fa fa-envelope-o"></i>
               <span class="badge bg-theme">5</span>
               </a>
@@ -130,7 +130,7 @@
               </li>
               <li>
                 
-                <a href="index.html#">
+                <a href="">
                   <span class="photo"><img alt="avatar" src="{% static 'img/ui-divya.jpg' %}"></span>
                   <span class="subject">
                   <span class="from">Mohamed</span>
@@ -144,14 +144,14 @@
               <li>
                
               <li>
-                <a href="index.html#">voir toutes les notifications </a>
+                <a href="">voir toutes les notifications </a>
               </li>
             </ul>
           </li>
           <!-- inbox dropdown end -->
           <!-- notification dropdown start-->
           <li id="header_notification_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="">
               <i class="fa fa-bell-o"></i>
               <span class="badge bg-warning">7</span>
               </a>
@@ -159,7 +159,7 @@
               <div class="notify-arrow notify-arrow-yellow"></div>
               
               <li>
-                <a href="index.html#">See all notifications</a>
+                <a href="">See all notifications</a>
               </li>
             </ul>
           </li>
@@ -197,54 +197,61 @@
               </a>
           </li>
           <li class="sub-menu">
-            <a>
+            <a href="">
               <i class="fa fa-desktop"></i>
               <span>Switch</span>
-              </a>
+            </a>
             <ul class="sub">
               <li><a href="{% url 'app_principal:switch' %}">chercher</a></li>
               <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
-             
             </ul>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;">
+            <a href="">
+              <i class="fa fa-desktop"></i>
+              <span>Modele</span>
+            </a>
+            <ul class="sub">
+              <li><a href="{% url 'app_principal:modele' %}">chercher</a></li>
+              <li><a href="{% url 'app_principal:ajout_modele' %}">Ajouter</a></li>
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="">
               <i class="fa fa-cogs"></i>
               <span>Vlan</span>
               </a>
             <ul class="sub">
-              <li><a href="">Grids</a></li>
               <li><a href="{% url 'app_principal:vlan' %}">Chercher </a></li>
               <li><a href="">Ajouter</a></li> <!--lien vers ajout vlan-->
               
             </ul>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;"><!--lien vers contact form-->
+            <a href=""><!--lien vers contact form-->
               <i class="fa fa-book"></i>
               <span> Contactez-nous</span> 
               </a>
-            
           </li>
           <li class="sub-menu">
-            <a class="active" href="javascript:;"><!--lien vers la page d'aide-->
+            <a class="active" href=""><!--lien vers la page d'aide-->
               <i class="fa fa-tasks"></i>
               <span>Aide</span>
             </a>
           <li class="sub-menu">
-            <a href="javascript:;"><!--lien vers page about (infos sur lapp) -->
+            <a href=""><!--lien vers page about (infos sur lapp) -->
               <i class="fa fa-th"></i>
               <span>A propos </span>
              
          
-            <a href="inbox.html"> <!--lien vers gestion des utilisateurs-->
+            <a href="{% url 'app_principal:users' %}"> <!--lien vers gestion des utilisateurs-->
               <i class="fa fa-envelope"></i>
               <span>gestion des utilisateurs </span>
-              <span class="label label-theme pull-right mail-info">2</span>
+              <!--<span class="label label-theme pull-right mail-info">2</span>-->
               </a>
           </li>
           <li class="sub-menu"> <!--lien vers nos services-->
-            <a href="javascript:;">
+            <a href="">
               <i class=" fa fa-bar-chart-o"></i>
               <span>Nos service</span>
               </a>

@@ -37,9 +37,16 @@ urlpatterns = [
     path('modele/', views.modele_tab, name='modele'),
     path('modele/ajout', views.ajout_modele, name='ajout_modele'),
     # gestion_user
-    path('utilisateurs/', views.register_super_user, name='users'),
     path('loginuser', views.connecter, name="login"),
 
     path('contact/', views.contact, name='contact'),
     path('switch/<int:switch_id>/reformer',views.switch_reforme,name='reformer_switch'),
+  #gestion_user
+  path('utilisateurs/',views.gestion_user,name='users'),
+  path('utilisateurs/ajouter_super_utilisateur',views.register_super_user,name='create_superuser'),
+  path('utilisateurs/ajouter_utilisateur',views.register_user,name='ajouter-user'),
+  path('utilisateurs/corbeille',views.corbeille,name='corbeille'),
+  path('utilisateurs/activer_utilisateur/<int:user_id>',views.activer_user,name='activer_user'),
+  path('utilisateurs/modifier_permissions/<int:user_id>',views.modif_permissions_user,name='modif_permissions_user'),
+
 ]

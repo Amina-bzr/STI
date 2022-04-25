@@ -1,7 +1,7 @@
 
 {% extends "base.html" %} 
 {% load static %}
-        {% block title %}{{ operation }}{% endblock %}
+        {% block title %}Ajout superutilisateur{% endblock %}
   {% block content %}
 <div class="wrapper">
   
@@ -14,7 +14,7 @@
     {% endfor %}
   {% endif %}
 
-  <h3><i class="fa fa-angle-right"></i> {{ operation }} {{ choix }}</h3>
+  <h3><i class="fa fa-angle-right"></i>Ajout superutilisateur</h3>
   <div class="row mt">
     <div class="col-lg-12">
         <div class="form-panel">
@@ -23,18 +23,14 @@
                 {% csrf_token %}
 
                 
-                {% for field in form %}
                   <div class="form-group" style="display:flex;flex-direction: row;" >
                     <div class="control-label col-lg-2" style="margin-left: 40px;">
-                    {{ field.label_tag }} 
+                    {{ form.email.label_tag }} 
                     </div>
                     <div class="col-lg-7">
-                      {{field}}
+                      {{form.email}}
                     </div>
-                    <br>
-                      <strong style="color:red;">{{ field.errors }}</strong>
                   </div>
-                {% endfor %}
                 
                 <div class="form-group">
                   <div class="col-lg-offset-2 col-lg-10">
@@ -54,7 +50,7 @@
                       </button>
                     </div>
                     <div class="modal-body text-center">
-                      Voullez vous vraiment effectuer l'operation de l'{{ operation }}?
+                      Voullez vous vraiment ajouter un superutilisateur? Cet utilisateur va avoir tous les droits d'accés dans l'application!
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
@@ -63,6 +59,8 @@
                   </div>
                 </div>
               </div>
+
+              <!--fin modal-->
             </form>
           </div>
         </div>
@@ -74,4 +72,3 @@
   {% block js %}
   <script src="{% static 'lib/form-validation-script.js' %}"></script>
   {% endblock %}
-

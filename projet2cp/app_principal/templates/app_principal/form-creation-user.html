@@ -23,18 +23,23 @@
                 {% csrf_token %}
 
                 
-                {% for field in form %}
                   <div class="form-group" style="display:flex;flex-direction: row;" >
                     <div class="control-label col-lg-2" style="margin-left: 40px;">
-                    {{ field.label_tag }} 
+                    {{ form.email.label_tag }} 
                     </div>
                     <div class="col-lg-7">
-                      {{field}}
+                      {{form.email}}
                     </div>
-                    <br>
-                      <strong style="color:red;">{{ field.errors }}</strong>
                   </div>
-                {% endfor %}
+
+                  <div class="form-group" style="display:flex;flex-direction: row;" >
+                    <div class="control-label col-lg-2" style="margin-left: 40px;">
+                    {{ form.permissions.label_tag }} 
+                    </div>
+                    <div class="col-lg-7">
+                      {{form.permissions}}
+                    </div>
+                  </div>
                 
                 <div class="form-group">
                   <div class="col-lg-offset-2 col-lg-10">
@@ -74,4 +79,3 @@
   {% block js %}
   <script src="{% static 'lib/form-validation-script.js' %}"></script>
   {% endblock %}
-
