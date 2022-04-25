@@ -1,6 +1,7 @@
 from base64 import urlsafe_b64encode
 from email import message
-from readline import get_current_history_length
+from queue import LifoQueue
+from warnings import catch_warnings
 from django.contrib.sites.shortcuts import get_current_site
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
@@ -9,7 +10,10 @@ from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
-from .forms import EditUserPermissionsForm, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as authlogin
+from django.contrib.auth.forms import UserCreationForm
+from .forms import EditUserPermissionsForm, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform
 from .models import switch, vlan, Port, ModeleSwitch
 from django.contrib import messages
 from django.contrib.auth import decorators
@@ -21,101 +25,224 @@ from django.conf import settings
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.crypto import get_random_string
+from django.core.exceptions import ObjectDoesNotExist
+
+
+def acul(request):
+    return render(request, 'app_principal/accumm.html')
+
+
+def servicepage(request):
+    return render(request, 'app_principal/service.html')
+
+# User Register
+
+
+def register(request):
+    form = UserCreationForm
+    if request.method == 'POST':
+        regForm = UserCreationForm(request.POST)
+        if regForm.is_valid():
+            regForm.save()
+            messages.success(request, 'User has been registered.')
+    return render(request, 'app_principal/register.html', {'form': form})
+
+
+def profil(request):
+    return render(request, 'app_principal/Profil-user.html')
+
 
 ''' def user_of_stores(user):
-    if user.is_authenticated() and user.has_perm("stores.change_store"):
-        return True
-    else:
-        return False 
-        
-        @user_passes_test(user_of_stores)
+	if user.is_authenticated() and user.has_perm("stores.change_store"):
+		return True
+	else:
+		return False
+
+		@user_passes_test(user_of_stores)
 '''
-#@permission_required('app_principal.add_switch')
+# @permission_required('app_principal.add_switch')
+
 
 def ajoutswitch(request):
 
-        form = switchform(request.POST or None)
-        if request.method == 'POST':
-                if form.is_valid():
-                        s=form.save()
-                        form.save()
-                        id=s.id
-                        messages.success(request, ('le switch a été creé avec succés!'))  
-                        return redirect('app_principal:config_switch', id)
-                else:
-                        messages.warning(request, ('Echec lors de la création, veuillez réessayer une autre fois.')) 
-        context = {'form':form, 'choix':'switch','operation':'Ajout',}
-        return render (request ,'app_principal/form_validation.html',context)
+    form = switchform(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            nom_model = form.cleaned_data['modele']
+            try:
+                modele = ModeleSwitch.objects.get(nom=nom_model)
+            except ObjectDoesNotExist:
+                messages.warning(
+                    request, ("Le modele que vous avez introduit n'existe pas veuillez d'abord le créer"))
+            else:
+                s = form.save()
+                form.save()
+                id = s.id
+                messages.success(
+                    request, ('le switch a été creé avec succés!'))
+                # return redirect('app_principal:config_switch', id)
 
-#@permission_required('app_principal.add_vlan')
+                nb_port = modele.nbr_port
+
+                for i in range(1, nb_port+1):
+                    if((modele.premier_port_FE <= i) and (i < modele.premier_port_FE+modele.nbr_port_FE)):
+                        s.port_set.create(
+                            num_port=i, etat=Port.nonutilise, type_port=Port.fe)
+
+                    elif((modele.premier_port_GE <= i) and (i < modele.premier_port_GE+modele.nbr_port_GE)):
+                        s.port_set.create(
+                            num_port=i, etat=Port.nonutilise, type_port=Port.ge)
+                    elif((modele.premier_port_SFP <= i) and (i < modele.premier_port_SFP+modele.nbr_port_SFP)):
+                        s.port_set.create(
+                            num_port=i, etat=Port.nonutilise, type_port=Port.sfp)
+
+                return redirect('app_principal:config_switch', id)
+        else:
+            messages.error(
+                request, ('Echec lors de la création, veuillez réessayer une autre fois.'))
+    context = {'form': form, 'choix': 'switch', 'operation': 'Ajout', }
+    return render(request, 'app_principal/form_validation.html', context)
+
+
+# @permission_required('app_principal.add_vlan')
+
 
 def ajoutvlan(request):
 
-        form=vlanform(request.POST or None)
+    form = vlanform(request.POST or None)
 
-        if request.method == 'POST':
-                if form.is_valid():
-                        form.save()
-        context = {'form':form, 'choix':'vlan','operation':'Ajout',}
-        return render (request ,'app_principal/form_validation.html',context)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+    context = {'form': form, 'choix': 'vlan', 'operation': 'Ajout', }
+    return render(request, 'app_principal/form_validation.html', context)
 
-#@permission_required('app_principal.change_switch')
+# @permission_required('app_principal.change_switch')
+
+
+def ajout_modele(request):
+
+    form = modeleform(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+    context = {'form': form, 'choix': 'modele', 'operation': 'Ajout', }
+    return render(request, 'app_principal/form_validation.html', context)
+
 
 def switchConfig(request, switch_id):
     s = get_object_or_404(switch, id=switch_id)
-    if request.method == 'POST': #si le switch d'id = switch_id n'existe pas on renvoie 404
-        form= switchConfigForm(request.POST,instance=s)
+    if request.method == 'POST':  # si le switch d'id = switch_id n'existe pas on renvoie 404
+        form = switchConfigForm(request.POST, instance=s)
 
         if form.is_valid():
             form.save()
-            if s.etat==switch.passif:
-                s.etat=switch.actif
+            if s.etat == switch.passif:
+                s.etat = switch.actif
                 s.save()
-            return redirect('app_principal:switch')
-        
+            # return redirect('app_principal:switch')
+            return redirect('./port_tab/', id)
             # configuration du `switch` existant dans la base de données
             # redirect vers le form de ports---à faire
-        
+
     else:
         form = switchConfigForm(instance=s)
     return render(request,
-                'app_principal/form_validation.html',
-                {'form':form, 'choix':s.nom,'operation':'Configuration',})	
-        
-#@permission_required('app_principal.view_switch')
-       
-def switchtab(request):
-        cols_principales=['nom','bloc','local','armoire','Cascade depuis']
-        cols_detail=['Adresse MAC','Numero de Serie',"Numero d'inventaire","Date d'achat",'Marque','Modèle']
-        switchs = switch.objects.all()
-        context={'objet':'switchs','objets':switchs,'colsp':cols_principales,'colsd':cols_detail,}
-        return render(request, 'app_principal/offictable.html',context)
+                  'app_principal/form_validation.html',
+                  {'form': form, 'choix': s.nom, 'operation': 'Configuration', })
 
-#@permission_required('app_principal.view_vlan')
+
+# # @permission_required('app_principal.change_switch')
+def portConfig(request, switch_id, port_num):
+    s = get_object_or_404(switch, id=switch_id)
+    p = s.port_set.get(num_port=port_num)
+
+    if request.method == 'POST':  # si le switch d'id = switch_id n'existe pas on renvoie 404
+        form = portform(request.POST)
+
+        if form.is_valid():
+
+            p.type_port = form.cleaned_data["type_port"]
+            p.etat = form.cleaned_data["etat"]
+            p.vlan_associe = form.cleaned_data["vlan_associe"]
+            p.nom_suiv = form.cleaned_data["nom_suiv"]
+            p.type_suiv = form.cleaned_data["type_suiv"]
+            p.save()
+
+            return redirect('../port_tab/', switch_id)
+    else:
+        form = portform(instance=p)
+
+    return render(request,
+                  'app_principal/form_validation.html',
+                  {'form': form, 'choix': 'Port', 'operation': 'Configuration', })
+
+
+# def portConfig(request, switch_id, id):
+
+#     form = portform(request.POST or None)
+
+#     return render(request,
+#                   'app_principal/form_validation.html',
+#                   {'form': form, 'choix': Port, 'operation': 'Configuration', })
+
+# @permission_required('app_principal.view_switch')
+
+
+def switchtab(request):
+    cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis']
+    cols_detail = ['Adresse MAC', 'Numero de Serie',
+                   "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle']
+    switchs = switch.objects.all()
+    context = {'objet': 'switchs', 'objets': switchs,
+               'colsp': cols_principales, 'colsd': cols_detail, }
+    return render(request, 'app_principal/offictable.html', context)
+
+# @permission_required('app_principal.view_vlan')
+
 
 def vlan_tab(request):
-        cols_principales=['num_Vlan ','nom','ip','masque','passerelle']
-        cols_detail=[]
-        vlans = vlan.objects.all()
-        context={'objet':'vlans','objets':vlans,'colsp':cols_principales,'colsd':cols_detail,}
-        return render(request, 'app_principal/offictable.html',context)
+    cols_principales = ['num_Vlan ', 'nom', 'ip', 'masque', 'passerelle']
+    cols_detail = []
+    vlans = vlan.objects.all()
+    context = {'objet': 'vlans', 'objets': vlans,
+               'colsp': cols_principales, 'colsd': cols_detail, }
+    return render(request, 'app_principal/offictable.html', context)
 
-#@permission_required('app_principal.view_port')
-def port_tab(request):
-        cols_principales=['num_port','type_port','etat','vlan_associe','elm_suiv']
-        cols_detail=[]
-        ports = Port.objects.all()
-        context={'objet':'ports','objets':ports,'colsp':cols_principales,'colsd':cols_detail,}
-        return render(request, 'app_principal/offictable.html',context)
+# @permission_required('app_principal.view_port')
 
-#@permission_required('app_principal.view_modele')
+
+def port_tab(request, switch_id):
+
+    cols_principales = ['port_num', 'type_port',
+                        'etat', 'vlan_associe', 'type_suivant', 'nom_suivant']
+    cols_detail = []
+    # ports = Port.objects.all()
+    Ports = Port.objects.filter(switch=switch_id)
+    context = {'objet': 'ports', 'objets': Ports,
+               'colsp': cols_principales, 'colsd': cols_detail, }
+    return render(request, 'app_principal/offictable.html', context)
+
+# @permission_required('app_principal.view_modele')
+
+
 def modele_tab(request):
-        cols_principales=['nbr_port','nbr_port_SFP','nbr_port_GE','nbr_port_FE']
-        cols_detail=[]
-        modeles = ModeleSwitch.objects.all()
-        context={'objet':'modèles','objets':modeles,'colsp':cols_principales,'colsd':cols_detail,}
-        return render(request, 'app_principal/offictable.html',context)
+    cols_principales = ['nom', 'nbr_port', 'nbr_port_FE',
+                        'nbr_port_GE', 'nbr_port_SFP', ' premier_port_FE', 'premier_port_GE', ' premier_port_SFP']
+    cols_detail = []
+    modeles = ModeleSwitch.objects.all()
+    context = {'objet': 'modèles', 'objets': modeles,
+               'colsp': cols_principales, 'colsd': cols_detail, }
+    return render(request, 'app_principal/offictable.html', context)
 
+
+def login(request):
+    return render(request, 'app_principal/login.html')
+
+
+def profil(request):
+    return render(request, 'app_principal/Profil-user.html')
 
 def gestion_user(request):
         users=User.objects.all()        
@@ -142,6 +269,9 @@ def activer_user(request, user_id):
         messages.success(request, ("l'utilisateur "+user.username+" a été activé avec succés!"))
         return redirect('app_principal:corbeille')		
 
+
+def formprofil(request):
+    return render(request, 'app_principal/form_user.html')
 
 
 def register_super_user(request):
@@ -258,3 +388,26 @@ def modif_permissions_user(request, user_id):
                         messages.warning(request,("Echec! les permissions n'ont pas été modifiées."))            
                
         return render(request,'app_principal/modif_user_permissions.html',{'form':form,'user':user,})
+    
+    
+def connecter(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            authlogin(request, user)
+            return redirect('app_principal:switch')
+        else:
+            messages.success(
+                request, ("There Was An Error Logging In, Try Again..."))
+            return redirect('app_principal:login')
+
+    else:
+        return render(request, 'app_principal/login.html', {})
+
+
+def logout_user(request):
+    logout(request)
+    messages.success(request, ("You Were Logged Out!"))
+    return redirect('app_principal:vlan')

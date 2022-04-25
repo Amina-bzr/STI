@@ -9,7 +9,7 @@
   <link type="text/css" href="{% static 'lib/advanced-datatable/css/demo_table.css' %}" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'lib/advanced-datatable/css/DT_bootstrap.css' %}" />
   {% endblock %}
-
+  
   <!--SSOURCE: -->
   <!-- =======================================================
     Template Name: Dashio
@@ -61,11 +61,12 @@
 
                     {% if objet == "ports" %}
                       <tr class="gradeA">
-                        <td>{{ s.num_port }}</td>  
+                        <td>{{ s.num_port }} <a href="{% url 'app_principal:portconfig' s.switch.id s.num_port %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}"/> </a></td>  
                         <td>{{ s.type_port }}</td>  
                         <td>{{ s.etat }}</td>  
                         <td>{{ s.vlan_associe }}</td>  
-                        <td>{{ s.elm_suiv }}</td>  
+                        <td>{{ s.type_suiv }}</td>  
+                        <td>{{ s.nom_suiv }}</td> 
                       </tr>
                     {% endif %}
 
@@ -75,7 +76,10 @@
                         <td>{{ s.nbr_port }}</td>  
                         <td>{{ s.nbr_port_FE }}</td>  
                         <td>{{ s.nbr_port_GE }}</td>  
-                        <td>{{ s.nbr_port_SFP }}</td>  
+                        <td>{{ s.nbr_port_SFP }}</td> 
+                        <td>{{ s.premier_port_FE }}</td>
+                        <td>{{ s.premier_port_GE }}</td>
+                        <td>{{ s.premier_port_SFP }}</td>  
                       </tr>
                     {% endif %}
                   {% endfor %}

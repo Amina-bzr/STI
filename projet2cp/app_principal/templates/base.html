@@ -12,7 +12,7 @@
   <title>{% block title %}  {% endblock %}</title>
   {% load static %}
   <!-- Favicons -->
-  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/img.png' %}" rel="icon"> 
   <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
@@ -34,6 +34,7 @@
 
 <body >
   <section id="container" >
+    <a href="#"><img src="img" alt="good vybes" /></a>
     <!-- **********************************************************************************************************************************************************
         TOP BAR CONTENT & NOTIFICATIONS
         *********************************************************************************************************************************************************** -->
@@ -169,12 +170,13 @@
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
           <li><a class="logout" href=""> 
-            {% if user.is_authentificated %}
-              se déconnecter
-            {% else %}
-              se connecter
-            {% endif %}
-
+            {% if user.is_authenticated %}
+            <button type="button" class="btn btn-outline-secondary "   href="{% url 'app_principal:logout' %}">Se Decconecter</a> 
+            <span class="nav-item nav-link"> <i class="fa fa-user"></i>  {{user.username}}</span>
+          {% else %}
+            
+            <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'app_principal:login_user' %}">Se connceter</a>
+          {% endif %}
           </a></li > <!--lien page login-->
         </ul>
       </div>
@@ -249,9 +251,8 @@
       </div>
      </aside>
      <section id="main-content">
-        {% block content %}
+        {% block content %} 
         {% endblock %}
-     </section>
     
         <footer class="site-footer">
           <div class="text-center">
@@ -272,6 +273,7 @@
               </a>
           </div>
         </footer>
+      </section>
   </section>
       <!--footer end-->
     

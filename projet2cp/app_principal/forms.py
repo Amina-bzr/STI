@@ -1,15 +1,23 @@
 from unittest.util import _MAX_LENGTH
 from django import forms
 from .models import switch, vlan, Port, ModeleSwitch
-from django.contrib.auth.forms import UserCreationForm  
-from django.contrib.auth.models import User, Group
 
+import datetime
+
+from django.shortcuts import render, redirect
+
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
+
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
 
 
 class switchform(forms.ModelForm):
 
-    class Meta: 
-        model=switch
+    class Meta:
+        model = switch
 
         fields = ['mac','inventaire','serie','marque','modele','date_achat']
 
@@ -24,9 +32,6 @@ class switchform(forms.ModelForm):
 
 
 class switchConfigForm(forms.ModelForm):
-    
-    class Meta: 
-        model=switch
 
         fields = ['nom','bloc','local','armoire','preced']
 
@@ -40,38 +45,37 @@ class switchConfigForm(forms.ModelForm):
 
 
 class vlanform(forms.ModelForm):
-    
+
     class Meta:
         model = vlan
-        fields = "__all__" 
+        fields = "__all__"
 
-        
+
 class portform(forms.ModelForm):
-    
+
     class Meta:
         model = Port
-        fields = "__all__"   
-         
+        fields = ['type_port', 'etat', 'vlan_associe', 'type_suiv', 'nom_suiv']
 
-    
+
 class modeleform(forms.ModelForm):
-    
-    class Meta: 
-        model=ModeleSwitch
 
-        fields = "__all__" 
+    class Meta:
+        model = ModeleSwitch
+
+        fields = "__all__"
 
         widgets = {
-            'nbr_port': forms.TextInput(attrs={'class':'form-control'},),
-            'nbr_port_FE': forms.TextInput(attrs={'class':'form-control'},),
-            'nbr_port_GE': forms.TextInput(attrs={'class':'form-control'},),
-            'nbr_port_SFP': forms.TextInput(attrs={'class':'form-control'},),
-            'premier_port_FE': forms.TextInput(attrs={'class':'form-control'},),
-            'premier_port_GE': forms.TextInput(attrs={'class':'form-control'},),
-            'premier_port_SFP':forms.TextInput(attrs={'class':'form-control',},),
-        }           
-        
-       
+            'nbr_port': forms.TextInput(attrs={'class': 'form-control'},),
+            'nbr_port_FE': forms.TextInput(attrs={'class': 'form-control'},),
+            'nbr_port_GE': forms.TextInput(attrs={'class': 'form-control'},),
+            'nbr_port_SFP': forms.TextInput(attrs={'class': 'form-control'},),
+            'premier_port_FE': forms.TextInput(attrs={'class': 'form-control'},),
+            'premier_port_GE': forms.TextInput(attrs={'class': 'form-control'},),
+            'premier_port_SFP': forms.TextInput(attrs={'class': 'form-control', },),
+        }
+
+
 class CreateSuperUserForm(UserCreationForm):
 
     email = forms.EmailField()  
