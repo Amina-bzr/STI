@@ -194,10 +194,21 @@ def portConfig(request, switch_id, port_num):
 
 
 def switchtab(request):
+    switchs = switch.objects.all() 
+    if request.method == 'POST': 
+        ids_selectionnes = [box[10:] for box in request.POST.keys() if box.startswith("selection_")]
+        switchs_selectiones= switch.objects.filter(id__in=ids_selectionnes)
+        for s in switchs_selectiones.all():
+            s.etat = s.reforme
+            s.bloc = "reformé"
+            s.local = "reformé"
+            s.armoire = "magazin"
+            s.preced = "pas en cascade"
+            s.save()
+
     cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis']
     cols_detail = ['Adresse MAC', 'Numero de Serie',
-                   "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle']
-    switchs = switch.objects.all()
+                "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle', 'password']
     context = {'objet': 'switchs', 'objets': switchs,
                'colsp': cols_principales, 'colsd': cols_detail, }
     return render(request, 'app_principal/offictable.html', context)

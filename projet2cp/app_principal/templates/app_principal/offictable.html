@@ -27,6 +27,21 @@
         <div class="row mb">
           <!-- page start-->
           <div class="content-panel">
+            <div class="chk-all">
+              <div class="pull-left mail-checkbox">
+                <input type="checkbox" onClick="toggle(this)">
+              </div> 
+              <form method="post" >
+                {% csrf_token %}
+              <div class="btn-group">
+                <a data-toggle="dropdown" href="#" class="btn mini all">
+                  TOUT
+                  
+                  </a>
+                
+              </div>
+              <button class="btn mini blue" style="background:#d9534f;color:black" type="button" data-toggle="modal" data-target="#exampleModal">Desactiver</button>
+            </div>
             <div class="adv-table">
               <table cellpadding="0" cellspacing="0" class="display table table-bordered" id="hidden-table-info">
                 <thead>
@@ -41,6 +56,8 @@
 
                     {% if objet == 'switchs' %}
                       <tr class="gradeA">
+                        <td><input type="checkbox" name="selection_{{ s.id }}" class="check mail-checkbox"></td>
+
                         <td>{{ s.nom }}</td>  
                         <td>{{ s.bloc }}</td>  
                         <td>{{ s.armoire }}</td>  
@@ -86,6 +103,29 @@
                 </tbody>
               </table>
             </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Etes-vous sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Voulez-vous vraiment réformer les switchs sélectionnés ? veuillez bien verifier ceux que vous avez selectionner avant de procéder à cette action.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-theme" >Oui, je suis sure.</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <!--fin modal-->
+          </form>
           </div>
           <!-- page end-->
         </div>
@@ -163,6 +203,12 @@
           }
         });
       });
+        function toggle(source) {
+          checkboxes = document.getElementsByClassName('check');
+          for(var i=0, n=checkboxes.length;i<n;i++) {
+            checkboxes[i].checked = source.checked;
+          }
+        }
     </script>
 
    {% endif %} 
