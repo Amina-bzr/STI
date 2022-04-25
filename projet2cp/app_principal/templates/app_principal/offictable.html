@@ -21,77 +21,125 @@
  {% block content %}    
  
       
-      <section class="wrapper">
+    <section class="wrapper">
         <h3><i class="fa fa-angle-right"></i> Table des {{ objet }}</h3> <!--vlan ou switch-->
        
-        <div class="row mb">
+      <div class="row mb">
           <!-- page start-->
-          <div class="content-panel">
-            <div class="adv-table">
-              <table cellpadding="0" cellspacing="0" class="display table table-bordered" id="hidden-table-info">
-                <thead>
-                  <tr>
-                    {% for col in colsp %}
-                    <th>{{ col }}</th>
+        <div class="content-panel">
+          {% if objet == 'switchs' %}
+          <form method="post" >
+              {% csrf_token %}
+              
+              <div class="chk-all" style="margin-bottom: 10px;">
+                <div class="pull-left mail-checkbox">
+                  <input type="checkbox" onClick="toggle(this)">
+                </div> 
+                <div class="btn-group">
+                  <a data-toggle="dropdown" href="#" class="btn mini all" style="color:black">
+                    TOUT
+                    
+                    </a>
+                  
+                </div>
+                <button class="btn mini blue" style="background:#d9534f;color:black" type="button" data-toggle="modal" data-target="#exampleModal">Réformer</button>
+              </div>
+              {% endif %}
+              <div class="adv-table">
+                <table cellpadding="0" cellspacing="0" class="display table table-bordered" id="hidden-table-info">
+                  <thead>
+                    <tr>
+
+                      {% if objet == 'switchs' %}<th class="inbox-small-cells"></th>{% endif %}
+                      {% for col in colsp %}
+                      <th>{{ col }}</th>
+                      {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for s in objets %}
+
+                      {% if objet == 'switchs' %}
+                        <tr class="gradeA">
+                          <td><input type="checkbox" name="selection_{{ s.id }}" class="check mail-checkbox"></td>
+                          <td>{{ s.nom }} <a href="{% url 'app_principal:config_switch' s.id %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}"/> </a></td>  
+                          <td>{{ s.bloc }}</td>  
+                          <td>{{ s.armoire }}</td>  
+                          <td>{{ s.local }}</td>  
+                          <td>{{ s.preced }}</td>  
+                        </tr>
+                      {% endif %}
+
+                      {% if objet == "vlans" %}
+                        <tr class="gradeA">
+                          <td>{{ s.num_Vlan }}</td>  
+                          <td>{{ s.nom }}</td>  
+                          <td>{{ s.ip }}</td>  
+                          <td>{{ s.masque }}</td>  
+                          <td>{{ s.passerelle }}</td>  
+                        </tr>
+                      {% endif %}
+
+                      {% if objet == "ports" %}
+                        <tr class="gradeA">
+                          <td>{{ s.num_port }} <a href="{% url 'app_principal:portconfig' s.switch.id s.num_port %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}"/> </a></td>  
+                          <td>{{ s.type_port }}</td>  
+                          <td>{{ s.etat }}</td>  
+                          <td>{{ s.local }}</td> 
+                          <td>{{ s.vlan_associe }}</td>  
+                          <td>{{ s.type_suiv }}</td>  
+                          <td>{{ s.nom_suiv }}</td> 
+                        </tr>
+                      {% endif %}
+
+                      {% if objet == "modèles" %}
+                        <tr class="gradeA">
+                          <td>{{ s.nom }}</td>  
+                          <td>{{ s.nbr_port }}</td>  
+                          <td>{{ s.nbr_port_FE }}</td>  
+                          <td>{{ s.nbr_port_GE }}</td>  
+                          <td>{{ s.nbr_port_SFP }}</td> 
+                          <td>{{ s.premier_port_FE }}</td>
+                          <td>{{ s.premier_port_GE }}</td>
+                          <td>{{ s.premier_port_SFP }}</td>  
+                        </tr>
+                      {% endif %}
                     {% endfor %}
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for s in objets %}
-
-                    {% if objet == 'switchs' %}
-                      <tr class="gradeA">
-                        <td>{{ s.nom }}</td>  
-                        <td>{{ s.bloc }}</td>  
-                        <td>{{ s.armoire }}</td>  
-                        <td>{{ s.local }}</td>  
-                        <td>{{ s.preced }}</td>  
-                      </tr>
-                    {% endif %}
-
-                    {% if objet == "vlans" %}
-                      <tr class="gradeA">
-                        <td>{{ s.num_Vlan }}</td>  
-                        <td>{{ s.nom }}</td>  
-                        <td>{{ s.ip }}</td>  
-                        <td>{{ s.masque }}</td>  
-                        <td>{{ s.passerelle }}</td>  
-                      </tr>
-                    {% endif %}
-
-                    {% if objet == "ports" %}
-                      <tr class="gradeA">
-                        <td>{{ s.num_port }} <a href="{% url 'app_principal:portconfig' s.switch.id s.num_port %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}"/> </a></td>  
-                        <td>{{ s.type_port }}</td>  
-                        <td>{{ s.etat }}</td>  
-                        <td>{{ s.vlan_associe }}</td>  
-                        <td>{{ s.type_suiv }}</td>  
-                        <td>{{ s.nom_suiv }}</td> 
-                      </tr>
-                    {% endif %}
-
-                    {% if objet == "modèles" %}
-                      <tr class="gradeA">
-                        <td>{{ s.nom }}</td>  
-                        <td>{{ s.nbr_port }}</td>  
-                        <td>{{ s.nbr_port_FE }}</td>  
-                        <td>{{ s.nbr_port_GE }}</td>  
-                        <td>{{ s.nbr_port_SFP }}</td> 
-                        <td>{{ s.premier_port_FE }}</td>
-                        <td>{{ s.premier_port_GE }}</td>
-                        <td>{{ s.premier_port_SFP }}</td>  
-                      </tr>
-                    {% endif %}
-                  {% endfor %}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Etes-vous sure?</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Voulez-vous vraiment réformer les switchs sélectionnés ? veuillez bien verifier ceux que vous avez selectionner avant de procéder à cette action.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
+                  <button type="submit" class="btn btn-theme" >Oui, je suis sure.</button>
+                </div>
+              </div>
             </div>
           </div>
-          <!-- page end-->
+
+        <!--fin modal-->
+        {% if objet == 'switchs' %}
+        </form>{% endif %}
         </div>
+          <!-- page end-->
+      </div>
         <!-- /row -->
-      </section>
-      <!-- /wrapper -->    
+    </section>
+      <!-- /wrapper -->   
+      
+      
   {% endblock %}
 
   {% block js %}
@@ -122,7 +170,7 @@
         */
         var nCloneTh = document.createElement('th');
         var nCloneTd = document.createElement('td');
-        nCloneTd.innerHTML = "<img src='{% static 'lib/advanced-datatable/images/details_open.png' %}'>";
+        nCloneTd.innerHTML = "<img id='open' src='{% static 'lib/advanced-datatable/images/details_open.png' %}'>";
         nCloneTd.className = "center";
 
         $('#hidden-table-info thead tr').each(function() {
@@ -150,7 +198,7 @@
         * Note that the indicator for showing which row is open is not controlled by DataTables,
         * rather it is done here
         */
-        $('#hidden-table-info tbody td img').live('click', function() {
+        $('#hidden-table-info tbody td img #open').live('click', function() {
           var nTr = $(this).parents('tr')[0];
           if (oTable.fnIsOpen(nTr)) {
             /* This row is already open - close it */
@@ -163,6 +211,13 @@
           }
         });
       });
+
+      function toggle(source) {
+          checkboxes = document.getElementsByClassName('check');
+          for(var i=0, n=checkboxes.length;i<n;i++) {
+            checkboxes[i].checked = source.checked;
+          }
+        }
     </script>
 
    {% endif %} 

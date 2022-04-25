@@ -106,6 +106,9 @@ class Port(models.Model):
     # afin que django va supprimer tous les ports associé à un switch si le switch est supprimé
     switch = models.ForeignKey(switch, on_delete=models.CASCADE, null=True)
     num_port = models.PositiveIntegerField(default=1)
+    local=models.CharField(
+        max_length=100,
+        default='magazin',)
     type_port = models.CharField(
         max_length=20,
         choices=choix_type_port,
