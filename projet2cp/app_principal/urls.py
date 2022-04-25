@@ -40,4 +40,6 @@ urlpatterns = [
     path('utilisateurs/', views.register_super_user, name='users'),
     path('loginuser', views.connecter, name="login"),
 
+    path('contact/', views.contact, name='contact'),
+    path('switch/<int:switch_id>/reformer',views.switch_reforme,name='reformer_switch'),
 ]
