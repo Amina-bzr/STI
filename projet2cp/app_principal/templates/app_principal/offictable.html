@@ -22,7 +22,7 @@
  
       
     <section class="wrapper">
-        <h3><i class="fa fa-angle-right"></i> Table des {{ objet }}</h3> <!--vlan ou switch-->
+        <h3><i class="fa fa-angle-right"></i> Table des {{ objet }} {% if objet == 'ports' %} de {{ switch_nom }} {% endif %} </h3> <!--vlan ou switch-->
        
       <div class="row mb">
           <!-- page start-->
@@ -42,7 +42,8 @@
                     </a>
                   
                 </div>
-                <button class="btn mini blue" style="background:#d9534f;color:black" type="button" data-toggle="modal" data-target="#exampleModal">Réformer</button>
+                <button class="btn mini " style="background:#d9534f;color:black;margin-left: 5%;" type="button" data-toggle="modal" data-target="#exampleModal">Réformer</button>
+                <button class="btn mini " style="background:#5a4f4f;" type="button" ><a style="color:white;" href="{% url 'app_principal:add_switch' %}"> + Ajouter</a></button>
               </div>
               {% endif %}
               <div class="adv-table">
@@ -50,7 +51,9 @@
                   <thead>
                     <tr>
 
-                      {% if objet == 'switchs' %}<th class="inbox-small-cells"></th>{% endif %}
+                      {% if objet == 'switchs' %}
+                      <th class="inbox-small-cells"></th>
+                      <th class="inbox-small-cells"></th>{% endif %}
                       {% for col in colsp %}
                       <th>{{ col }}</th>
                       {% endfor %}
@@ -61,12 +64,14 @@
 
                       {% if objet == 'switchs' %}
                         <tr class="gradeA">
+                          <td><a href="{% url 'app_principal:plus_info_switch' s.id %}" style="border:none;padding:0;"><img style="width:13.5px;margin-left: 5px;" src="{% static 'lib/advanced-datatable/images/details_open.png' %}" title="plus d'infos" /> </a></td>  
                           <td><input type="checkbox" name="selection_{{ s.id }}" class="check mail-checkbox"></td>
-                          <td>{{ s.nom }} <a href="{% url 'app_principal:config_switch' s.id %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}"/> </a></td>  
+                          <td>{{ s.nom }} <a href="{% url 'app_principal:config_switch' s.id %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}" title="configurer"/> </a></td>  
                           <td>{{ s.bloc }}</td>  
                           <td>{{ s.armoire }}</td>  
                           <td>{{ s.local }}</td>  
                           <td>{{ s.preced }}</td>  
+                          <td>{{ s.vlans }}</td>  
                         </tr>
                       {% endif %}
 
@@ -82,7 +87,7 @@
 
                       {% if objet == "ports" %}
                         <tr class="gradeA">
-                          <td>{{ s.num_port }} <a href="{% url 'app_principal:portconfig' s.switch.id s.num_port %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}"/> </a></td>  
+                          <td>{{ s.num_port }} <a href="{% url 'app_principal:portconfig' s.switch.id s.num_port %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}" title="configurer"/> </a></td>  
                           <td>{{ s.type_port }}</td>  
                           <td>{{ s.etat }}</td>  
                           <td>{{ s.local }}</td> 
@@ -130,8 +135,14 @@
           </div>
 
         <!--fin modal-->
+
         {% if objet == 'switchs' %}
         </form>{% endif %}
+        <br>
+        {% if objet == 'ports' %}
+        <a href="{% url 'app_principal:switch' %}">Revenir à la table des Switchs</a>
+        {% endif %}
+        
         </div>
           <!-- page end-->
       </div>
@@ -150,67 +161,7 @@
     {% if objet == "switchs" %}
     <script type="text/javascript">
       /* Formating function for row details */
-      function fnFormatDetails(oTable, nTr) {
-        var aData = oTable.fnGetData(nTr);
-        var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-        sOut += '<tr><td>Numero de Serie:</td><td>{{ s.inventaire }}</td></tr>';
-        sOut += '<tr><td>Adresse MAC:</td><td>{{ s.mac }}</td></tr>';
-        sOut += '<tr><td>Modèle:</td><td> {{ s.modele }}</td></tr>';
-        sOut += '<tr><td>Marque:</td><td> {{ s.marque }}</td></tr>';
-        sOut += '<tr><td>Inventaire:</td><td> {{ s.inventaire }}</td></tr>';
-        sOut += '</table>';
-
-        return sOut;
-      }
       
-
-      $(document).ready(function() {
-        /*
-        * Insert a 'details' column to the table
-        */
-        var nCloneTh = document.createElement('th');
-        var nCloneTd = document.createElement('td');
-        nCloneTd.innerHTML = "<img id='open' src='{% static 'lib/advanced-datatable/images/details_open.png' %}'>";
-        nCloneTd.className = "center";
-
-        $('#hidden-table-info thead tr').each(function() {
-          this.insertBefore(nCloneTh, this.childNodes[0]);
-        });
-
-        $('#hidden-table-info tbody tr').each(function() {
-          this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
-        });
-
-        /*
-        * Initialse DataTables, with no sorting on the 'details' column
-        */
-        var oTable = $('#hidden-table-info').dataTable({
-          "aoColumnDefs": [{
-            "bSortable": false,
-            "aTargets": [0]
-          }],
-          "aaSorting": [
-            [1, 'asc']
-          ]
-        });
-
-        /* Add event listener for opening and closing details
-        * Note that the indicator for showing which row is open is not controlled by DataTables,
-        * rather it is done here
-        */
-        $('#hidden-table-info tbody td img #open').live('click', function() {
-          var nTr = $(this).parents('tr')[0];
-          if (oTable.fnIsOpen(nTr)) {
-            /* This row is already open - close it */
-            this.src = "{% static 'lib/advanced-datatable/images/details_open.png' %}";
-            oTable.fnClose(nTr);
-          } else {
-            /* Open this row */
-            this.src = '{% static "lib/advanced-datatable/images/details_close.png" %}';
-            oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
-          }
-        });
-      });
 
       function toggle(source) {
           checkboxes = document.getElementsByClassName('check');

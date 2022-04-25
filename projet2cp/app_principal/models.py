@@ -46,7 +46,7 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
         default=passif,
     )
     vlans=models.CharField(
-        'VLANs associés', max_length=350, blank=True, default="Aucun")
+        'VLANs associés', max_length=350, blank=True, default="/ ")
 
     def __str__(self):
         return self.nom

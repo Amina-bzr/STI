@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('switch/<int:switch_id>/configurer',
          views.switchConfig, name='config_switch'),
-
+    path('switch/plus_info/<int:switch_id>', views.plus_info_switch, name='plus_info_switch'),
     path('switch/<int:switch_id>/portConfig/<int:port_num>',
          views.portConfig, name='portconfig'),
 

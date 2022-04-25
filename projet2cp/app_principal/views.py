@@ -1,5 +1,6 @@
 from base64 import urlsafe_b64encode
 from email import message
+from multiprocessing import context
 from queue import LifoQueue
 from warnings import catch_warnings
 from django.contrib.sites.shortcuts import get_current_site
@@ -105,7 +106,10 @@ def ajoutswitch(request):
 
 
 # @permission_required('app_principal.add_vlan')
-
+def plus_info_switch(request,switch_id):
+    s=switch.objects.get(id=switch_id)
+    context={'objet':s,}
+    return render(request, 'app_principal/plus_info.html', context)
 
 def ajoutvlan(request):
 
@@ -171,6 +175,11 @@ def portConfig(request, switch_id, port_num):
             p.nom_suiv = form.cleaned_data["nom_suiv"]
             p.type_suiv = form.cleaned_data["type_suiv"]
             p.save()
+            s=p.switch
+            if not p.vlan_associe in s.vlans:
+                s.vlans = s.vlans + p.vlan_associe + " / "
+                s.save()
+                print(p.vlan_associe)
 
             return redirect('../port_tab/', switch_id)
     else:
@@ -202,9 +211,10 @@ def switchtab(request):
             sw.local = "reformé"
             sw.armoire = "magazin"
             sw.preced = "pas en cascade"
+            sw.vlans="Aucun"
             sw.save()
     switchs= switch.objects.all()
-    cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis']
+    cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis', 'vlans']
     cols_detail = ['Adresse MAC', 'Numero de Serie',
                      "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle', 'password']
     context = {'objet': 'switchs', 'objets': switchs,
@@ -227,14 +237,14 @@ def vlan_tab(request):
 
 
 def port_tab(request, switch_id):
-
+    switch_nom=switch.objects.get(id=switch_id).nom
     cols_principales = ['Numero du port', 'Type du port',
                         'Etat', 'Local','Vlan associé', "Type de l'appareil suivante", "nom de l'appareil suivante"]
     cols_detail = []
     # ports = Port.objects.all()
     Ports = Port.objects.filter(switch=switch_id)
     context = {'objet': 'ports', 'objets': Ports,
-               'colsp': cols_principales, 'colsd': cols_detail, }
+               'colsp': cols_principales, 'colsd': cols_detail, 'switch_nom':switch_nom,}
     return render(request, 'app_principal/offictable.html', context)
 
 # @permission_required('app_principal.view_modele')
