@@ -37,7 +37,6 @@ urlpatterns = [
     path('modele/', views.modele_tab, name='modele'),
     path('modele/ajout', views.ajout_modele, name='ajout_modele'),
     # gestion_user
-    path('utilisateurs/', views.register_super_user, name='users'),
     path('loginuser', views.connecter, name="login"),
 
   #gestion_user
