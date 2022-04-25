@@ -1,0 +1,74 @@
+
+{% extends "base.html" %} 
+{% load static %}
+        {% block title %}Modifier permissions utilisateur{% endblock %}
+  {% block content %}
+<div class="wrapper">
+  
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">  <!-- singular -->
+            <a class="close" data-dismiss="alert"></a>
+            {{ message }}
+        </div>
+    {% endfor %}
+  {% endif %}
+
+  <h3><i class="fa fa-angle-right"></i> Modifier permissions</h3>
+  <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <p style="font-size:1.2em;margin: 20px 15px 35px;">Les permissions actuelles de "{{user.username}}" sont : 
+                {% for group in user.groups.all %}
+                    <span style="color:red;"> <strong>{{ group.name }}</strong></span>
+                {% endfor %}, veuillez selectionner toutes les permissions associées à cet utilisateur:</p>
+          <div class="form">
+            <form method="post" class="cmxform form-horizontal style-form" >
+                {% csrf_token %}
+                <div class="form-group" style="display:flex;flex-direction: row;" >
+                    <div class="control-label col-lg-2" style="margin-left: 40px;">
+                    {{ form.permissions.label_tag }} 
+                    </div>
+                    <div class="col-lg-7">
+                      {{form.permissions}}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                  <div class="col-lg-offset-2 col-lg-10">
+                    <button class="btn btn-theme" id="" type="button" data-toggle="modal" data-target="#exampleModal">Enregistrer</button>
+                    <a href="{% url 'app_principal:switch' %}" class="btn btn-theme04" type="button">Annuler</a>
+                  </div>
+                </div>
+
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="top:25%;">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Etes-vous sure? </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body text-center">
+                      Voullez vous vraiment modifier les permissions de {{user.username}}?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
+                      <button type="submit" class="btn btn-theme" >Proceder</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+  {% block js %}
+  <script src="{% static 'lib/form-validation-script.js' %}"></script>
+  {% endblock %}

@@ -1,0 +1,43 @@
+
+{% extends "base.html" %} 
+{% load static %}
+        {% block title %}Desactiver utilisateur{% endblock %}
+  {% block content %}
+<div class="wrapper">
+  
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">  <!-- singular -->
+            <a class="close" data-dismiss="alert"></a>
+            {{ message }}
+        </div>
+    {% endfor %}
+  {% endif %}
+
+  <h3><i class="fa fa-angle-right"></i>Desactiver utilisateur</h3>
+  <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+          <div class="form">
+            
+                    <h1>Etes-vous sure?</h1>
+                    <p>Voulez-vous vraiment désactiver les utilisateurs sélectionnés ? Tous les utilisateurs suivants seront désactivés:</p>
+                    <ul>
+                        {% for user in users %}
+                            <li>{{user.username}}</li>
+                        {% endfor %}
+                    </ul>
+                    <form method="post" class="cmxform form-horizontal style-form" >
+                      <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
+                      <input type="submit" class="btn btn-theme" >Proceder</button>
+                    </form>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+
+  {% block js %}
+  <script src="{% static 'lib/form-validation-script.js' %}"></script>
+  {% endblock %}
