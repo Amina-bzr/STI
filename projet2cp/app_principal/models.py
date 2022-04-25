@@ -135,7 +135,6 @@ class ModeleSwitch(models.Model):
     nbr_port_FE = models.PositiveIntegerField(default=0)
     nbr_port_GE = models.PositiveIntegerField(default=0)
     nbr_port_SFP = models.PositiveIntegerField(default=0)
-<<<<<<< HEAD
     premier_port_FE=models.PositiveIntegerField(default=1) #on utilise le fait que les ports du meme
     premier_port_GE=models.PositiveIntegerField(default=1) #type sont sequentiels
     premier_port_SFP=models.PositiveIntegerField(default=1)
@@ -147,13 +146,8 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.user.username} Profile'
-=======
-    premier_port_FE = models.PositiveIntegerField(
-        default=1)  # on utilise le fait que les ports du meme
-    premier_port_GE = models.PositiveIntegerField(
-        default=1)  # type sont sequentiels
-    premier_port_SFP = models.PositiveIntegerField(default=1)
-    # pour automatiquement remplir qlq champs du formulaire des ports et switch
+    
+
 class Contact(models.Model):
     name = models.CharField(max_length=158)
     email = models.EmailField()
@@ -162,4 +156,3 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
->>>>>>> 0e3c1f41c8fdda7f963135c911a238f88c58681a

@@ -1,13 +1,10 @@
 from base64 import urlsafe_b64encode
 from email import message
-<<<<<<< HEAD
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
-=======
 from multiprocessing import context
 from queue import LifoQueue
 from warnings import catch_warnings
->>>>>>> 0e3c1f41c8fdda7f963135c911a238f88c58681a
 from django.contrib.sites.shortcuts import get_current_site
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
@@ -32,7 +29,6 @@ from django.conf import settings
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.crypto import get_random_string
-<<<<<<< HEAD
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.forms import PasswordResetForm
@@ -48,7 +44,6 @@ def acul(request):
 def res(request):
     return render(request,'app_principal/password/reset.html')
     
-=======
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 
@@ -57,7 +52,6 @@ def acul(request):
     return render(request, 'app_principal/accumm.html')
 
 
->>>>>>> 0e3c1f41c8fdda7f963135c911a238f88c58681a
 def servicepage(request):
     return render(request, 'app_principal/service.html')
 
@@ -238,17 +232,14 @@ def switchtab(request):
             sw.local = "reformé"
             sw.armoire = "magazin"
             sw.preced = "pas en cascade"
-            sw.vlans="Aucun"
             sw.save()
     switchs= switch.objects.all()
-    cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis', 'vlans']
+    cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis']
     cols_detail = ['Adresse MAC', 'Numero de Serie',
                      "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle', 'password']
     context = {'objet': 'switchs', 'objets': switchs,
                'colsp': cols_principales, 'colsd': cols_detail, }
     return render(request, 'app_principal/offictable.html', context)
-
-
 # @permission_required('app_principal.view_vlan')
 
 
@@ -277,17 +268,8 @@ def port_tab(request, switch_id):
 # @permission_required('app_principal.view_modele')
 
 
+ 
 def modele_tab(request):
-<<<<<<< HEAD
-        cols_principales=['nbr_port','nbr_port_SFP','nbr_port_GE','nbr_port_FE']
-        cols_detail=[]
-        modeles = ModeleSwitch.objects.all()
-        context={'objet':'modèles','objets':modeles,'colsp':cols_principales,'colsd':cols_detail,}
-        return render(request, 'app_principal/offictable.html',context)
-    
-def log(request):
-        return render(request, 'app_principal/log.html')
-=======
     cols_principales = ['nom', 'nbr_port', 'nbr_port_FE',
                         'nbr_port_GE', 'nbr_port_SFP', ' premier_port_FE', 'premier_port_GE', ' premier_port_SFP']
     cols_detail = []
@@ -301,7 +283,6 @@ def login(request):
     return render(request, 'app_principal/login.html')
 
 
->>>>>>> 0e3c1f41c8fdda7f963135c911a238f88c58681a
 def profil(request):
     return render(request, 'app_principal/Profil-user.html')
 
@@ -332,28 +313,7 @@ def activer_user(request, user_id):
 
 
 def formprofil(request):
-<<<<<<< HEAD
         return render(request, 'app_principal/form_user.html')               
-
-def log(request):
-
-	if request.method == 'POST':
-		username = request.POST.get('username')
-		password =request.POST.get('password')
-
-		user = authenticate(request, username=username, password=password)
-
-		if user is not None:
-			login(request, user)
-			return redirect('app_principal:switch')
-		else:
-			messages.info(request, 'Username OR password is incorrect')
-
-	context = {}
-	return render(request, 'app_principal/log.html', context)
-=======
-    return render(request, 'app_principal/form_user.html')
->>>>>>> 0e3c1f41c8fdda7f963135c911a238f88c58681a
 
 
 def register_super_user(request):
@@ -490,7 +450,6 @@ def connecter(request):
 
 
 def logout_user(request):
-<<<<<<< HEAD
 	logout(request)
 	messages.success(request, ("You Were Logged Out!"))
 	return redirect('app_principal:service') 
@@ -525,7 +484,6 @@ def password_change(request):
     }
     return render(request,'app_principal/password/changepassword.html',context)
   
-=======
     logout(request)
     messages.success(request, ("You Were Logged Out!"))
     return redirect('app_principal:vlan')
@@ -568,4 +526,3 @@ def switch_reforme(request, switch_id):
     return render(request,
                 'app_principal/form_validation.html',
                 {'choix':s.nom,'operation':'réformation',})	
->>>>>>> 0e3c1f41c8fdda7f963135c911a238f88c58681a
