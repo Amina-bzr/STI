@@ -194,24 +194,24 @@ def portConfig(request, switch_id, port_num):
 
 
 def switchtab(request):
-    switchs = switch.objects.all() 
-    if request.method == 'POST': 
+    if request.method == 'POST':
         ids_selectionnes = [box[10:] for box in request.POST.keys() if box.startswith("selection_")]
         switchs_selectiones= switch.objects.filter(id__in=ids_selectionnes)
-        for s in switchs_selectiones.all():
-            s.etat = s.reforme
-            s.bloc = "reformé"
-            s.local = "reformé"
-            s.armoire = "magazin"
-            s.preced = "pas en cascade"
-            s.save()
-
+        for sw in switchs_selectiones.all():
+            sw.etat = switch.reforme
+            sw.bloc = "reformé"
+            sw.local = "reformé"
+            sw.armoire = "magazin"
+            sw.preced = "pas en cascade"
+            sw.save()
+    switchs= switch.objects.all()
     cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis']
     cols_detail = ['Adresse MAC', 'Numero de Serie',
-                "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle', 'password']
+                     "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle', 'password']
     context = {'objet': 'switchs', 'objets': switchs,
                'colsp': cols_principales, 'colsd': cols_detail, }
     return render(request, 'app_principal/offictable.html', context)
+
 
 # @permission_required('app_principal.view_vlan')
 
@@ -230,7 +230,7 @@ def vlan_tab(request):
 def port_tab(request, switch_id):
 
     cols_principales = ['Numero du port', 'Type du port',
-                        'Etat', 'Vlan associé', "Type de l'appareil suivante", "nom de l'appareil suivante"]
+                        'Etat', 'Local','Vlan associé', "Type de l'appareil suivante", "nom de l'appareil suivante"]
     cols_detail = []
     # ports = Port.objects.all()
     Ports = Port.objects.filter(switch=switch_id)
