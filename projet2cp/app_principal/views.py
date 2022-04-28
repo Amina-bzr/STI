@@ -1,8 +1,8 @@
 from base64 import urlsafe_b64encode
 from email import message
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.models import User
 from multiprocessing import context
-from queue import LifoQueue
-from warnings import catch_warnings
 from django.contrib.sites.shortcuts import get_current_site
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
@@ -10,13 +10,13 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views import generic
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as authlogin
 from django.contrib.auth.forms import UserCreationForm
 from .forms import EditUserPermissionsForm, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform
 from .models import switch, vlan, Port, ModeleSwitch, Contact
 from django.contrib import messages
+from django.template.loader import render_to_string
 from django.contrib.auth import decorators
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import User, Group, Permission
@@ -26,6 +26,21 @@ from django.conf import settings
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.crypto import get_random_string
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.forms import PasswordResetForm
+from django.db.models.query_utils import Q
+from django.utils.http import urlsafe_base64_encode
+from django.core.mail import send_mail
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
+
+def acul(request):
+    return render(request,'app_principal/accumm.html')
+def res(request):
+    return render(request,'app_principal/password/reset.html')
+    
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 
@@ -48,7 +63,6 @@ def register(request):
             regForm.save()
             messages.success(request, 'User has been registered.')
     return render(request, 'app_principal/register.html', {'form': form})
-
 
 def profil(request):
     return render(request, 'app_principal/Profil-user.html')
@@ -217,14 +231,12 @@ def switchtab(request):
                 port.nom_suiv="/"
                 port.save()
     switchs= switch.objects.all()
-    cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis', 'vlans']
+    cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis', 'VLANs']
     cols_detail = ['Adresse MAC', 'Numero de Serie',
                      "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle', 'password']
     context = {'objet': 'switchs', 'objets': switchs,
                'colsp': cols_principales, 'colsd': cols_detail, }
     return render(request, 'app_principal/offictable.html', context)
-
-
 # @permission_required('app_principal.view_vlan')
 
 
@@ -253,6 +265,7 @@ def port_tab(request, switch_id):
 # @permission_required('app_principal.view_modele')
 
 
+ 
 def modele_tab(request):
     cols_principales = ['nom', 'nbr_port', 'nbr_port_FE',
                         'nbr_port_GE', 'nbr_port_SFP', ' premier_port_FE', 'premier_port_GE', ' premier_port_SFP']
@@ -297,7 +310,7 @@ def activer_user(request, user_id):
 
 
 def formprofil(request):
-    return render(request, 'app_principal/form_user.html')
+        return render(request, 'app_principal/form_user.html')               
 
 
 def register_super_user(request):
@@ -413,7 +426,7 @@ def modif_permissions_user(request, user_id):
                 else:
                         messages.warning(request,("Echec! les permissions n'ont pas été modifiées."))            
                
-        return render(request,'app_principal/modif_user_permissions.html',{'form':form,'user':user,})
+        return render(request,'app_principal/modif_user_permissions.html',{'form':form,'usr':user,})
     
 
 def connecter(request):
@@ -434,6 +447,40 @@ def connecter(request):
 
 
 def logout_user(request):
+	logout(request)
+	messages.success(request, ("Deconnexion faite avec succés!"))
+	return redirect('app_principal:login') 
+
+
+#reset-change password
+class PasswordReset(PasswordResetView):
+    template_name = 'app_principal/password/password_reset.html'
+
+class PasswordResetDone(PasswordResetDoneView):
+    template_name = 'app_principal/password/password_reset_done.html'
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'app_principal/password/password_reset_confirm.html'
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    template_name = 'app_principal/password/password_reset_complete.html'
+
+def password_change(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request,"Your Password Change")
+            return redirect('app_principal:switch')
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    context ={
+        'form':form,
+    }
+    return render(request,'app_principal/password/changepassword.html',context)
+  
     logout(request)
     messages.success(request, ("Deconnecté avec succés!"))
     return redirect('app_principal:vlan')

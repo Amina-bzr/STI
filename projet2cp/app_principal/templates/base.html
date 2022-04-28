@@ -171,11 +171,11 @@
         <ul class="nav pull-right top-menu">
           <li><a class="logout" href=""> 
             {% if user.is_authenticated %}
-            <button type="button" class="btn btn-outline-secondary "   href="{% url 'app_principal:logout' %}">Se Decconecter</a> 
+            <a type="button" class=" btn-outline-secondary "   href="{% url 'app_principal:logout' %}">Se Decconecter</a> 
             <span class="nav-item nav-link"> <i class="fa fa-user"></i>  {{user.username}}</span>
           {% else %}
             
-            <a class="btn btn-outline-success my-2 my-sm-0" href="{% url 'app_principal:login' %}">Se connceter</a>
+            <a class=" btn-outline-success my-2 my-sm-0" href="{% url 'app_principal:login' %}">Se connecter</a>
           {% endif %}
           </a></li > <!--lien page login-->
         </ul>
@@ -190,10 +190,10 @@
         <ul class="sidebar-menu" id="nav-accordion">
           <p class="centered"><a href="p"><img src=""" class="img-circle" width="80"></a></p>
           <h5 class="centered">Chef Service de Réseau</h5>
-          <li class="mt">
-            <a href="i">
-              <i class="fa fa-dashboard"></i>
-              <span>Accueil</span>
+          <li class="sub-menu"> <!--lien vers nos services-->
+            <a href="{% url 'app_principal:profile' %}">
+              <i class=" fa fa-bar-chart-o"></i>
+              <span>Profile</span>
               </a>
           </li>
           <li class="sub-menu">
@@ -223,7 +223,7 @@
               </a>
             <ul class="sub">
               <li><a href="{% url 'app_principal:vlan' %}">Chercher </a></li>
-              <li><a href="">Ajouter</a></li> <!--lien vers ajout vlan-->
+              <li><a href="{% url 'app_principal:add_vlan' %}">Ajouter</a></li> <!--lien vers ajout vlan-->
               
             </ul>
           </li>
@@ -253,8 +253,9 @@
           <li class="sub-menu"> <!--lien vers nos services-->
             <a href="">
               <i class=" fa fa-bar-chart-o"></i>
-              <span>Nos service</span>
+              <span>Statistiques</span>
               </a>
+          </li>
             
           
         <!-- sidebar menu end-->

@@ -38,26 +38,17 @@
     <div class="container">
       <form class="form-login"  method=POST>
         {% csrf_token %}
-        <h2 class="form-login-heading">Se Connecter</h2>
+        <h2 class="form-login-heading">Recuperer votre mot de passe</h2>
         <div class="login-wrap">
-          <input type="text" class="form-control" name="username" placeholder="Nom utilisatur" >
+          <input type="email" class="form-control" name="password" placeholder="Entrez Email" >
+          
           <br>
-          <input type="password" class="form-control" name="password" placeholder="mot de passe">
-          <label class="checkbox">
-            <input type="checkbox" value="remember-me"> Enregistrez moi
-            <span class="pull-right">
-            <a data-toggle="modal" href="{% url 'app_principal:password_reset'%}"> Mot de Passe oubliée?</a>
-            </span>
-            </label>
-          <button class="btn btn-theme btn-block"  type="submit"><i class="fa fa-lock" href="{% url 'app_principal:vlan' %}"></i> Se Connecter</button>
+          
+          <button type="button" href="{% url 'app_principal:password_reset_done' %}" > Envoiyer</button>
+          
           <hr>
          
-          <div class="registration">
-            Vous avez un compte Déja?<br/>
-            <a class="" href="#">
-              Creer Un Compte
-              </a>
-          </div>
+          
         </div>
         <!-- Modal -->
         <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
@@ -65,7 +56,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">mot de passe oubliée ?</h4>
+                <h4 class="modal-title">Envoiyer</h4>
               </div>
               
             </div>

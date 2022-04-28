@@ -1,5 +1,6 @@
 from unittest.mock import DEFAULT
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -135,12 +136,19 @@ class ModeleSwitch(models.Model):
     nbr_port_FE = models.PositiveIntegerField(default=0)
     nbr_port_GE = models.PositiveIntegerField(default=0)
     nbr_port_SFP = models.PositiveIntegerField(default=0)
-    premier_port_FE = models.PositiveIntegerField(
-        default=1)  # on utilise le fait que les ports du meme
-    premier_port_GE = models.PositiveIntegerField(
-        default=1)  # type sont sequentiels
-    premier_port_SFP = models.PositiveIntegerField(default=1)
-    # pour automatiquement remplir qlq champs du formulaire des ports et switch
+    premier_port_FE=models.PositiveIntegerField(default=1) #on utilise le fait que les ports du meme
+    premier_port_GE=models.PositiveIntegerField(default=1) #type sont sequentiels
+    premier_port_SFP=models.PositiveIntegerField(default=1)
+    #pour automatiquement remplir qlq champs du formulaire des ports et switch
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+  
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+    
+
 class Contact(models.Model):
     name = models.CharField(max_length=158)
     email = models.EmailField()

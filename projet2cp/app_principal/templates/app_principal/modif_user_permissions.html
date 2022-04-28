@@ -18,8 +18,8 @@
   <div class="row mt">
     <div class="col-lg-12">
         <div class="form-panel">
-            <p style="font-size:1.2em;margin: 20px 15px 35px;">Les permissions actuelles de "{{user.username}}" sont : 
-                {% for group in user.groups.all %}
+            <p style="font-size:1.2em;margin: 20px 15px 35px;">Les permissions actuelles de "{{usr.username}}" sont : 
+                {% for group in usr.groups.all %}
                     <span style="color:red;"> <strong>{{ group.name }}</strong></span>
                 {% endfor %}, veuillez selectionner toutes les permissions associées à cet utilisateur:</p>
           <div class="form">
@@ -52,7 +52,7 @@
                       </button>
                     </div>
                     <div class="modal-body text-center">
-                      Voullez vous vraiment modifier les permissions de {{user.username}}?
+                      Voullez vous vraiment modifier les permissions de {{usr.username}}?
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
