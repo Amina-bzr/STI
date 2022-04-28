@@ -57,7 +57,7 @@ class portform(forms.ModelForm):
 
     class Meta:
         model = Port
-        fields = ['type_port', 'etat', 'vlan_associe', 'type_suiv', 'nom_suiv']
+        fields = ['type_port', 'etat','local', 'vlan_associe', 'type_suiv', 'nom_suiv']
 
 
 class modeleform(forms.ModelForm):

@@ -8,6 +8,7 @@
   <link type="text/css" href="{% static 'lib/advanced-datatable/css/demo_page.css' %}" rel="stylesheet" />
   <link type="text/css" href="{% static 'lib/advanced-datatable/css/demo_table.css' %}" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'lib/advanced-datatable/css/DT_bootstrap.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/vlan.css' %}" />
   {% endblock %}
   
   <!--SSOURCE: -->
@@ -22,19 +23,20 @@
  
       
     <section class="wrapper">
-      {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">  <!-- singular -->
-            <a class="close" data-dismiss="alert"></a>
-            {{ message }}
-        </div>
-    {% endfor %}
-  {% endif %}
+      
         <h3><i class="fa fa-angle-right"></i> Table des {{ objet }} {% if objet == 'ports' %} de {{ switch_nom }} {% endif %} </h3> <!--vlan ou switch-->
        
       <div class="row mb">
           <!-- page start-->
-        <div class="content-panel">
+          {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">  <!-- singular -->
+                    <a class="close" data-dismiss="alert"></a>
+                    {{ message }}
+                </div>
+            {% endfor %}
+          {% endif %}
+        <div class="content-panel" style="position:relative;">
           {% if objet == 'switchs' %}
           <form method="post" >
               {% csrf_token %}
@@ -54,6 +56,9 @@
                 <button class="btn mini " style="background:#5a4f4f;" type="button" ><a style="color:white;" href="{% url 'app_principal:add_switch' %}"> + Ajouter</a></button>
               </div>
               {% endif %}
+              {% if objet == "modèles" %}
+              <button class="btn mini " style="background:#5a4f4f;margin-bottom: 10px;" type="button" ><a style="color:white;" href="{% url 'app_principal:ajout_modele' %}"> + Ajouter</a></button>
+              {% endif %}
               <div class="adv-table">
                 <table cellpadding="0" cellspacing="0" class="display table table-bordered" id="hidden-table-info">
                   <thead>
@@ -72,9 +77,9 @@
 
                       {% if objet == 'switchs' %}
                         <tr class="gradeA">
-                          <td><a href="{% url 'app_principal:plus_info_switch' s.id %}" style="border:none;padding:0;"><img style="width:13.5px;margin-left: 5px;" src="{% static 'lib/advanced-datatable/images/details_open.png' %}" title="plus d'infos" /> </a></td>  
+                          <td><a href="{% url 'app_principal:plus_info_switch' s.id %}" style="border:none;padding:0;"><img style="width:18px;margin-left: 5px;" src="{% static 'lib/advanced-datatable/images/details_open.png' %}" title="plus d'infos" /> </a></td>  
                           <td><input type="checkbox" name="selection_{{ s.id }}" class="check mail-checkbox"></td>
-                          <td>{{ s.nom }} <a href="{% url 'app_principal:config_switch' s.id %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}" title="configurer"/> </a></td>  
+                          <td>{{ s.nom }} <a href="{% url 'app_principal:config_switch' s.id %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}" title="configurer"/> </a><a href="{% url 'app_principal:port' s.id %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/port_icon.jpg' %}" title="ports"/> </a></td>  
                           <td>{{ s.bloc }}</td>  
                           <td>{{ s.armoire }}</td>  
                           <td>{{ s.local }}</td>  
@@ -84,13 +89,16 @@
                       {% endif %}
 
                       {% if objet == "vlans" %}
-                        <tr class="gradeA">
-                          <td>{{ s.num_Vlan }}</td>  
-                          <td>{{ s.nom }}</td>  
-                          <td>{{ s.ip }}</td>  
-                          <td>{{ s.masque }}</td>  
-                          <td>{{ s.passerelle }}</td>  
-                        </tr>
+                      <tr class="gradeA">
+                        <td>{{ s.num_Vlan }}</td>  
+                        <td>{{ s.nom }}</td>  
+                        <td>{{ s.adresse_reseau }}</td>
+                        <td>{{ s.ip }}</td>
+                        <td>{{ s.masque }}</td>
+                        <td>{{ s.passerelle }}</td> 
+                        <td><button  onclick="window.location.href ='edit/{{s.id}}';"  class="btn1">Modifier</button></td>
+                        <td><button  onclick="window.location.href = 'delete/{{s.id}}';"  class="btn2">supprimer</button></td>     
+                      </tr>
                       {% endif %}
 
                       {% if objet == "ports" %}
@@ -118,6 +126,11 @@
                         </tr>
                       {% endif %}
                     {% endfor %}
+                    {% if objet == "vlans" %}
+                  <button id="ajout" onclick="window.location.href='/app_principal/vlan/ajout';">
+                    <span>+</span>Ajouter nouveau Vlan</button>
+                    
+                  {% endif %}
                   </tbody>
                 </table>
               </div>
@@ -126,7 +139,7 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">Etes-vous sure?</h5>
+                  <h5 class="modal-title" id="exampleModalLongTitle">Etes-vous sûr?</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -136,7 +149,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
-                  <button type="submit" class="btn btn-theme" >Oui, je suis sure.</button>
+                  <button type="submit" class="btn btn-theme" >Oui, je suis sûr.</button>
                 </div>
               </div>
             </div>
@@ -145,7 +158,7 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Etes-vous sure?</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Etes-vous sûr?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -155,7 +168,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-theme" >Oui, je suis sure.</button>
+                    <button type="submit" class="btn btn-theme" >Oui, je suis sûr.</button>
                   </div>
                 </div>
               </div>
@@ -169,15 +182,18 @@
 
         {% if objet == 'switchs' %}
         </form>{% endif %}
-        <br>
-        {% if objet == 'ports' %}
-        <a href="{% url 'app_principal:switch' %}">Revenir à la table des Switchs</a>
-        {% endif %}
+  
         
+        
+        {% if objet == 'ports' %}
+        <a href="{% url 'app_principal:switch' %}" style="position:absolute;bottom:0;left:7px;">Revenir à la table des Switchs</a>
+        {% endif %}
         </div>
           <!-- page end-->
+          
       </div>
         <!-- /row -->
+        
     </section>
       <!-- /wrapper -->   
       
@@ -200,8 +216,119 @@
             checkboxes[i].checked = source.checked;
           }
         }
+
+    </script>
+    {% endif %}
+
+    {% if objet != "vlans" %}
+
+    <script>
+      /* Formating function for row details */
+      function fnFormatDetails(oTable, nTr) {
+        
+        sOut = '';
+
+        return sOut;
+      }
+
+      $(document).ready(function() {
+        /*
+        * Insert a 'details' column to the table
+        */
+        var nCloneTh = document.createElement('th');
+        var nCloneTd = document.createElement('td');
+      
+
+        /*
+        * Initialse DataTables, with no sorting on the 'details' column
+        */
+        var oTable = $('#hidden-table-info').dataTable({
+          "aoColumnDefs": [{
+            "bSortable": false,
+            "aTargets": [0]
+          }],
+          "aaSorting": [
+            [1, 'asc']
+          ]
+        });
+
+        /* Add event listener for opening and closing details
+        * Note that the indicator for showing which row is open is not controlled by DataTables,
+        * rather it is done here
+        */
+        
+      });
+
+      
     </script>
 
-   {% endif %} 
+    {% endif %}
+
+   {% if objet == "vlans" %}
+    <script type="text/javascript">
+      /* Formating function for row details */
+      function fnFormatDetails(oTable, nTr) {
+        var aData = oTable.fnGetData(nTr);
+        var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+        sOut += '<tr><td>Les switchs qui possède ce Vlan :</td><td>{{ s.adresse_reseau }}</td></tr>';
+
+        sOut += '</table>';
+
+        return sOut;
+      }
+
+      $(document).ready(function() {
+        /*
+        * Insert a 'details' column to the table
+        */
+        var nCloneTh = document.createElement('th');
+        var nCloneTd = document.createElement('td');
+        nCloneTd.innerHTML = "<img src='{% static 'lib/advanced-datatable/images/details_open.png' %}'>";
+        nCloneTd.className = "center";
+      
+
+        $('#hidden-table-info thead tr').each(function() {
+          this.insertBefore(nCloneTh, this.childNodes[0]);
+        });
+         
+        
+
+        $('#hidden-table-info tbody tr').each(function() {
+          this.insertBefore(nCloneTd.cloneNode(true), this.childNodes[0]);
+        });
+
+        /*
+        * Initialse DataTables, with no sorting on the 'details' column
+        */
+        var oTable = $('#hidden-table-info').dataTable({
+          "aoColumnDefs": [{
+            "bSortable": false,
+            "aTargets": [0]
+          }],
+          "aaSorting": [
+            [1, 'asc']
+          ]
+        });
+
+        /* Add event listener for opening and closing details
+        * Note that the indicator for showing which row is open is not controlled by DataTables,
+        * rather it is done here
+        */
+        $('#hidden-table-info tbody td img').live('click', function() {
+          var nTr = $(this).parents('tr')[0];
+          if (oTable.fnIsOpen(nTr)) {
+            /* This row is already open - close it */
+            this.src = "{% static 'lib/advanced-datatable/images/details_open.png' %}";
+            oTable.fnClose(nTr);
+          } else {
+            /* Open this row */
+            this.src = '{% static "lib/advanced-datatable/images/details_close.png" %}';
+            oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
+          }
+        });
+      });
+    </script>
+
    
+    {% endif %}  
  {% endblock %}

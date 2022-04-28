@@ -8,7 +8,6 @@ urlpatterns = [
     # va afficher le tableau des switchs
     path('switch/', views.switchtab, name='switch'),
     path('switch/ajout', views.ajoutswitch, name='add_switch'),
-    path('vlan/ajout', views.ajoutvlan, name='add'),
 
     path('switch/<int:switch_id>/configurer',
          views.switchConfig, name='config_switch'),
@@ -18,6 +17,9 @@ urlpatterns = [
 
     # va afficher le tableau des vlans
     path('vlan/', views.vlan_tab, name='vlan'),
+    path('vlan/ajout', views.ajoutvlan, name='add'),
+    path('vlan/edit/<int:id>',views.updateVlan),
+    path('vlan/delete/<int:id>',views.deleteVlan),
 
 
     # va afficher le tableau des ports

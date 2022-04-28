@@ -58,6 +58,7 @@ class vlan(models.Model):
     ip = models.GenericIPAddressField()
     masque = models.CharField(max_length=50)
     passerelle = models.GenericIPAddressField()
+    adresse_reseau = models.GenericIPAddressField()
     #liste des ports
     def __str__(self):
         return self.nom
@@ -118,7 +119,7 @@ class Port(models.Model):
         choices=etat_port,
         default=nonutilise)
     vlan_associe = models.CharField(
-        'VLAN associé', max_length=50, default= nonutilise)
+        'VLAN associé', max_length=50, default= "Aucun")
     nom_suiv = models.CharField(
         "Nom de l'appareil relié", max_length=100, default="Non relié")
     type_suiv = models.CharField(

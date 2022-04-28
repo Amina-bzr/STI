@@ -100,7 +100,7 @@ def ajoutswitch(request):
 
                 return redirect('app_principal:config_switch', id)
         else:
-            messages.error(
+            messages.warning(
                 request, ('Echec lors de la création, veuillez réessayer une autre fois.'))
     context = {'form': form, 'choix': 'switch', 'operation': 'Ajout', }
     return render(request, 'app_principal/form_validation.html', context)
@@ -112,15 +112,6 @@ def plus_info_switch(request,switch_id):
     context={'objet':s,}
     return render(request, 'app_principal/plus_info.html', context)
 
-def ajoutvlan(request):
-
-    form = vlanform(request.POST or None)
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-    context = {'form': form, 'choix': 'vlan', 'operation': 'Ajout', }
-    return render(request, 'app_principal/form_validation.html', context)
 
 # @permission_required('app_principal.change_switch')
 
@@ -133,6 +124,7 @@ def ajout_modele(request):
         if form.is_valid():
             form.save()
             messages.success(request,('Modèle créé avec succés!'))
+            return redirect('app_principal:modele')
         else:
             messages.warning(request,('Echec lors de la création, veuillez réessayer une autre fois.'))
     context = {'form': form, 'choix': 'modele', 'operation': 'Ajout', }
@@ -157,7 +149,7 @@ def switchConfig(request, switch_id):
         form = switchConfigForm(instance=s)
     return render(request,
                   'app_principal/form_validation.html',
-                  {'form': form, 'choix': s.nom, 'operation': 'Configuration', })
+                  {'form': form, 'choix': 'switch','objet':s.nom, 'operation': 'Configuration', })
 
 
 # # @permission_required('app_principal.change_switch')
@@ -175,9 +167,10 @@ def portConfig(request, switch_id, port_num):
             p.vlan_associe = form.cleaned_data["vlan_associe"]
             p.nom_suiv = form.cleaned_data["nom_suiv"]
             p.type_suiv = form.cleaned_data["type_suiv"]
+            p.local=form.cleaned_data["local"]
             p.save()
             s=p.switch
-            if not p.vlan_associe in s.vlans:
+            if not p.vlan_associe in s.vlans and p.vlan_associe!='Non utilisé' and p.vlan_associe!='Aucun':
                 s.vlans = s.vlans + p.vlan_associe + " / "
                 s.save()
                 print(p.vlan_associe)
@@ -214,8 +207,15 @@ def switchtab(request):
             sw.local = "reformé"
             sw.armoire = "magazin"
             sw.preced = "pas en cascade"
-            sw.vlans="Aucun"
+            sw.vlans="/"
             sw.save()
+            for port in sw.port_set.all():
+                port.etat=Port.nonutilise
+                port.vlan_associe="/"
+                port.local="magazin"
+                port.type_suiv="Aucun"
+                port.nom_suiv="/"
+                port.save()
     switchs= switch.objects.all()
     cols_principales = ['nom', 'bloc', 'local', 'armoire', 'Cascade depuis', 'vlans']
     cols_detail = ['Adresse MAC', 'Numero de Serie',
@@ -229,7 +229,7 @@ def switchtab(request):
 
 
 def vlan_tab(request):
-    cols_principales = ['num_Vlan ', 'nom', 'ip', 'masque', 'passerelle']
+    cols_principales = ['Vlan ', 'Nom', 'Adresse réseau', 'ip', 'Masque Sous Réseau', 'Passerelle', ' ', ' ']
     cols_detail = []
     vlans = vlan.objects.all()
     context = {'objet': 'vlans', 'objets': vlans,
@@ -435,7 +435,7 @@ def connecter(request):
 
 def logout_user(request):
     logout(request)
-    messages.success(request, ("You Were Logged Out!"))
+    messages.success(request, ("Deconnecté avec succés!"))
     return redirect('app_principal:vlan')
 
 def index(request):
@@ -476,3 +476,56 @@ def switch_reforme(request, switch_id):
     return render(request,
                 'app_principal/form_validation.html',
                 {'choix':s.nom,'operation':'réformation',})	
+
+
+#VLANS
+def ajoutvlan(request):
+    
+    form=vlanform(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request,'ce vlan a été ajouté avec succès..!')
+            return redirect('/app_principal/vlan')
+    context = {'form':form, 'choix':'vlan','operation':'Ajout',}
+    return render (request ,'app_principal/form_validation.html',context)
+
+def updateVlan(request,id):
+    updVlan = get_object_or_404(vlan,id=id)
+    initialData={
+           'num_Vlan': updVlan.num_Vlan ,
+           'nom': updVlan.nom ,
+            'adresse_reseau' : updVlan.adresse_reseau ,
+            'ip' : updVlan.ip ,
+            'masque' : updVlan.masque ,
+            'passerelle' : updVlan.passerelle ,
+        }
+    if request.method == "POST":
+        editForm = vlanform(request.POST,instance=updVlan)
+        if editForm.is_valid():
+                editForm.save()
+        messages.success(request,'Les information de ce vlan ont été mis à jour avec succès...!')
+        return redirect('/app_principal/vlan')
+    editForm=vlanform(initialData)
+    context={ 'form':editForm , 'choix':'vlan' , 'operation':'modification'}
+    return render(request,'app_principal/form_validation.html',context)
+
+def deleteVlan(request,id):
+        deletVlan = get_object_or_404(vlan,id=id)
+        initialData={
+           'num_Vlan': deletVlan.num_Vlan ,
+           'nom': deletVlan.nom ,
+            'adresse_reseau' : deletVlan.adresse_reseau ,
+            'ip' : deletVlan.ip ,
+            'masque' : deletVlan.masque ,
+            'passerelle' : deletVlan.passerelle ,
+        }
+        form = vlanform(initial=initialData)
+        if request.method == 'POST' :
+                deletVlan.delete() 
+                messages.success(request,' ce vlan ont été supprimé avec succès...!')
+                return redirect("/app_principal/vlan")
+        context={
+                'form':form , 'choix':'vlan', 'operation':'supression'
+        }
+        return render(request,'app_principal/form_validation.html',context)

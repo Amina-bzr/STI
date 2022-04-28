@@ -1,0 +1,25 @@
+#ajout{
+    margin: 15px auto;
+    background-color: rgb(23, 230, 50);
+    border: 2px  rgb(23, 230, 50) outset;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.btn1{
+    background-color: rgb(28, 163, 118);
+    border: 2px outset rgb(28, 163, 118);
+    border-radius: 5px;
+    padding: 5px;
+    font-family: Arial;
+    color: white;
+}
+.btn2{
+    background-color: rgb(241, 65, 65);
+    border: 2px outset rgb(241, 65, 65);
+    border-radius: 5px;
+    padding: 5px;
+    font-family: Arial;
+    color: white;
+}
