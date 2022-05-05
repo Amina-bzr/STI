@@ -136,3 +136,4 @@ EMAIL_HOST_PASSWORD = '-*/tracck/*-ecole@'
 GOOGLE_RECAPTCHA_SECRET_KEY= '6Ldq_9AZAAAAAEBLVbknRrtgQfTZVBcDZXNgG6jL'
 
 
+LOGIN_URL='/app_principal/loginuser'

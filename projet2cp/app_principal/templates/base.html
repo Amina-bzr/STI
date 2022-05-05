@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  {% load static %}
   <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
   <title>{% block title %}  {% endblock %}</title>
-  {% load static %}
+  
   <!-- Favicons -->
   <link href="{% static 'img/img.png' %}" rel="icon"> 
   <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <!--external css-->
+  <!-- css externe--> 
   {% block css %}{% endblock %}
   <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
-  <!-- Custom styles for this template -->
+  <!-- Styles personalisés pour cette template -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
 
@@ -33,6 +34,7 @@
 </head>
 
 <body >
+  {% load app_extras %}
   <section id="container" >
     <a href="#"><img src="img" alt="good vybes" /></a>
     <!-- **********************************************************************************************************************************************************
@@ -188,8 +190,8 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="p"><img src=""" class="img-circle" width="80"></a></p>
-          <h5 class="centered">Chef Service de Réseau</h5>
+          <p class="centered"><a href="p"><img src="" class="img-circle" width="80"></a></p>
+          <h5 class="centered">Bienvenue, {{user.username}}!</h5>
           <li class="sub-menu"> <!--lien vers nos services-->
             <a href="{% url 'app_principal:profile' %}">
               <i class=" fa fa-bar-chart-o"></i>
@@ -203,7 +205,10 @@
             </a>
             <ul class="sub">
               <li><a href="{% url 'app_principal:switch' %}">chercher</a></li>
-              <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
+              {% if request.user|has_group:"ajouter"  %} 
+                <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
+              {% endif %}
+              
             </ul>
           </li>
           <li class="sub-menu">
@@ -213,7 +218,9 @@
             </a>
             <ul class="sub">
               <li><a href="{% url 'app_principal:modele' %}">chercher</a></li>
-              <li><a href="{% url 'app_principal:ajout_modele' %}">Ajouter</a></li>
+              {% if request.user|has_group:"ajouter" %} 
+                  <li><a href="{% url 'app_principal:ajout_modele' %}">Ajouter</a></li>
+              {% endif %}
             </ul>
           </li>
           <li class="sub-menu">
@@ -223,8 +230,9 @@
               </a>
             <ul class="sub">
               <li><a href="{% url 'app_principal:vlan' %}">Chercher </a></li>
-              <li><a href="{% url 'app_principal:add_vlan' %}">Ajouter</a></li> <!--lien vers ajout vlan-->
-              
+              {% if request.user|has_group:"ajouter" %} 
+                <li><a href="{% url 'app_principal:add_vlan' %}">Ajouter</a></li> <!--lien vers ajout vlan-->
+              {% endif %}
             </ul>
           </li>
           <li class="sub-menu">
@@ -238,26 +246,29 @@
               <i class="fa fa-tasks"></i>
               <span>Aide</span>
             </a>
-          <li class="sub-menu">
-            <a href=""><!--lien vers page about (infos sur lapp) -->
-              <i class="fa fa-th"></i>
-              <span>A propos </span>
-             
-         
-            <a href="{% url 'app_principal:users' %}"> <!--lien vers gestion des utilisateurs-->
-              <i class="fa fa-envelope"></i>
-              <span>gestion des utilisateurs </span>
-              <!--<span class="label label-theme pull-right mail-info">2</span>-->
+            <li class="sub-menu">
+              <a href=""><!--lien vers page about (infos sur lapp) -->
+                <i class="fa fa-th"></i>
+                <span>A propos </span>
               </a>
-          </li>
+            {% if request.user.is_superuser == True %} 
+              <a href="{% url 'app_principal:users' %}"> <!--lien vers gestion des utilisateurs-->
+                <i class="fa fa-envelope"></i>
+                <span>gestion des utilisateurs </span>
+                <!--<span class="label label-theme pull-right mail-info">2</span>-->
+              </a>
+                
+         
+            {% endif %}
+          </li>  
           <li class="sub-menu"> <!--lien vers nos services-->
-            <a href="">
+            <a href="{% url 'app_principal:statistique' %}">
               <i class=" fa fa-bar-chart-o"></i>
               <span>Statistiques</span>
               </a>
           </li>
             
-          
+        </ul> 
         <!-- sidebar menu end-->
       </div>
      </aside>

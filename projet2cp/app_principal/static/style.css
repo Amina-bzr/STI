@@ -934,11 +934,15 @@ PANELS CONFIGURATIONS
 .grey-panel {
 	text-align: center;
 	background: #dfdfe1;
+    height: max-content;
+    border-radius: 20px;
 }
 .grey-panel .grey-header {
 	background: #ccd1d9;
 	padding: 3px;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 .grey-panel h5 {
 	font-weight: 200;
@@ -948,6 +952,27 @@ PANELS CONFIGURATIONS
 	margin-left: 5px;
 }
 /* Specific Conf for Donut Charts*/
+.graphbox
+{
+ position: relative; 
+ width:100% ;  
+ padding: 20%;
+ display: grid;
+ grid-template-columns: 2fr 1fr;
+ grid-gap: 30px;
+}
+.graphbox .box
+{
+    position: relative;
+    background:black ;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 7px 25px rgba(0, 0, 0,0.08);
+    border-radius: 20px;
+
+
+
+}
 .donut-chart p {
 	margin-top: 20px;
 	font-weight: 700;
@@ -959,54 +984,62 @@ PANELS CONFIGURATIONS
 	font-size: 38px;
 }
 
-/* Dark Blue*/
+/* green panel*/
 
-.darkblue-panel {
+.green-panel {
 	text-align: center;
-	background: #444c57;
+	background: #51cea8;
+    height: max-content;
+    border-radius: 20px;
 }
-.darkblue-panel .darkblue-header {
-	background: transparent;
+.green-panel .green-header {
+	background: #11a578;
 	padding: 3px;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
-.darkblue-panel h1 {
+.green-panel h1 {
 	color: #f2f2f2;
 }
-.darkblue-panel h5 {
+.green-panel h5 {
 	font-weight: 200;
 	margin-top: 10px;
 	color: white;
 }
-.darkblue-panel footer {
+.green-panel footer {
 	color: white;
 }
-.darkblue-panel footer h5 {
+.green-panel footer h5 {
 	margin-left:10px;
 	margin-right: 10px;
 	font-weight: 700;
 }
 
-/*Green Panel*/
-.green-panel {
+/*blue Panel*/
+.blue-panel {
 	text-align: center;
-	background: #4ECDC4;
+	background: #55c5f1;
+    border-radius: 20px;
+    height: max-content;
 }
-.green-panel .green-header {
-	background: #43b1a9;
+.blue-panel .blue-header {
+	background: #2cbccf;
 	padding: 3px;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
-.green-panel h5 {
+.blue-panel h5 {
 	color: white;
 	font-weight: 200;
 	margin-top: 10px;
 }
-.green-panel h3 {
+.blue-panel h3 {
 	color: white;
 	font-weight: 100;
 }
-.green-panel p {
+.blue-panel p {
 	color: white;
 }
 
@@ -1014,11 +1047,14 @@ PANELS CONFIGURATIONS
 .white-panel {
 	text-align: center;
 	background: #ffffff;
+    height: max-content;
+    border-radius: 20px;
 }
 .white-panel .white-header {
 	background: #f3f3f3;
 	padding: 3px;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
+    border-radius: 20px;
 }
 .white-panel .small {
 	font-size: 10px;
@@ -1618,10 +1654,7 @@ PANELS CONFIGURATIONS
 	margin-right: 8px;
 }
 
-/* Grid Showcase*/
 
-	margin-bottom: 15px;
-}
 
 .show-grid [class^=col-] {
 	padding-top: 10px;
@@ -3356,10 +3389,6 @@ ul.chat-available-user li a:hover {
 
 #contact {
   padding: 40px 0;
-}
-
-.contact-form {
-
 }
 
 .contact-form label {

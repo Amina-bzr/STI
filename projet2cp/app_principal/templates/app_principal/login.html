@@ -36,6 +36,14 @@
       *********************************************************************************************************************************************************** -->
   <div id="login-page">
     <div class="container">
+      {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">  <!-- singular -->
+                <a class="close" data-dismiss="alert"></a>
+                {{ message }}
+            </div>
+          {% endfor %}
+      {% endif %}
       <form class="form-login"  method=POST>
         {% csrf_token %}
         <h2 class="form-login-heading">Se Connecter</h2>

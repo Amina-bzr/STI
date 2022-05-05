@@ -38,7 +38,7 @@ urlpatterns = [
         # path("password_reset", views.password_reset_request, name="password_reset") ,
      path('logout', views.logout_user, name='logout'),
      path('loginuser', views.connecter, name="login"),
-     path('register/', views.register, name='register'),
+     #path('register/', views.register, name='register'),
      path('change-password/', views.password_change , name ='password_change'),
      path('reset-password/', views.PasswordReset.as_view(),name ='password_reset'),
      path('reset-password-done/', views.PasswordResetDone.as_view(),name ='password_reset_done'),
@@ -47,7 +47,7 @@ urlpatterns = [
     
 
      #PROFIL
-     path('user/',views.profil,name='profile'),
+     path('profile/',views.profil,name='profile'),
      path('user_form/',views.formprofil,name='user_form'),
 
 
@@ -63,5 +63,6 @@ urlpatterns = [
      path('utilisateurs/activer_utilisateur/<int:user_id>',views.activer_user,name='activer_user'),
      path('utilisateurs/modifier_permissions/<int:user_id>',views.modif_permissions_user,name='modif_permissions_user'),
  
-
+    #STATISTIQUES
+    path('statistique/',views.statistique, name='statistique'),
 ]
