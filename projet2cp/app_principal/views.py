@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as authlogin
 from django.contrib.auth.forms import UserCreationForm
-from .forms import EditUserPermissionsForm, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform
+from .forms import EditUserPermissionsForm, contactform, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform
 from .models import switch, vlan, Port, ModeleSwitch, Contact
 from django.contrib import messages
 from django.template.loader import render_to_string
@@ -482,7 +482,6 @@ def password_change(request):
 
 
 #CONTACT--------------------------------
-@login_required()
 def contact(request):
     if request.method == "POST":
 
@@ -497,12 +496,10 @@ def contact(request):
         contact.message = message
         contact.save()
         messages.success(request, ("Merci de nous avoir contacté"))
+        send_mail('Contact Form',message,settings.EMAIL_HOST_USER,['ka_sebti@esi.dz','asma16.sebti@gmail.com'],fail_silently=False)
 
-        send_mail('Contact Form',message,settings.EMAIL_HOST_USER,['asma16.sebti@gmail.com'],fail_silently=False)
 
-        
     return render(request, 'contact.html')
-
 
 #VLAN----------------------------------------
 @login_required()

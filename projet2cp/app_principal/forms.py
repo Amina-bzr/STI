@@ -1,6 +1,8 @@
 from unittest.util import _MAX_LENGTH
 from django import forms
-from .models import switch, vlan, Port, ModeleSwitch
+
+#from projet2cp.app_principal.views import contact
+from .models import Contact, switch, vlan, Port, ModeleSwitch
 
 import datetime
 
@@ -31,6 +33,16 @@ class switchform(forms.ModelForm):
             'date_achat':forms.DateInput(attrs={'placeholder': 'jour/mois/année','class':'form-control',},),
         }
 
+class contactform(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name','email','subject','message']
+        widgets = {
+            'name': forms.TextInput(attrs={'class':'form-control'},),
+            'email': forms.EmailInput(attrs={'class':'form-control'},),
+            'subject': forms.TextInput(attrs={'class':'form-control'},),
+            'message': forms.TextInput(attrs={'class':'form-control'},),
+          }
 
 class switchConfigForm(forms.ModelForm):
         class Meta:

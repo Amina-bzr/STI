@@ -4,7 +4,7 @@
 {% block content %}
 <h1 class="text-center">"Contact Form"</h1> 
 <div class="container">
-  <p style="text-align: center; font-size: 30px; font-weight: bold; padding-top: 30px;">Contact Form</p>
+  <p style="text-align: center; font-size: 30px; font-weight: bold; padding-top: 30px;">Formulaire de Contact</p>
 
   <form method="POST">
       {% csrf_token %}
@@ -29,7 +29,7 @@
         <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Message..."></textarea>
       </div>
 
-      <button type="submit" class="btn btn-theme"> Submit </button>
+      <button type="submit" class="btn btn-theme"> Envoyer </button>
   </form>
 </div>
 {% endblock content %}
