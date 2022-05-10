@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as authlogin
 from django.contrib.auth.forms import UserCreationForm
-from .forms import EditUserPermissionsForm, contactform, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform
+from .forms import EditUserPermissionsForm, contactform, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform,update
 from .models import switch, vlan, Port, ModeleSwitch, Contact
 from django.contrib import messages
 from django.template.loader import render_to_string
@@ -647,3 +647,26 @@ def statistique(request):
             'data5': data5,
              }
         return render(request, 'app_principal/statistique.html',context)
+
+
+
+def profilUpdate(request):
+    if request.method == 'POST':
+        u_form = update(request.POST, instance=request.user)
+        
+        if u_form.is_valid() :
+            u_form.save()
+           
+            messages.success(request, f'Votre info-personnelles sont mis à jour!')
+            return redirect('app_principal:c')
+
+    else:
+        u_form = update(instance=request.user)
+        
+
+    context = {
+        'u_form': u_form,
+       
+    }
+
+    return render(request, 'app_principal/update.html', context)

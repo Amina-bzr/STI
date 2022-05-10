@@ -67,4 +67,5 @@ urlpatterns = [
     path('statistique/',views.statistique, name='statistique'),
     #profil
      path('Compte', views.p, name='c'),
+     path('updateprofil', views.profilUpdate, name='ch'),
 ]

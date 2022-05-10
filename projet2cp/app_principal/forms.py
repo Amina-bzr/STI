@@ -163,3 +163,10 @@ class EditUserPermissionsForm(forms.Form):
     def permissions_clean(self):  #pour traiter la donnee entrée par l'utilisateur et voir si elle est correcte
         group = self.cleaned_data['group'].lower()  
         return group  
+
+class update(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
