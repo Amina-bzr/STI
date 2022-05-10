@@ -47,8 +47,8 @@ urlpatterns = [
     
 
      #PROFIL
-     path('profile/',views.profil,name='profile'),
-     path('user_form/',views.formprofil,name='user_form'),
+    
+    
 
 
      #CONTACT
@@ -65,4 +65,6 @@ urlpatterns = [
  
     #STATISTIQUES
     path('statistique/',views.statistique, name='statistique'),
+    #profil
+     path('Compte', views.p, name='c'),
 ]

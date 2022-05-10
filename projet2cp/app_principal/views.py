@@ -61,12 +61,10 @@ def servicepage(request):
 
 #PROFIL-----------------------------------------------------------
 @login_required()
-def profil(request):
-    return render(request, 'app_principal/Profil-user.html')
+def p(request):
+    return render(request, 'app_principal/profil.html')
 
-@login_required()
-def formprofil(request):
-        return render(request, 'app_principal/form_user.html')   
+
 
 #SWITCH------------------------------------------------------------
 @login_required()
