@@ -43,7 +43,9 @@
                     <button class="btn btn-theme" id="" type="button" data-toggle="modal" data-target="#exampleModal">Supprimer</button>
                     {% elif operation == "Ajout"%}
                     <button class="btn btn-theme" id="" type="button" data-toggle="modal" data-target="#exampleModal">Ajouter</button>
-             
+                    {% elif operation == "Recherche"%}
+                    <button class="btn btn-theme" id="" type="submit" data-toggle="modal" data-target="#exampleModal">Chercher</button>
+                  
                     {% else %}
                     <button class="btn btn-theme" id="" type="button" data-toggle="modal" data-target="#exampleModal">Enregistrer</button>
                     {% endif %}
@@ -58,7 +60,7 @@
                     {% endif %}
                   </div>
                 </div>
-
+              {% if operation != "Recherche"%}
               <!-- Modal -->
               <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="top:25%;">
                 <div class="modal-dialog" role="document">
@@ -70,7 +72,7 @@
                       </button>
                     </div>
                     <div class="modal-body text-center">
-                      Voullez vous vraiment effectuer l'operation de l'{{ operation }}?
+                      Voullez vous vraiment effectuer l'operation de {{ operation }}?
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
@@ -79,6 +81,7 @@
                   </div>
                 </div>
               </div>
+              {% endif %}
             </form>
           </div> 
           

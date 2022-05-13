@@ -60,7 +60,8 @@
                 {% if request.user|has_group:"ajouter" %} 
                   <button class="btn mini " style="background:#5a4f4f;" type="button" ><a style="color:white;" href="{% url 'app_principal:add_switch' %}"> + Ajouter</a></button>
                 {% endif %}
-
+                <button class="btn mini " style="background:#5a4f4f;" type="button" ><a style="color:white;" href="{% url 'app_principal:ele_suiv' %}"> Chercher</a></button>
+              
               </div>
           {% endif %}
             {% if objet == "modèles" and request.user|has_group:"ajouter" %}
