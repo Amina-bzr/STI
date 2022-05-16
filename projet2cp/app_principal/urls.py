@@ -17,13 +17,13 @@ urlpatterns = [
          views.switchConfig, name='config_switch'),
     path('switch/<int:switch_id>/reformer',
          views.switch_reforme, name='reformer_switch'),
-    path('switch/el_suiv', views.recherche_elem_suiv, name='ele_suiv'),
+    path('switch/Recherche_el_suiv', views.recherche_elem_suiv, name='ele_suiv'),
 
     # VLANS
     path('vlan/', views.vlan_tab, name='vlan'),
     path('vlan/ajout', views.ajoutvlan, name='add_vlan'),
-    path('vlan/edit/<int:id>', views.updateVlan),
-    path('vlan/delete/<int:id>', views.deleteVlan),
+    path('vlan/Mise_à_jour/<int:id>', views.updateVlan),
+    path('vlan/Supprimer/<int:id>', views.deleteVlan),
 
     # PORTS
     # va afficher le tableau des ports
@@ -31,24 +31,24 @@ urlpatterns = [
     path('switch/<int:switch_id>/port_tab/', views.port_tab, name='port'),
 
     # MODELE_SWITCH
-    path('modele/', views.modele_tab, name='modele'),
-    path('modele/ajout', views.ajout_modele, name='ajout_modele'),
+    path('Modele/', views.modele_tab, name='modele'),
+    path('Modele/ajout', views.ajout_modele, name='ajout_modele'),
 
     # ACCUEIL
-    path('home', views.acul, name='home'),
-    path('Notre_serivce', views.servicepage, name='service'),
+    path('Accueil', views.PageAccueil, name='home'),
+    path('Notre_Serivces', views.servicepage, name='service'),
 
 
 
     # AUTHENTIFICATION
     # path('login/',views.login,name='register'),
     # path("password_reset", views.password_reset_request, name="password_reset") ,
-    path('logout', views.logout_user, name='logout'),
-    path('loginuser', views.connecter, name="login"),
+    path('Deconnecter', views.logout_user, name='logout'),
+    path('Se Connecter', views.connecter, name="login"),
     #path('register/', views.register, name='register'),
-    path('change-password/', views.password_change, name='password_change'),
-    path('reset-password/', views.PasswordReset.as_view(), name='password_reset'),
-    path('reset-password-done/', views.PasswordResetDone.as_view(),
+    path('changer_mot_passe/', views.password_change, name='password_change'),
+    path('Recuperer_mot_passe/', views.PasswordReset.as_view(), name='password_reset'),
+    path('mot_de_passe_recuperée/', views.PasswordResetDone.as_view(),
          name='password_reset_done'),
     path('reset-password/<uidb64>/<token>/',
          views.PasswordResetConfirm.as_view(), name='password_reset_confirm'),
@@ -80,6 +80,7 @@ urlpatterns = [
     # STATISTIQUES
     path('statistique/', views.statistique, name='statistique'),
     # profil
-    path('Compte', views.p, name='c'),
-    path('updateprofil', views.profilUpdate, name='ch'),
+     path('Mon-Compte', views.p, name='c'),
+     path('Mon-Compte/Modifier', views.profilUpdate, name='ch'),
+     path('Changer_mot_de_passe', views.motpass, name='ch'),
 ]

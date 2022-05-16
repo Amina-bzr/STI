@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  {% load static %}
   <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
   <title>{% block title %}  {% endblock %}</title>
-  
+  {% load static %}
   <!-- Favicons -->
-  <link href="{% static 'img/img.png' %}" rel="icon"> 
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
   <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <!-- css externe--> 
+  <!--chartjs CDN-->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+  <!--external css-->
   {% block css %}{% endblock %}
   <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
-  <!-- Styles personalisés pour cette template -->
+  <!-- Custom styles for this template -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
 
@@ -31,153 +32,69 @@
     Author: TemplateMag.com
     License: https://templatemag.com/license/
   ======================================================= -->
+  {% load static %}
+  <Style>
+    .logo{
+
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      top: 5px;
+      left: 60px;
+      
+    }
+
+    #top_menu{
+      position: absolute;
+     left:   140px;
+    }
+    #di{
+      position: absolute;
+      bottom: 10px;
+    }
+    head er{
+      position: relative;
+    }
+  </Style>
 </head>
 
 <body >
-  {% load app_extras %}
+  
+  
   <section id="container" >
-    <a href="#"><img src="img" alt="good vybes" /></a>
     <!-- **********************************************************************************************************************************************************
         TOP BAR CONTENT & NOTIFICATIONS
         *********************************************************************************************************************************************************** -->
     <!--header start-->
      <!--header start-->
+     
      <header class="header black-bg" style="top:0;">
+      
+      <a href="#" ><img class="logo" src="{% static 'img/ph.png'%}" alt="logo nnnn"></a>
+    
       <div class="sidebar-toggle-box">
-        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        <div id="di" class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="index.html" class="logo"><b>S<span>TI</span></b></a>
+     
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
         <!--  notification start -->
-        <ul class="nav top-menu">
+       
           <!-- settings start -->
-          <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="">
-              <i class="fa fa-tasks"></i>
-              <span class="badge bg-theme">4</span>
-              </a>
-            <ul class="dropdown-menu extended tasks-bar">
-              <div class="notify-arrow notify-arrow-green"></div>
-              <li>
-                <p class="green">Voici les changement faites récamment</p>
-              </li>
-              <li>
-                <a href="">
-                  <div class="task-info">
-                    <div class="desc">Switch ajouté</div>
-                    <div class="percent">30%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                      <span class="sr-only">40% Complete (success)</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <div class="task-info">
-                    <div class="desc">Switch configuration</div>
-                    <div class="percent">60%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                      <span class="sr-only">60% Complete (success)</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <div class="task-info">
-                    <div class="desc">Switch activé</div>
-                    <div class="percent">80%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                      <span class="sr-only">80% Complete</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="">
-                  <div class="task-info">
-                    <div class="desc">Switch Reformé</div>
-                    <div class="percent">70%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                      <span class="sr-only">70% Complete (Important)</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-              
-            </ul>
-          </li>
-          <!-- settings end -->
-          <!-- inbox dropdown start-->
-          <li id="header_inbox_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="">
-              <i class="fa fa-envelope-o"></i>
-              <span class="badge bg-theme">5</span>
-              </a>
-            <ul class="dropdown-menu extended inbox">
-              <div class="notify-arrow notify-arrow-green"></div>
-              <li>
-                <p class="green">vous avez 5 nouvelles notifications</p>
-              </li>
-              <li>
-                
-                <a href="">
-                  <span class="photo"><img alt="avatar" src="{% static 'img/ui-divya.jpg' %}"></span>
-                  <span class="subject">
-                  <span class="from">Mohamed</span>
-                  <span class="time">40 mins.</span>
-                  </span>
-                  <span class="message">
-                  Demande accés
-                  </span>
-                  </a>
-              </li>
-              <li>
-               
-              <li>
-                <a href="">voir toutes les notifications </a>
-              </li>
-            </ul>
-          </li>
-          <!-- inbox dropdown end -->
-          <!-- notification dropdown start-->
-          <li id="header_notification_bar" class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="">
-              <i class="fa fa-bell-o"></i>
-              <span class="badge bg-warning">7</span>
-              </a>
-            <ul class="dropdown-menu extended notification">
-              <div class="notify-arrow notify-arrow-yellow"></div>
-              
-              <li>
-                <a href="">See all notifications</a>
-              </li>
-            </ul>
-          </li>
-          <!-- notification dropdown end -->
-        </ul>
+         
         <!--  notification end -->
       </div>
+    
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
           <li><a class="logout" href=""> 
             {% if user.is_authenticated %}
-            <a type="button" class=" btn-outline-secondary "   href="{% url 'app_principal:logout' %}">Se Decconecter</a> 
-            <span class="nav-item nav-link"> <i class="fa fa-user"></i>  {{user.username}}</span>
+            <a type="button" class="btn btn-info"  href="{% url 'app_principal:logout' %}">Se Deconnecter</a> 
+           
           {% else %}
             
-            <a class=" btn-outline-success my-2 my-sm-0" href="{% url 'app_principal:login' %}">Se connecter</a>
+            <a class=" btn-outline-success my-2 my-sm-0" href="{% url 'app_principal:login' %}">Se Connecter</a>
           {% endif %}
           </a></li > <!--lien page login-->
         </ul>
@@ -190,96 +107,80 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="p"><img src="" class="img-circle" width="80"></a></p>
-          <h5 class="centered">Bienvenue, {{user.username}}!</h5>
-          <li class="sub-menu"> <!--lien vers nos services-->
-            <a href="{% url 'app_principal:c' %}">
-              <i class=" fa fa-bar-chart-o"></i>
-              <span>Profile</span>
+          <p class="centered"><a href="p"><img src=""" class="img-circle" width="80"></a></p>
+          <h5 class="centered">Bonjour {{user.username}}!</h5>
+          <li class="mt">
+            <a href="i">
+              <i class="fa fa-dashboard"></i>
+              <span>Accueil</span>
               </a>
           </li>
           <li class="sub-menu">
-            <a href="">
+            <a>
               <i class="fa fa-desktop"></i>
               <span>Switch</span>
-            </a>
+              </a>
             <ul class="sub">
               <li><a href="{% url 'app_principal:switch' %}">chercher</a></li>
-              {% if request.user|has_group:"ajouter"  %} 
-                <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
-              {% endif %}
-              
+              <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
+             
             </ul>
           </li>
           <li class="sub-menu">
-            <a href="">
-              <i class="fa fa-desktop"></i>
-              <span>Modele</span>
-            </a>
-            <ul class="sub">
-              <li><a href="{% url 'app_principal:modele' %}">chercher</a></li>
-              {% if request.user|has_group:"ajouter" %} 
-                  <li><a href="{% url 'app_principal:ajout_modele' %}">Ajouter</a></li>
-              {% endif %}
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="">
+            <a href="javascript:;">
               <i class="fa fa-cogs"></i>
               <span>Vlan</span>
               </a>
             <ul class="sub">
+              <li><a href="">Grids</a></li>
               <li><a href="{% url 'app_principal:vlan' %}">Chercher </a></li>
-              {% if request.user|has_group:"ajouter" %} 
-                <li><a href="{% url 'app_principal:add_vlan' %}">Ajouter</a></li> <!--lien vers ajout vlan-->
-              {% endif %}
+              <li><a href="">Ajouter</a></li> <!--lien vers ajout vlan-->
+              
             </ul>
           </li>
           <li class="sub-menu">
-            <a href=""><!--lien vers contact form-->
+            <a href="javascript:;"><!--lien vers contact form-->
               <i class="fa fa-book"></i>
               <span> Contactez-nous</span> 
               </a>
+            
           </li>
           <li class="sub-menu">
-            <a class="active" href=""><!--lien vers la page d'aide-->
+            <a class="active" href="javascript:;"><!--lien vers la page d'aide-->
               <i class="fa fa-tasks"></i>
               <span>Aide</span>
             </a>
-            <li class="sub-menu">
-              <a href=""><!--lien vers page about (infos sur lapp) -->
-                <i class="fa fa-th"></i>
-                <span>A propos </span>
-              </a>
-            {% if request.user.is_superuser == True %} 
-              <a href="{% url 'app_principal:users' %}"> <!--lien vers gestion des utilisateurs-->
-                <i class="fa fa-envelope"></i>
-                <span>gestion des utilisateurs </span>
-                <!--<span class="label label-theme pull-right mail-info">2</span>-->
-              </a>
-                
+          <li class="sub-menu">
+            <a href="javascript:;"><!--lien vers page about (infos sur lapp) -->
+              <i class="fa fa-th"></i>
+              <span>A propos </span>
+             
          
-            {% endif %}
-          </li>  
-          <li class="sub-menu"> <!--lien vers nos services-->
-            <a href="{% url 'app_principal:statistique' %}">
-              <i class=" fa fa-bar-chart-o"></i>
-              <span>Statistiques</span>
+            <a href="inbox.html"> <!--lien vers gestion des utilisateurs-->
+              <i class="fa fa-envelope"></i>
+              <span>gestion des utilisateurs </span>
+              <span class="label label-theme pull-right mail-info">2</span>
               </a>
           </li>
+          <li class="sub-menu"> <!--lien vers nos services-->
+            <a href="javascript:;">
+              <i class=" fa fa-bar-chart-o"></i>
+              <span>Nos service</span>
+              </a>
             
-        </ul> 
+          
         <!-- sidebar menu end-->
       </div>
      </aside>
      <section id="main-content">
-        {% block content %} 
+        {% block content %}
         {% endblock %}
+     </section>
     
         <footer class="site-footer">
           <div class="text-center">
             <p>
-              &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
+              &copy; Copyrights <strong>STI</strong>. All Rights Reserved
             </p>
             <div class="credits">
               <!--
@@ -295,7 +196,6 @@
               </a>
           </div>
         </footer>
-      </section>
   </section>
       <!--footer end-->
     
@@ -313,4 +213,3 @@
 </body>
   
 </html>
-  

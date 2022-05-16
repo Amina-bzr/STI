@@ -40,15 +40,18 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 from django.core.exceptions import ObjectDoesNotExist
 
 
-@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:profile')
-def acul(request):
-    return render(request, 'app_principal/accumm.html')
+
+def PageAccueil(request):
+    return render(request, 'app_principal/PageAccueil.html')
 
 
-@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:profile')
+
 def servicepage(request):
     return render(request, 'app_principal/service.html')
 
+
+def motpass(request):
+    return render(request, 'app_principal/NotifPass.html')
 
 ''' def register(request):
     form = UserCreationForm
@@ -490,7 +493,7 @@ def modif_permissions_user(request, user_id):
 
 
 # AUTHENTIFICATION-------------------------------------------------------------------------
-@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:profile')
+#@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:profile')
 def connecter(request):
     if request.method == "POST":
         username = request.POST['username']
