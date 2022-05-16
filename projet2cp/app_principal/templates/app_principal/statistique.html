@@ -2,8 +2,8 @@
 {% load static %}
     <!-- Custom styles for this template -->
    
-    <link href="{% static 'style.css' %}" rel="stylesheet">
-
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'style.css' %}" rel="stylesheet"> 
   {% block js %}
   <!--chartjs CDN-->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
@@ -75,6 +75,7 @@
     </script>
 
   {% endblock %}
+  
 {% block content %}
     <!-- =======================================================
         Template Name: Dashio
@@ -161,9 +162,12 @@
                         type: 'doughnut',
                         data: {
                             labels: [
-                            'Etat Passif',
-                            'Etat Actif',
-                            'Etat Reformé'
+                            'Defectueux',
+                            ' Passif',
+                            ' Reformé',
+                            ' Actif'
+                          
+                            
                         ],
                         datasets: [{
                             label: 'My First Dataset',
@@ -171,7 +175,9 @@
                             backgroundColor: [
                             'rgb(255, 99, 132)',
                             'rgb(54, 162, 235)',
-                            'rgb(255, 205, 86)'
+                            'rgb(255, 205, 86)',
+                            'rgb(201, 203, 207)'
+                     
                             ],
                             hoverOffset: 4
                                         }]
@@ -202,7 +208,7 @@
                             labels: [
                             'Defectueux',
                             'Utilisé',
-                            'Non utilisé'
+                            'Non_utilisé'
                         ],
                         datasets: [{
                             label: 'My First Dataset',
@@ -230,9 +236,9 @@
                
                 <div class="col-md-4 col-sm-4 mb">
                     <div class="blue-panel pn">
-                        <div class="blue-header">
-                            <h5 class="centered" >TYPES PORTS</h5>
-                        </div>
+                    <div class="blue-header">
+                        <h5 class="centered" >TYPES PORTS</h5>
+                    </div>
                     
                     <canvas id="chart" width="120" height="120"></canvas>
                     <script>
@@ -315,79 +321,7 @@
                     </div>
                 
                  <!-- RECENT ACTIVITIES SECTION -->
-               
-                <h4 class="centered mt">Activité Résente</h4>
-                <!-- First Activity -->
-                <div class="desc">
-                <div class="thumb">
-                    <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
-                </div>
-                <div class="details">
-                    <p>
-                    <span>Juste maintenant</span>
-                    <br/>
-                    <a href="#">Paul Rudd</a> a ajouter un switch <br/>
-                    </p>
-                </div>
-                </div>
-                <!-- Second Activity -->
-                <div class="desc">
-                <div class="thumb">
-                    <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
-                </div>
-                <div class="details">
-                    <p>
-                    <span>Il y a 2 Minutes </span>
-                    <br/>
-                    <a href="#">James Brown</a> a réformer un switch<br/>
-                    </p>
-                </div>
-                </div>
-                <!-- Third Activity -->
-                <div class="desc">
-                <div class="thumb">
-                    <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
-                </div>
-                <div class="details">
-                    <p>
-                    <span>Il y a 3 heurs</span>
-                    <br/>
-                    <a href="#">Diana Kennedy</a> a modifier un switch <br/>
-                    </p>
-                </div>
-                </div>
-                <!-- Fourth Activity -->
-                <div class="desc">
-                <div class="thumb">
-                    <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
-                </div>
-                <div class="details">
-                    <p>
-                    <span>Il y a 7 heurs</span>
-                    <br/>
-                    <a href="#">Brando Page</a> a cofigurer un switch<br/>
-                    </p>
-                </div>
-                </div>
-               <!-- Fifth Activity -->
-               <div class="desc">
-                <div class="thumb">
-                    <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
-                </div>
-                <div class="details">
-                    <p>
-                    <span>Il y a 8 heurs</span>
-                    <br/>
-                    <a href="#">karim ali</a> a ajouter un nouveau VLAN <br/>
-                    </p>
-                </div>
-                </div>
-                
-                
-            </div>
-            <!-- /col-lg-3 -->
-            </div>
-            <!-- /row -->
+              
         </section>
         </section>
     </section>
