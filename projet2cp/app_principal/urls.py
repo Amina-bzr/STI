@@ -82,5 +82,5 @@ urlpatterns = [
     # profil
      path('Mon-Compte', views.p, name='c'),
      path('Mon-Compte/Modifier', views.profilUpdate, name='ch'),
-     path('Changer_mot_de_passe', views.motpass, name='ch'),
+     path('Changer_mot_de_passe', views.motpass, name='cha'),
 ]

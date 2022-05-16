@@ -15,7 +15,7 @@
   <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <!--external css-->
-  <link href="{% static 'lib/bootstrap/css/font-awesome.css' %}" rel="stylesheet" >
+  <link href="https://fonts.google.com/specimen/Mukta"  >
   <!-- Custom styles for this template -->
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
@@ -46,7 +46,8 @@
       {% endif %}
       <form class="form-login"  method=POST>
         {% csrf_token %}
-        <h2 class="form-login-heading">Si vous n'avez pas encore Changer votre mot de passe veuillez le changer en cliquant sur le button changer Sinon aller directemt vers se connecter</h2>
+        <h2 class="form-login-heading">
+            "Si vous etes Connectés pour la première fois veuillez changer votre mot de passe avant de proceder à l'utilisation de l'application"</h2>
         <div class="login-wrap">
           
             <a href="{% url 'app_principal:password_change' %}" class="btn btn-theme04" type="button">Changer</a>

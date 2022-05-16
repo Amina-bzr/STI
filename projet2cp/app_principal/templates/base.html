@@ -23,7 +23,7 @@
   {% block css %}{% endblock %}
   <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
   <!-- Custom styles for this template -->
-  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
 
   <!-- =======================================================
@@ -110,63 +110,54 @@
           <p class="centered"><a href="p"><img src=""" class="img-circle" width="80"></a></p>
           <h5 class="centered">Bonjour {{user.username}}!</h5>
           <li class="mt">
-            <a href="i">
+            <a href="{% url 'app_principal:home' %}">
               <i class="fa fa-dashboard"></i>
               <span>Accueil</span>
               </a>
           </li>
           <li class="sub-menu">
-            <a>
+            <a  href="{% url 'app_principal:switch'%}"><!--lien vers la page d'aide-->
               <i class="fa fa-desktop"></i>
               <span>Switch</span>
-              </a>
-            <ul class="sub">
-              <li><a href="{% url 'app_principal:switch' %}">chercher</a></li>
-              <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
-             
-            </ul>
+            </a>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;">
+            <a  href="{% url 'app_principal:vlan'%}"><!--lien vers la page d'aide-->
               <i class="fa fa-cogs"></i>
               <span>Vlan</span>
-              </a>
-            <ul class="sub">
-              <li><a href="">Grids</a></li>
-              <li><a href="{% url 'app_principal:vlan' %}">Chercher </a></li>
-              <li><a href="">Ajouter</a></li> <!--lien vers ajout vlan-->
-              
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="javascript:;"><!--lien vers contact form-->
-              <i class="fa fa-book"></i>
-              <span> Contactez-nous</span> 
-              </a>
-            
-          </li>
-          <li class="sub-menu">
-            <a class="active" href="javascript:;"><!--lien vers la page d'aide-->
-              <i class="fa fa-tasks"></i>
-              <span>Aide</span>
             </a>
-          <li class="sub-menu">
-            <a href="javascript:;"><!--lien vers page about (infos sur lapp) -->
-              <i class="fa fa-th"></i>
-              <span>A propos </span>
-             
+          </li>
          
-            <a href="inbox.html"> <!--lien vers gestion des utilisateurs-->
+          <li class="sub-menu">
+            <a  href="{% url 'app_principal:modele'%}"><!--lien vers la page d'aide-->
+              <i class="fa fa-tasks"></i>
+              <span>Modele</span>
+            </a>
+          </li>
+             
+          <li class="sub-menu"> 
+            <a href=" {% url 'app_principal:users'%}"> <!--lien vers gestion des utilisateurs-->
               <i class="fa fa-envelope"></i>
-              <span>gestion des utilisateurs </span>
-              <span class="label label-theme pull-right mail-info">2</span>
+              <span>gestion des Comptes </span>
+           
               </a>
           </li>
-          <li class="sub-menu"> <!--lien vers nos services-->
-            <a href="javascript:;">
-              <i class=" fa fa-bar-chart-o"></i>
-              <span>Nos service</span>
-              </a>
+         
+              <li class="sub-menu"> <!--lien vers nos services-->
+                <a href="{% url 'app_principal:statistique'%}">
+                  <i class=" fa fa-bar-chart-o"></i>
+                  <span>Statistiques</span>
+                  </a>
+                  <li class="sub-menu">
+                    <a  href="{% url 'app_principal:contact'%}"><!--lien vers la page d'aide-->
+                      <i class="fa fa-tasks"></i>
+                      <span>Contact</span>
+                    </a>
+                  </li>
+              <li class="sub-menu">
+                <a href=""><!--lien vers page about (infos sur lapp) -->
+                  <i class="fa fa-th"></i>
+                  <span>Aide</span>
             
           
         <!-- sidebar menu end-->
