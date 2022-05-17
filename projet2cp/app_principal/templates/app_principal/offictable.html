@@ -8,6 +8,7 @@
   <link type="text/css" href="{% static 'lib/advanced-datatable/css/demo_page.css' %}" rel="stylesheet" />
   <link type="text/css" href="{% static 'lib/advanced-datatable/css/demo_table.css' %}" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'lib/advanced-datatable/css/DT_bootstrap.css' %}" />
+
   
   
   <!-- Bootstrap core CSS -->
@@ -367,7 +368,9 @@
    
     {% endif %}  
     
-    !-- js placed at the end of the document so the pages load faster -->
+    
+    <!--script for this page-->
+    <!-- js placed at the end of the document so the pages load faster -->
     <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'lib/bootstrap/js/bootstrap.min.js' %}"></script>
     <script class="include" type="text/javascript" src="{% static 'lib/jquery.dcjqaccordion.2.7.js' %}"></script>
@@ -376,6 +379,5 @@
     <!--common script for all pages-->
     <script src="{% static 'lib/common-scripts.js' %}"></script>
     <!--script for this page-->
-    
   
  {% endblock %}
