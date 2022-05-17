@@ -10,11 +10,13 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
     passif = 'passif'
     actif = 'actif'
     reforme = 'reformé'
+    defectueux= 'défectueux'
 
     choix_etat = [
+        (defectueux, 'défectueux'),
         (passif, 'passif'),
-        (actif, 'actif'),
         (reforme, 'reformé'),
+        (actif, 'actif'),
     ]
 
     # les attributs de la table des switchs
@@ -54,8 +56,8 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
 
 
 class vlan(models.Model):
-    num_Vlan = models.PositiveIntegerField(default=0)
-    nom = models.CharField(max_length=50)
+    num_Vlan = models.PositiveIntegerField(default=0,unique=True)
+    nom = models.CharField(max_length=50,unique=True)
     ip = models.GenericIPAddressField()
     masque = models.CharField(max_length=50)
     passerelle = models.GenericIPAddressField()
@@ -120,7 +122,7 @@ class Port(models.Model):
         choices=etat_port,
         default=nonutilise)
     vlan_associe = models.CharField(
-        'VLAN associé', max_length=50, default= "Aucun")
+        'VLAN associé', max_length=50, default= "/")
     nom_suiv = models.CharField(
         "Nom de l'appareil relié", max_length=100, default="Non relié")
     type_suiv = models.CharField(

@@ -55,7 +55,8 @@
                   </div>                
                   
                   <button class="btn mini " style="background:#d9534f;color:black;margin-left: 5%;" type="button" data-toggle="modal" data-target="#exampleModal">Réformer</button>
-                {% endif %}
+                  <button class="btn mini " style="background:#d9534f;color:black;" type="button" data-toggle="modal" data-target="#exampleModal">Défectueux</button>
+                  {% endif %}
 
                 {% if request.user|has_group:"ajouter" %} 
                   <button class="btn mini " style="background:#5a4f4f;" type="button" ><a style="color:white;" href="{% url 'app_principal:add_switch' %}"> + Ajouter</a></button>
@@ -89,14 +90,14 @@
                         <tr class="gradeA">
                           <td><a href="{% url 'app_principal:plus_info_switch' s.id %}" style="border:none;padding:0;"><img style="width:18px;margin-left: 5px;" src="{% static 'lib/advanced-datatable/images/details_open.png' %}" title="plus d'infos" /> </a></td>  
                           {% if request.user|has_group:"modifier" %} 
-                            <td><input type="checkbox" name="selection_{{ s.id }}" class="check mail-checkbox"></td>
+                            <td><input type="checkbox" name="selection_reform_{{ s.id }}" class="check mail-checkbox"></td>
                           {% endif %}
                           <td>{{ s.nom }} {% if request.user|has_group:"modifier" %} <a href="{% url 'app_principal:config_switch' s.id %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/config.png' %}" title="configurer"/> </a>{% endif %}<a href="{% url 'app_principal:port' s.id %}" ><img style="width:13.5px;margin-left: 5px;" src="{% static 'img/port_icon.jpg' %}" title="ports"/> </a></td>  
                           <td>{{ s.bloc }}</td>  
                           <td>{{ s.armoire }}</td>  
                           <td>{{ s.local }}</td>  
                           <td>{{ s.preced }}</td>  
-                          <td>{{ s.vlans }}</td>  
+                          <td style="max-width: 175px;">{{ s.vlans }}</td>  
                         </tr>
                       {% endif %}
 
@@ -158,7 +159,11 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  Voulez-vous vraiment réformer les switchs sélectionnés ? veuillez bien verifier ceux que vous avez selectionner avant de procéder à cette action.
+                  {% if operation == 'réformation' %}
+                    Voulez-vous vraiment réformer les switchs sélectionnés ? veuillez bien verifier ceux que vous avez selectionner avant de procéder à cette action.
+                  {% else %}
+                    Voulez-vous vraiment effectuer cette opération ? tous les switchs selectionnés seront declarés défectueux.
+                  {% endif %}
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
@@ -166,26 +171,7 @@
                 </div>
               </div>
             </div>
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Etes-vous sûr?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    Voulez-vous vraiment réformer les switchs sélectionnés ? veuillez bien verifier ceux que vous avez selectionner avant de procéder à cette action.
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-theme" >Oui, je suis sûr.</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
 
           <!--fin modal-->
           </form>

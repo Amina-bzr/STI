@@ -35,7 +35,7 @@ class switchform(forms.ModelForm):
 class switchConfigForm(forms.ModelForm):
         class Meta:
             model= switch
-            fields = ['nom','bloc','local','armoire','preced']
+            fields = ['nom','etat','bloc','local','armoire','preced']
 
             widgets = {
                 'nom': forms.TextInput(attrs={'class':'form-control'},),
@@ -58,6 +58,9 @@ class portform(forms.ModelForm):
     class Meta:
         model = Port
         fields = ['type_port', 'etat','local', 'vlan_associe', 'type_suiv', 'nom_suiv']
+        help_texts = {
+            'vlan_associe': "introduire '/' si aucun VLAN est associé à ce port",
+        }
 
 
 class modeleform(forms.ModelForm):

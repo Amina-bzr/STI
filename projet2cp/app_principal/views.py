@@ -120,13 +120,13 @@ def plus_info_switch(request,switch_id):
 
 @login_required()
 @user_passes_test(lambda u: (Group.objects.get(name="modifier") in u.groups.all()) or u.is_superuser==True,login_url='app_principal:profile')
-def switch_reforme(request, switch_id):
+def switch_defectueux(request, switch_id):
     s = get_object_or_404(switch, id=switch_id)
     if request.method == 'POST': 
             
-        s.etat = s.reforme
-        s.bloc = "reformé"
-        s.local = "reformé"
+        s.etat = s.defectueux
+        s.bloc = "magazin"
+        s.local = "magazin"
         s.armoire = "magazin"
         s.preced = "pas en cascade"
         s.save()
@@ -134,7 +134,7 @@ def switch_reforme(request, switch_id):
        
     return render(request,
                 'app_principal/form_validation.html',
-                {'choix':s.nom,'operation':'réformation',})	
+                {'choix':s.nom,'operation':'défectueux',})	
 
 @login_required()
 @user_passes_test(lambda u: (Group.objects.get(name="modifier") in u.groups.all()) or u.is_superuser==True,login_url='app_principal:profile')
@@ -145,8 +145,13 @@ def switchConfig(request, switch_id):
 
         if form.is_valid():
             form.save()
+            
             if (s.etat == switch.passif and s.armoire!="pas configuré"):
                 s.etat = switch.actif
+                s.bloc=s.bloc.upper()
+                s.save()
+            else:
+                s.bloc=s.bloc.upper()
                 s.save()
             return redirect('./port_tab/', id)
             # configuration du `switch` existant dans la base de données
@@ -223,25 +228,34 @@ def portConfig(request, switch_id, port_num):
 
     if request.method == 'POST':  # si le switch d'id = switch_id n'existe pas on renvoie 404
         form = portform(request.POST)
-
-        if form.is_valid():
-
-            p.type_port = form.cleaned_data["type_port"]
-            p.etat = form.cleaned_data["etat"]
-            p.vlan_associe = form.cleaned_data["vlan_associe"]
-            p.nom_suiv = form.cleaned_data["nom_suiv"]
-            p.type_suiv = form.cleaned_data["type_suiv"]
-            p.local=form.cleaned_data["local"]
-            p.save()
-            s=p.switch
-            if not p.vlan_associe in s.vlans and p.vlan_associe!='Non utilisé' and p.vlan_associe!='Aucun':
-                s.vlans = s.vlans + p.vlan_associe + " / "
-                s.save()
-                print(p.vlan_associe)
-            messages.success(request,('port numero '+str(p.num_port)+' configuré avec succés!'))
-            return redirect('../port_tab/', switch_id)
+        try: #voir si le VLAN existe dans la table des vlans
+            nom_vlan=request.POST['vlan_associe']
+            if (nom_vlan!='/'):
+                v=vlan.objects.get(nom__iexact=nom_vlan)
+        except ObjectDoesNotExist:
+            messages.warning(request,("Le VLAN que vous avez introduit n'existe pas.. si ce n'est pas une erreur de saisie, veuillez le créer d'habord."))
         else:
-            messages.warning(request,('echec lors de la configuration, veuillez réessayer une autre fois.'))
+               
+            if form.is_valid():
+                p.type_port = form.cleaned_data["type_port"]
+                p.etat = form.cleaned_data["etat"]
+                p.vlan_associe = form.cleaned_data["vlan_associe"].capitalize()
+                p.nom_suiv = form.cleaned_data["nom_suiv"]
+                p.type_suiv = form.cleaned_data["type_suiv"]
+                p.local=form.cleaned_data["local"]
+                p.save()
+                s=p.switch
+                list_vlans= s.port_set.values_list('vlan_associe', flat=True).distinct()
+                s.vlans='/ '.join([str(vlan) for vlan in list_vlans if vlan!='/'])
+                s.save()
+                #if not p.vlan_associe.lower() in s.vlans.lower() and p.vlan_associe!='Non utilisé' and p.vlan_associe!='Aucun' and p.vlan_associe!='/':
+                #    s.vlans = s.vlans + p.vlan_associe + " / "
+                #    s.save()
+                #    print(p.vlan_associe)
+                messages.success(request,('port numero '+str(p.num_port)+' configuré avec succés!'))
+                return redirect('../port_tab/', switch_id)
+            else:
+                messages.warning(request,('echec lors de la configuration, veuillez réessayer une autre fois.'))
     else:
         form = portform(instance=p)
 
@@ -590,7 +604,7 @@ def statistique(request):
         vlans = vlan.objects.values_list('nom', flat=True)
         for Vlan in vlans:
 
-                nb_ports = Port.objects.filter(vlan_associe= Vlan).count() 
+                nb_ports = Port.objects.filter(vlan_associe__iexact= Vlan).count() 
                 
                 labels1.append(Vlan)
                 data1.append(nb_ports)
@@ -620,7 +634,7 @@ def statistique(request):
 
         labels4=[]
         data4 = []
-        etat_switch = ['passif','actif','reformé']
+        etat_switch = ['défectueux','passif','reformé','actif']
         for etatS in etat_switch:
 
             nbswitch = switch.objects.filter(etat = etatS  ).count() 

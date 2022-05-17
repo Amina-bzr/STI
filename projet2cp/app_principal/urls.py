@@ -11,8 +11,9 @@ urlpatterns = [
      path('switch/plus_info/<int:switch_id>', views.plus_info_switch, name='plus_info_switch'),
      path('switch/<int:switch_id>/portConfig/<int:port_num>',views.portConfig, name='portconfig'),    
      path('switch/<int:switch_id>/configurer',views.switchConfig,name='config_switch'),
-     path('switch/<int:switch_id>/reformer',views.switch_reforme,name='reformer_switch'),
+     path('switch/<int:switch_id>/defectueux',views.switch_defectueux,name='defect_switch'),
 
+    
     #VLANS
      path('vlan/', views.vlan_tab, name='vlan'),
      path('vlan/ajout', views.ajoutvlan, name='add_vlan'),
