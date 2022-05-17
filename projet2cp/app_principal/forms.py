@@ -177,8 +177,6 @@ class EditUserPermissionsForm(forms.Form):
 
 
 class update(forms.ModelForm):
-    email = forms.EmailField()
-
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email','last_name','first_name']

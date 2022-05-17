@@ -36,7 +36,8 @@ urlpatterns = [
 
     # ACCUEIL
     path('Accueil', views.PageAccueil, name='home'),
-    path('Notre_Serivces', views.servicepage, name='service'),
+     path('Notre_Serivces', views.servicepage, name='service'),
+   
 
 
 
@@ -44,7 +45,7 @@ urlpatterns = [
     # path('login/',views.login,name='register'),
     # path("password_reset", views.password_reset_request, name="password_reset") ,
     path('Deconnecter', views.logout_user, name='logout'),
-    path('Se Connecter', views.connecter, name="login"),
+    path('Se Connecter', views.connecter, name="cha"),
     #path('register/', views.register, name='register'),
     path('changer_mot_passe/', views.password_change, name='password_change'),
     path('Recuperer_mot_passe/', views.PasswordReset.as_view(), name='password_reset'),
@@ -82,5 +83,5 @@ urlpatterns = [
     # profil
      path('Mon-Compte', views.p, name='c'),
      path('Mon-Compte/Modifier', views.profilUpdate, name='ch'),
-     path('Changer_mot_de_passe', views.motpass, name='cha'),
+    # path('Changer_mot_de_passe', views.motpass, name='cha'),
 ]

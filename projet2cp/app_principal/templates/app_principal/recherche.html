@@ -10,8 +10,15 @@
     <h1>Liste des switch dont ses ports sont dan le local:</h1>
     <h2>il ya {{len}} resultat de votre recherche</h2>
      {% for s in switch %}
+
            
-            <h3>{{s.switch.nom}}<a href="{% url 'app_principal:port' s.switch.id  %}">port num:{{s.num_port}}</a><h3>  
+           
+                 <tr >
+                   
+                    <td> <a href="{% url 'app_principal:config_switch' s.id %}" >{{s.switch.nom}} </td>  
+                    <td>{{s.num_port}}</td>  
+                    
+                  </tr>
              
          
       {% endfor %}                

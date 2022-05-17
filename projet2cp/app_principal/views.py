@@ -64,7 +64,7 @@ def motpass(request):
 
 
 # PROFIL-----------------------------------------------------------
-@login_required()
+#@login_required()
 def p(request):
     return render(request, 'app_principal/profil.html')
 
@@ -738,8 +738,13 @@ def profilUpdate(request):
         u_form = update(request.POST, instance=request.user)
 
         if u_form.is_valid():
+            #user=request.user
+            #user.username=u_form.cleaned_data['username']
+            #user.email=u_form.cleaned_data['email']
+            #user.last_name=u_form.cleaned_data['last_name']
+            #user.first_name=u_form.cleaned_data['first_name']
+            #user.save()
             u_form.save()
-
             messages.success(
                 request, f'Votre info-personnelles sont mis à jour!')
             return redirect('app_principal:c')
@@ -748,8 +753,10 @@ def profilUpdate(request):
         u_form = update(instance=request.user)
 
     context = {
-        'u_form': u_form,
+        'form': u_form,
+        'operation':'Mdifier',
+        'objet':'Infos Personnels',
 
     }
 
-    return render(request, 'app_principal/update.html', context)
+    return render(request, 'app_principal/form_validation.html', context)
