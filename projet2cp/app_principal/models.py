@@ -1,22 +1,23 @@
 from unittest.mock import DEFAULT
 from django.db import models
 from django.contrib.auth.models import User
+from pkg_resources import require
 
 # Create your models here.
 
 
 class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un objet "switch" : switch_objet.port_set.create(num_port=...,type_port=...etc)
     # les choix de quelques listes deroulantes
-    passif = 'passif'
-    actif = 'actif'
-    reforme = 'reformé'
-    defectueux= 'défectueux'
+    passif = 'Passif'
+    actif = 'Actif'
+    reforme = 'Reformé'
+    defectueux= 'Défectueux'
 
     choix_etat = [
-        (defectueux, 'défectueux'),
-        (passif, 'passif'),
-        (reforme, 'reformé'),
-        (actif, 'actif'),
+        (defectueux, 'Défectueux'),
+        (passif, 'Passif'),
+        (reforme, 'Reformé'),
+        (actif, 'Actif'),
     ]
 
     # les attributs de la table des switchs
@@ -30,7 +31,8 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
     inventaire = models.CharField(max_length=50, unique=True,)
     serie = models.CharField(max_length=25, unique=True,)
     mac = models.CharField(max_length=25, unique=True,)
-    password=models.CharField('Mot de passe',max_length=100,default="")
+    password=models.CharField('Mot de passe',max_length=100,blank=True,
+                                  null=True,)
    # nbr_port = models.IntegerField(default=0,)
     # nbr_port_FE = models.IntegerField(default=0,)
     # nbr_port_GE = models.IntegerField(default=0,)
@@ -62,6 +64,7 @@ class vlan(models.Model):
     masque = models.CharField(max_length=50)
     passerelle = models.GenericIPAddressField()
     adresse_reseau = models.GenericIPAddressField()
+    switchs = models.CharField(max_length=1000,default="/",blank=True)
     #liste des ports
     def __str__(self):
         return self.nom
@@ -112,7 +115,7 @@ class Port(models.Model):
     num_port = models.PositiveIntegerField(default=1)
     local=models.CharField(
         max_length=100,
-        default='magazin',)
+        default='/',)
     type_port = models.CharField(
         max_length=20,
         choices=choix_type_port,
@@ -150,6 +153,15 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} Profile'
     
+
+class Contact(models.Model):
+    name = models.CharField(max_length=158)
+    email = models.EmailField()
+    subject = models.CharField(max_length=158)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 class Contact(models.Model):
     name = models.CharField(max_length=158)

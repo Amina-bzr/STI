@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+<head>
+ 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link href="{% static 'accul.css' %}" rel="stylesheet">
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  <title></title>
+  {% load static %}
+  <Style>
+    .logo{
+
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      top: 5px;
+      left: 60px;
+      
+    }
+
+    #top_menu{
+      position: absolute;
+     left:   140px;
+    }
+    #di{
+      position: absolute;
+      bottom: 50px;
+    }
+    head er{
+      position: relative;
+    }
+  </Style>
+
+
+</head>
+
+<body>
+  <!-- Header -->
+  <section id="header">
+    <div class="header container">
+      <div class="nav-bar">
+        <div class="brand">
+          <a href="">
+            <a href="#" ><img class="logo" src="{% static 'img/ph.png'%}" alt="logo nnnn"></a>
+         
+          </a>
+        </div>
+        <div class="nav-list">
+          <div class="hamburger">
+            <div class="bar"></div>
+          </div>
+          <ul>
+          
+            <li><h2><a href="{% url 'app_principal:service' %}"> Nos Services</a></h2></li>
+            <li><h2><a href="{% url 'app_principal:login' %}" >Se Connecter</a></h2></li>
+          </h2>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End Header -->
+
+
+  <!-- Hero Section  -->
+  <section id="hero">
+    <div class="hero container">
+      <div>
+        <h1>Bienvenue, <span></span></h1>
+        <h1>sur <span></span></h1>
+        <h1>STI <span></span></h1>
+        <a href="#projects" type="button" class="cta">Savoir plus Sur STI</a>
+      </div>
+    </div>
+  </section>
+  <!-- End Hero Section  -->
+
+  <script src="{% static 'accc.js' %}"></script>
+ 
+</body>
+
+</html>

@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  {% load static %}
   <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <meta name="author" content="Dashboard">
   <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
   <title>{% block title %}  {% endblock %}</title>
-  
+  {% load static %}
   <!-- Favicons -->
   <link href="{% static 'img/img.png' %}" rel="icon"> 
   <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
-
   <!-- Bootstrap core CSS -->
   <link href="{% static 'lib/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <!-- css externe--> 
   {% block css %}{% endblock %}
   <link href="{% static 'style.css' %}" rel="stylesheet">
   <link href="{% static 'lib/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
-  <!-- Styles personalisés pour cette template -->
-  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="{% static 'style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+   <!-- Bootstrap core CSS -->
+   
+   <!--external css-->
+   
+   <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-fileupload/bootstrap-fileupload.css' %}" />
+   <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-datepicker/css/datepicker.css' %}" />
+   <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-daterangepicker/daterangepicker.css' %}" />
+   <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-timepicker/compiled/timepicker.css' %}" />
+   <link rel="stylesheet" type="text/css" href="{% static 'lib/bootstrap-datetimepicker/datertimepicker.css' %}" />
+   <!-- Custom styles for this template -->
 
   <!-- =======================================================
     Template Name: Dashio
@@ -58,7 +67,6 @@
 </head>
 
 <body >
-  {% load app_extras %}
   <section id="container" >
     <a href="#"><img src="img" alt="good vybes" /></a>
     <!-- **********************************************************************************************************************************************************
@@ -67,8 +75,10 @@
     <!--header start-->
      <!--header start-->
      <header class="header black-bg" style="top:0;">
+      <a href="#" ><img class="logo" src="{% static 'img/ph.png'%}" alt="logo nnnn"></a>
+    
       <div class="sidebar-toggle-box">
-        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+        <div id="di" class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
       <a href="#" ><img class="logo" src="{% static 'img/logo.png'%}" alt="logo nnnn"></a>
@@ -88,91 +98,85 @@
     </header>
     <!--header end-->
     <!-- **********************************************************************************************************************************************************-->
-        <!--sidebar start-->
+         <!-- **********************************************************************************************************************************************************
+        MAIN SIDEBAR MENU
+        *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
     <aside>
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="p"><img src="" class="img-circle" width="80"></a></p>
-          <h5 class="centered">Bienvenue, {{user.username}}!</h5>
-          <li class="sub-menu"> <!--lien vers nos services-->
-            <a href="{% url 'app_principal:profile' %}">
-              <i class=" fa fa-bar-chart-o"></i>
-              <span>Profile</span>
+          
+          <h5 class="centered">Bienvenue, {{request.user.username}} !</h5>
+          <li class="mt">
+            <a href="{% url 'app_principal:home'  %}">
+              <i class="fa fa-dashboard"></i>
+              <span>Accueil</span>
               </a>
-          </li>
-          <li class="sub-menu">
-            <a href="">
-              <i class="fa fa-desktop"></i>
-              <span>Switch</span>
-            </a>
-            <ul class="sub">
-              <li><a href="{% url 'app_principal:switch' %}">chercher</a></li>
-              {% if request.user|has_group:"ajouter"  %} 
-                <li><a href="{% url 'app_principal:add_switch' %}">Ajouter</a></li>
-              {% endif %}
               
-            </ul>
           </li>
           <li class="sub-menu">
-            <a href="">
-              <i class="fa fa-desktop"></i>
-              <span>Modele</span>
-            </a>
-            <ul class="sub">
-              <li><a href="{% url 'app_principal:modele' %}">chercher</a></li>
-              {% if request.user|has_group:"ajouter" %} 
-                  <li><a href="{% url 'app_principal:ajout_modele' %}">Ajouter</a></li>
-              {% endif %}
-            </ul>
-          </li>
-          <li class="sub-menu">
-            <a href="">
-              <i class="fa fa-cogs"></i>
-              <span>Vlan</span>
+            <a href="{% url 'app_principal:c'  %}">
+              <i class="fa fa-user"></i>
+              <span>Mon Compte</span>
               </a>
-            <ul class="sub">
-              <li><a href="{% url 'app_principal:vlan' %}">Chercher </a></li>
-              {% if request.user|has_group:"ajouter" %} 
-                <li><a href="{% url 'app_principal:add_vlan' %}">Ajouter</a></li> <!--lien vers ajout vlan-->
-              {% endif %}
-            </ul>
-          </li>
+          
           <li class="sub-menu">
-            <a href=""><!--lien vers contact form-->
-              <i class="fa fa-book"></i>
-              <span> Contactez-nous</span> 
-              </a>
-          </li>
-          <li class="sub-menu">
-            <a class="active" href=""><!--lien vers la page d'aide-->
+            <a  href="{% url 'app_principal:switch'  %}">
               <i class="fa fa-tasks"></i>
-              <span>Aide</span>
-            </a>
-            <li class="sub-menu">
-              <a href=""><!--lien vers page about (infos sur lapp) -->
-                <i class="fa fa-th"></i>
-                <span>A propos </span>
+              <span>Switch</span>
               </a>
-            {% if request.user.is_superuser == True %} 
-              <a href="{% url 'app_principal:users' %}"> <!--lien vers gestion des utilisateurs-->
-                <i class="fa fa-envelope"></i>
-                <span>gestion des utilisateurs </span>
-                <!--<span class="label label-theme pull-right mail-info">2</span>-->
+           
+          </li>
+          
+          <li class="sub-menu">
+            <a  href="{% url 'app_principal:vlan'  %}">
+              <i class="fa fa-tasks"></i>
+              <span>VLAN</span>
               </a>
-                
-         
-            {% endif %}
-          </li>  
-          <li class="sub-menu"> <!--lien vers nos services-->
-            <a href="{% url 'app_principal:statistique' %}">
-              <i class=" fa fa-bar-chart-o"></i>
-              <span>Statistiques</span>
+           
+          </li>
+
+          <li class="sub-menu">
+            <a  href="{% url 'app_principal:modele'  %}">
+              <i class="fa fa-tasks"></i>
+              <span>Modèles switch</span>
+              </a>
+           
+          </li>
+          <li class="sub-menu">
+            <a  href="{% url 'app_principal:users'  %}">
+              <i class="fa fa-users"></i>
+              <span>Gestion Des Comptes</span>
+              </a>
+           
+          </li>
+          <li class="sub-menu">
+            <a href="{% url 'app_principal:statistique'  %}">
+              <i class="fa fa-bar-chart-o"></i>
+              <span>Statistique</span>
+              </a>
+           
+          </li>
+          <li>
+            <a href="{% url 'app_principal:contact'  %}">
+              <i class="fa fa-envelope"></i>
+              <span>Contactez-nous </span>
+             
               </a>
           </li>
-            
-        </ul> 
+          <li class="sub-menu">
+            <a href="">
+              <i class=" fa fa-bar-chart-o"></i>
+              <span>Aide</span>
+              </a>
+         
+          </li>
+          
         <!-- sidebar menu end-->
+      </div>
+    </aside>
+    <!--sidebar end-->
       </div>
      </aside>
      <section id="main-content">
@@ -185,13 +189,7 @@
               &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
             </p>
             <div class="credits">
-              <!--
-                You are NOT allowed to delete the credit link to TemplateMag with free version.
-                You can delete the credit link only if you bought the pro version.
-                Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
-                Licensing information: https://templatemag.com/license/
-              -->
-              Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
+            
             </div>
             <a href="" class="go-top">
               <i class="fa fa-angle-up"></i>
@@ -211,8 +209,12 @@
     <!--common script for all pages-->
     <script src="{% static 'lib/common-scripts.js' %}"></script>
     <!--script for this page-->
-    {% block js %}{% endblock %}
+    <script src="{% static 'lib/advanced-datatable/js/jquery.js' %}"></script>
+    <script src="{% static 'lib/advanced-datatable/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'lib/advanced-datatable/js/DT_bootstrap.js' %}"></script>
     
+    {% block js %}
+    {% endblock %}
 </body>
   
 </html>

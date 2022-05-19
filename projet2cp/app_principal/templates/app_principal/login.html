@@ -53,11 +53,14 @@
           <input type="password" class="form-control" name="password" placeholder="mot de passe">
           <label class="checkbox" style="margin-left: 3.5px;">
             <input type="checkbox" value="remember-me"> Enregistrez moi
-            <span class="pull-right">
+            <span class="pull-right">            
             <a data-toggle="modal" href="{% url 'app_principal:password_reset'%}"> Mot de Passe oubliée?</a>
             </span>
             </label>
           <button class="btn btn-theme btn-block"  type="submit"><i class="fa fa-lock" href="{% url 'app_principal:vlan' %}"></i> Se Connecter</button>
+          <hr>
+         
+         
         </div>
         <!-- Modal -->
         <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
@@ -88,4 +91,4 @@
   </script>
 </body>
 
-</html>}
+</html>

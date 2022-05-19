@@ -14,7 +14,6 @@
                 <ul class="nav nav-pills nav-stacked mail-nav" style="display: flex;flex-direction: column;">
                   <li class="active"><a href="{% url 'app_principal:users' %}"> <i class="fa fa-users"></i> Les utilisateurs  <!--<span class="label label-theme pull-right inbox-notification">3</span>--></a></li>
                   
-                  <li><a href="#"> <i class="fa fa-exclamation-circle"></i> Important</a></li>
                   
                   </li>
                   <li><a href="{% url 'app_principal:corbeille' %}"> <i class="fa fa-trash-o"></i> Corbeille</a></li>
@@ -73,11 +72,6 @@
                         
                       </div>
                     </div>
-                    <div class="btn-group">
-                      <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="{% url 'app_principal:users' %}" class="btn mini tooltips">
-                        <i class=" fa fa-refresh"></i>
-                        </a>
-                    </div>
                     
                     <!--<div class="btn-group">
                       <a data-toggle="dropdown" href="#" class="btn mini blue">
@@ -92,15 +86,7 @@
                       </ul>
                     </div> -->
                       <button class="btn mini blue" style="background:#d9534f;color:black" type="button" data-toggle="modal" data-target="#exampleModal">Desactiver</button>
-                      <ul class="unstyled inbox-pagination">
-                      <li><span>1-3 parmi 3</span></li>
-                      <li>
-                        <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
-                      </li>
-                      <li>
-                        <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
-                      </li>
-                    </ul>
+                      
                   </div>
                   <div class="table-inbox-wrap ">
                     <table class="table table-inbox table-hover">

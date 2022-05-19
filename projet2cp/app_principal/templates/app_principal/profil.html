@@ -1,0 +1,64 @@
+
+      {% extends "base.html" %}
+      
+   
+        {% block title %}Informations Personelles{% endblock %}
+      {% load static %}
+        
+        {% block content %}
+        
+            <section class="wrapper site-min-height">
+              <!-- page start-->
+              <div class="chat-room mt">
+                <aside class="mid-side">
+                  <div class="chat-room-head">
+                    <h3>Information-Personnlle</h3>
+                    <form action="#" class="pull-right position">
+                <a href="{% url 'app_principal:ch' %} " class="btn btn-theme04" type="button">Modifier</a>
+                <a href="{% url 'app_principal:password_change' %} " class="btn btn-theme04" type="button">Changer Mot de passe</a>
+                    </form>
+                  </div>
+                  <div class="group-rom">
+                    <div class="first-part odd"> Nom d'utilisateur:                   {{user.username}} </div>
+                   
+                  </div>
+                  <div class="group-rom">
+                  
+                    <div class="group-rom">
+                      
+                  
+                  </div>
+                  <div class="group-rom">
+                    <div class="first-part odd">Email: {{user.email}}</div>
+                    
+                  </div>
+                  <div class="group-rom">
+                    
+                  </div>
+                  <div class="group-rom">
+                    <div class="first-part odd">Nom: {{user.last_name}}</div>
+                    
+                  </div>
+                  <div class="group-rom">
+                  
+                  </div>
+                  <div class="group-rom">
+                    <div class="first-part odd">Prenom: {{user.first_name}}</div>
+                    
+                  </div>
+                  <div class="group-rom">
+                  
+                  
+                    
+                  
+                 
+            
+                 
+                    
+                    </li>
+                  </ul>
+                </aside>
+              </div>
+        <!-- js placed at the end of the document so the pages load faster -->
+        
+        {% endblock %}
