@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+
+    {% load static %}
+    {% block css %}
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style1.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <style>
+        
+        /*the container must be positioned relative:*/
+        .autocomplete {
+          position: relative;
+          display: inline-block;
+        }
+        input {
+          border: 1px solid transparent;
+          border-radius: 5px;
+          background-color: black;
+          padding: 10px;
+          font-size: 16px;
+        }
+        
+        input[type=text] {
+          background-color: #f1f1f1;
+          color: black;
+          width: 100%;
+        }
+           
+        .autocomplete-items {
+          position: absolute;
+          border: 1px solid #d4d4d4;
+          border-bottom: none;
+          border-top: none;
+          z-index: 99;
+          /*position the autocomplete items to be the same width as the container:*/
+          top: 100%;
+          left: 0;
+          right: 0;
+        }
+        
+        .autocomplete-items div {
+          padding: 10px;
+          cursor: pointer;
+          background-color: #fff; 
+          border-bottom: 1px solid #d4d4d4; 
+        }
+        
+        /*when hovering an item:*/
+        .autocomplete-items div:hover {
+          background-color: #e9e9e9; 
+        }
+        
+        /*when navigating through the items using the arrow keys:*/
+        .autocomplete-active {
+          background-color: DodgerBlue !important; 
+          color: #ffffff; 
+        }
+        td{
+            padding: 8px 15px;
+        }
+    </style>
+   {% endblock %}
+
+{% block content %}
+    <div class="container-xxl bg-white p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Navbar & Hero Start -->
+        <div class="container-xxl position-relative p-0">
+
+            <div class="container-xxl bg-primary hero-header">
+                <div class="container">
+                    <div class="row g-5 align-items-center">
+                        <div class="col-lg-6 text-center text-lg-start">
+                            <h1 class="text-white mb-4 animated zoomIn">Comment pouvons-nous vous aider ? </h1>
+                                
+                              <!--Make sure the form has the autocomplete function switched off:-->
+                                    <form autocomplete="off">
+                                        <div class="autocomplete" style="width:500px;">
+                                        <input id="myInput" type="text" name="myCountry" placeholder="Search">
+                                        <input type="submit" name="btn" id="btn" value="Chercher">
+                                        </div>
+                                    </form>
+                        </div>
+                        <div class="col-lg-6 text-center text-lg-start">
+                            <img class="img-fluid animated zoomIn" src="{% static 'img/hero.png' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar & Hero End -->
+        <div class="container-xxl py-6">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="service-item rounded h-100">
+                            <div class="d-flex justify-content-between">
+                                <div class="service-icon">
+                                    <i class="fa fa-user-tie fa-2x"></i>
+                                </div>
+                                <a class="service-btn" href="compte">
+                                    <i class="fa fa-link fa-2x"></i>
+                                </a>
+                            </div>
+                            <div class="p-5">
+                                <h5 class="mb-3">Paramètres du Compte</h5>
+                                <span>
+                                    Comprendre comment créer un compte dans notre application, quelle est 
+                                    la différence entre les utilisateurs normaux et superutilisateurs également
+                                    leurs droits d'accès aux données.
+                                    Comprendre comment désactiver et réactiver le compte, modifier votre Email , mot de passe
+                                    ou supprimer le compte .
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="service-item rounded h-100">
+                            <div class="d-flex justify-content-between">
+                                <div class="service-icon">
+                                    <i class="bi bi-broadcast" style="font-size: 30px "></i>
+                                </div>
+                                <a class="service-btn" href="vlan_aide">
+                                    <i class="fa fa-link fa-2x"></i>
+                                </a>
+                            </div>
+                            <div class="p-5">
+                                <h5 class="mb-3">Gestion des Vlans</h5>
+                                <span>
+                                    Comprendre la création d'un nouveau Virtual Local Area Network (VLAN), mis à jour et 
+                                    supression des Vlans existants.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="service-item rounded h-100">
+                            <div class="d-flex justify-content-between">
+                                <div class="service-icon">
+                                    <i class="fab fa-nintendo-switch fa-3x"></i>
+                                </div>
+                                <a class="service-btn" href="switch_aide">
+                                    <i class="fa fa-link fa-2x"></i>
+                                </a>
+                            </div>
+                            <div class="p-5">
+                                <h5 class="mb-3">Gestion des Switchs</h5>
+                                <span>
+                                    Comprendre comment ajouter un nouveau switch , configurer , réformer ou changer quelques caractéristiques 
+                                    attribués au switch existant .
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="service-item rounded h-100">
+                            <div class="d-flex justify-content-between">
+                                <div class="service-icon">
+                                    <i class="fas fa-ethernet fa-2x"></i>
+                                </div>
+                                <a class="service-btn" href="port_aide">
+                                    <i class="fa fa-link fa-2x"></i>
+                                </a>
+                            </div>
+                            <div class="p-5">
+                                <h5 class="mb-3">Gestion des ports</h5>
+                                <span>
+                                    comprendre la configuration des ports d'un switch  
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="service-item rounded h-100">
+                            <div class="d-flex justify-content-between">
+                                <div class="service-icon">
+                                    <i class="fa fa-chart-line fa-2x"></i>
+                                </div>
+                                <a class="service-btn" href="statistique">
+                                    <i class="fa fa-link fa-2x"></i>
+                                </a>
+                            </div>
+                            <div class="p-5">
+                                <h5 class="mb-3">Gestion des Statistiques</h5>
+                                <span>
+                                    comprendre comment obtenir des statistiques d'une façon instantanée, utiliser ces statistiques 
+                                    et réglementer l'accès par les différent types d'utilisateurs . 
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="service-item rounded h-100">
+                            <div class="d-flex justify-content-between">
+                                <div class="service-icon">
+                                    <i class="bi bi-lightbulb" style="font-size: 30px;"></i>
+                                </div>
+                                <a class="service-btn" href="FAQ">
+                                    <i class="fa fa-link fa-2x"></i>
+                                </a>
+                            </div>
+                            <div class="p-5">
+                                <h5 class="mb-3">Résoudre un problème</h5>
+                                <span>
+                                    Besoin d’aide ? Recherchez des solutions aux problèmes les plus courants.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Service End -->
+       <center><div class="container-xxl">
+           <div class="container">
+               <table>
+                <tr>
+                    <td><img src="{% static 'img/send.png' %}" alt="" style="width:50px;"></td>
+                    <td>
+                        <h4>Contacter l'assistance </h4>
+                     <p>Vous avez besoin d'aide ?</p>
+                     <a href="contact">Contacter notre équipe d'assistance </a>
+                    </td>
+                </tr>
+               </table>
+           </div>
+       </div></center>
+       
+        
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+    <!--footer begin-->
+    
+</div>
+{% endblock %}
+{% block js %}
+    <!--footer end-->
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        function autocomplete(inp, arr) {
+          /*the autocomplete function takes two arguments,
+          the text field element and an array of possible autocompleted values:*/
+          var currentFocus;
+          /*execute a function when someone writes in the text field:*/
+          inp.addEventListener("input", function(e) {
+              var a, b, i, val = this.value;
+              /*close any already open lists of autocompleted values*/
+              closeAllLists();
+              if (!val) { return false;}
+              currentFocus = -1;
+              /*create a DIV element that will contain the items (values):*/
+              a = document.createElement("DIV");
+              a.setAttribute("id", this.id + "autocomplete-list");
+              a.setAttribute("class", "autocomplete-items");
+              /*append the DIV element as a child of the autocomplete container:*/
+              this.parentNode.appendChild(a);
+              /*for each item in the array...*/
+              for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                  /*create a DIV element for each matching element:*/
+                  b = document.createElement("DIV");
+                  /*make the matching letters bold:*/
+                  b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                  b.innerHTML += arr[i].substr(val.length);
+                  /*insert a input field that will hold the current array item's value:*/
+                  b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                  /*execute a function when someone clicks on the item value (DIV element):*/
+                  b.addEventListener("click", function(e) {
+                      /*insert the value for the autocomplete text field:*/
+                      inp.value = this.getElementsByTagName("input")[0].value;
+                      /*close the list of autocompleted values,
+                      (or any other open lists of autocompleted values:*/
+                      closeAllLists();
+                  });
+                  a.appendChild(b);
+                }
+              }
+          });
+          /*execute a function presses a key on the keyboard:*/
+          inp.addEventListener("keydown", function(e) {
+              var x = document.getElementById(this.id + "autocomplete-list");
+              if (x) x = x.getElementsByTagName("div");
+              if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+              } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+              } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                  /*and simulate a click on the "active" item:*/
+                  if (x) x[currentFocus].click();
+                }
+              }
+          });
+          function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+          }
+          function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+              x[i].classList.remove("autocomplete-active");
+            }
+          }
+          function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+              if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+              }
+            }
+          }
+          /*execute a function when someone clicks in the document:*/
+          document.addEventListener("click", function (e) {
+              closeAllLists(e.target);
+          });
+        }
+        
+        
+        var countries = ["j ai oublié mon mot de passe"," je ne reçois pas un E-mail pour réinitialiser mon mot de passe","je ne peux pas modifier l adresse e-mail avec laquelle j ai inscrit",
+                        "je ne peux pas se connecter avec mon compte","je n arrive pas à ajouter un VLAN ",
+                        "je ne peux pas récupérer les Vlans supprimés","je ne peux pas rajouter un switch",
+                        "je ne peux pas modifier les données dans cette application"];
+        
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        autocomplete(document.getElementById("myInput"), countries);
+        </script>
+ {% endblock %}        

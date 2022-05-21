@@ -22,10 +22,9 @@ class switchform(forms.ModelForm):
         model = switch
 
         fields = ['mac', 'inventaire', 'serie',
-                  'marque', 'modele', 'password', 'date_achat']
+                  'marque', 'modele', 'date_achat']
 
         widgets = {
-            'password': forms.PasswordInput(attrs={'class': 'form-control'},),
             'mac': forms.TextInput(attrs={'class': 'form-control'},),
             'inventaire': forms.TextInput(attrs={'class': 'form-control'},),
             'serie': forms.TextInput(attrs={'class': 'form-control'},),
@@ -50,10 +49,11 @@ class contactform(forms.ModelForm):
 class switchConfigForm(forms.ModelForm):
         class Meta:
             model= switch
-            fields = ['nom','etat','bloc','local','armoire','preced']
+            fields = ['nom','etat','password','bloc','local','armoire','preced']
 
         widgets = {
             'nom': forms.TextInput(attrs={'class': 'form-control'},),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'},),
             'bloc': forms.TextInput(attrs={'class': 'form-control'},),
             'local': forms.TextInput(attrs={'class': 'form-control'},),
             'armoire': forms.TextInput(attrs={'class': 'form-control'},),
@@ -79,7 +79,7 @@ class portform(forms.ModelForm):
 
 
 class suiv_cherche(forms.Form):
-    nom_suiv = forms.CharField(label="Nom de l'appareil suivant",max_length=100, required=False)
+    nom_suiv = forms.CharField(label="Nom de l'appareil (switch, point d'accès...) auquel le port est relié :",max_length=100, required=False)
 
     local = forms.CharField(label='Local auquel le port est relié',required=False)
 
@@ -128,7 +128,7 @@ class CreateSuperUserForm(UserCreationForm):
 
 class CreateUserForm(UserCreationForm):
     GROUP_CHOICES = [
-        ('voir', 'Voir'),
+        ('voir', 'Consulter'),
         ('ajouter', 'Ajouter'),
         ('modifier', 'Modifier/Configurer'),
         ('supprimer', 'Supprimer'),

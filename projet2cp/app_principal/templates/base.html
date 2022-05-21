@@ -109,7 +109,7 @@
           
           <h5 class="centered">Bienvenue, {{request.user.username}} !</h5>
           <li class="mt">
-            <a href="{% url 'app_principal:home'  %}">
+            <a href="{% url 'app_principal:accueil1'  %}">
               <i class="fa fa-dashboard"></i>
               <span>Accueil</span>
               </a>
@@ -144,6 +144,7 @@
               </a>
            
           </li>
+          {% if request.user.is_superuser %}
           <li class="sub-menu">
             <a  href="{% url 'app_principal:users'  %}">
               <i class="fa fa-users"></i>
@@ -151,10 +152,11 @@
               </a>
            
           </li>
+          {% endif %}
           <li class="sub-menu">
             <a href="{% url 'app_principal:statistique'  %}">
               <i class="fa fa-bar-chart-o"></i>
-              <span>Statistique</span>
+              <span>Statistiques</span>
               </a>
            
           </li>
@@ -166,7 +168,7 @@
               </a>
           </li>
           <li class="sub-menu">
-            <a href="">
+            <a href="{% url 'app_principal:aide'  %}">
               <i class=" fa fa-bar-chart-o"></i>
               <span>Aide</span>
               </a>
@@ -186,7 +188,8 @@
         <footer class="site-footer">
           <div class="text-center">
             <p>
-              &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
+              Switch Tracking Inventory <br>
+              &copy; Copyrights Template <strong>Dashio</strong>. All Rights Reserved
             </p>
             <div class="credits">
             

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link href="{% static 'accul.css' %}" rel="stylesheet">
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+<!-- Favicons -->
+<link href="img/favicon.png" rel="icon">
+<link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+<!-- Bootstrap core CSS -->
+<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!--external css-->
+<link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<!-- Custom styles for this template -->
+<link href="css/style.css" rel="stylesheet">
+<link href="css/style-responsive.css" rel="stylesheet">
+<!-- =======================================================
+Template Name: Dashio
+Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
+Author: TemplateMag.com
+License: https://templatemag.com/license/
+======================================================= -->
+
+
+{% block content %}
+
+<!-- **********************************************************************************************************************************************************
+MAIN CONTENT
+*********************************************************************************************************************************************************** -->
+<!--main content start-->
+
+<section class="wrapper site-min-height" style="font-family:Verdana, Geneva, Tahoma, sans-serif;">
+  
+  <div class="row content-panel mt mb" style="background-color: #4ECDC4;"> 
+    <h1  style="color: rgb(12, 11, 11);">Bienvenu  {{user.username}} sur notre Application
+      <h style="font-size: 40px; color: green; "> STI </h>
+     </h1>
+  
+  </div> 
+
+<div >
+<div class="col-md-">
+    
+
+<h2  style="color: rgb(12, 11, 11);">  STI : abréviation de 
+   <h style="font-size: 35px; color: green; "> S</h><h style=" color: #777777; ">witch</h> 
+   <h style="font-size: 35px; color: green; "> T</h><h style=" color: #777777; ">racking and</h>
+   <h style="font-size: 35px; color: green; "> I</h><h style=" color: #777777; ">nventory</h> 
+  <h3 style="color: rgb(12, 11, 11);">Une application web développée par des étudiantes de l'école nationale supérieure de l'informatique:</h3>
+  <h4 style="color: rgb(12, 11, 11);">> Semcheddine Ikram</h4>
+  <h4 style="color: rgb(12, 11, 11);">> Benahcene Hadilane</h4>
+  <h4 style="color: rgb(12, 11, 11);">> Bouzar Amina</h4>
+  <h4 style="color: rgb(12, 11, 11);">> Tani Assia</h4>
+  <h4 style="color: rgb(12, 11, 11);">> Bouhadouza Rania</h4>
+  <h4 style="color: #0c0b0b;">> Sebti Asma</h4>
+  
+
+   <h3 style="color: rgb(12, 11, 11);">Dans le cadre du projet 2cp, cette application a pour but de faciliter la tâche du suivi des switchs et de leurs configurations de façon instantanée et précise.
+
+<h3 style="color: rgb(12, 11, 11);"> Cette application vous offre la possibilité d'avoir les informations suivants :</h3>
+  <h4 style="color: rgb(12, 11, 11);">- L'emplacement géographique du switch (dans quel bloc il se trouve, dans quel armoire réseau, etc.).</h4>
+  <h4 style="color: rgb(12, 11, 11);">- Les différents VLANs utilisés dans les switchs</h4>
+  <h4 style="color: rgb(12, 11, 11);">- Le nombre de ports pour chaque VLAN</h4>
+  <h4 style="color: rgb(12, 11, 11);">- Les ports de cascades</h4>
+  <h4 style="color: rgb(12, 11, 11);">- Les ports reliés à d'autres équipements (imprimantes, points d'accès, etc.)</h4>
+  <h4 style="color: rgb(12, 11, 11);">- Le type de ports (Gigabits Ethernet, Ethernet)</h4>
+  <h4 style="color: rgb(12, 11, 11);">- L'adresse MAC du switch</h4>
+  <h4 style="color: rgb(12, 11, 11);">- Le numéro d'inventaire du switch</h4>
+  <h4 style="color: rgb(12, 11, 11);">- Et beacoup plus!</h4>
+    </h3>
+    <h3 style="color: rgb(12, 11, 11);"> </h3>
+   
+
+</h2>
+
+</div>
+
+</div>
+
+</section>
+<!-- /wrapper -->
+
+<!-- /MAIN CONTENT -->
+<!--main content end-->
+<!--footer start-->
+
+<!--footer end-->
+
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="lib/jquery.dcjqaccordion.2.7.js"></script>
+<script src="lib/jquery.scrollTo.min.js"></script>
+<script src="lib/jquery.nicescroll.js" type="text/javascript"></script>
+<!--common script for all pages-->
+<script src="lib/common-scripts.js"></script>
+<!--script for this page-->
+<script src="lib/ckeditor/ckeditor.js"></script>
+<script src="{% static 'accc.js' %}"></script>
+
+{% endblock %}

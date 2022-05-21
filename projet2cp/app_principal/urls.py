@@ -32,7 +32,7 @@ urlpatterns = [
     path('Modele/ajout', views.ajout_modele, name='ajout_modele'),
 
     # ACCUEIL
-    path('Accueil', views.PageAccueil, name='home'),
+    path('Accueil_app', views.PageAccueil, name='home'),
      path('nos_Serivces', views.servicepage, name='service'),
    
 
@@ -71,11 +71,22 @@ urlpatterns = [
          views.modif_permissions_user, name='modif_permissions_user'),
 
     # STATISTIQUES
-    path('statistique/', views.statistique, name='statistique'),
+    path('statistiques/', views.statistique, name='statistique'),
     
     
     # PROFIL
      path('Mon-Compte', views.p, name='c'),
      path('Mon-Compte/Modifier', views.profilUpdate, name='ch'),
      #path('Changer_mot_de_passe', views.motpass, name='cha'),
+
+      #Help page
+    path('aide',views.help, name='aide'),
+    path('compte',views.compte),
+    path('vlan_aide',views.vln),
+    path('port_aide',views.port),
+    path('switch_aide',views.swt),
+    path('statistique',views.stat),
+    path('FAQ',views.faq),
+
+     path('accueil', views.accueil1, name='accueil1'),
 ]

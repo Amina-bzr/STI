@@ -97,6 +97,7 @@ class Port(models.Model):
     prise = 'Prise'
     switch = 'Switch'
     poit_A = "Point d'accés"
+    imprim = "Imprimante"
     aucun = 'Aucun'
     autre = 'Autre'
 
@@ -104,6 +105,7 @@ class Port(models.Model):
         (prise, 'Prise'),
         (switch, 'Switch'),
         (poit_A, "Point d'accés"),
+        (imprim, "Imprimante"),
         (aucun, 'Aucun'),
         (autre, 'Autre'),
     ]
@@ -163,11 +165,8 @@ class Contact(models.Model):
     def __str__(self):
         return self.name
 
-class Contact(models.Model):
-    name = models.CharField(max_length=158)
-    email = models.EmailField()
-    subject = models.CharField(max_length=158)
-    message = models.TextField()
 
-    def __str__(self):
-        return self.name
+class Historique(models.Model):
+    username = models.CharField(max_length=100, blank=True, null=True)
+    action = models.CharField(max_length=30, blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)

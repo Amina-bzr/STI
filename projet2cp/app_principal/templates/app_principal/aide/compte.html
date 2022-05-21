@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+
+    {% load static %}
+  {% block css %}
+     <!-- Favicon -->
+     <link href="img/favicon.ico" rel="icon">
+
+     <!-- Google Web Fonts -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet"> 
+ 
+     <!-- Icon Font Stylesheet -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+ 
+     <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style1.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style>
+      #bot{
+        background-color: lightgray;
+        font-size: 13px;
+      }
+    </style>
+    {% endblock %}
+  {% block content %}
+
+    <center><h3 style="padding-top: 2cm;">Centre d'aide > Paramètres du compte</h3>
+    <div class="service-icon" style="max-width: 50px; background-color: rgb(8, 133, 91); color: white; padding: 5px;">
+        <i class="fa fa-user-tie fa-2x"></i>
+    </div>
+    <br>
+    <h2>Paramètres du compte</h2>
+    <p>
+        Comprendre comment créer un compte dans notre application, quelle est 
+        la différence entre les utilisateurs normaux et superutilisateurs également
+        leurs droits d'accès aux données.
+        Comprendre comment désactiver et réactiver le compte, modifier votre Email , mot de passe
+        ou supprimer le compte .
+    </p></center>
+    <div id="accordion">
+        <div class="element" id="creation"> 
+          <div class="element" id="headingTwo">
+            <h5 class="mb-0">
+              <button id="bot" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <span> > </span> Créer un compte et se connecter avec STI   
+              </button>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse-show" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+              <h4>S'inscrire et Se connecter avec STI </h4>
+              <p>Saisissez votre adresse e-mail afin de pouvoir commencer à utiliser l'application STI. 
+                Si vous avez dèja un compte, nous vous redirigeons vers celui-ci. Si vous ne disposez pas 
+                de compte, nous procédrons à votre inscription instantanément et gratuitement . 
+              </p>
+              <div class="special">
+                <i class="bi bi-exclamation-circle"> Il existe deux types d'utilisateurs de cette application: <br>
+                   - Superutilisateurs : sont les utilisateurs qui ont un accès totale aux données , avec le droit de 
+                                modification (ajout de nouvelles données, mis à jours ou élimination des données existantes) <br>
+                   - utilisateurs normaux : sont les utilisateurs qui ont un accès limité aux données , avec des droit imposés
+                   par les superutilisateurs . (par défaut il n'ont que le droit de lecture.)
+                </i>
+                <hr>Tous les utilisateurs (soit normaux ou superusers) ne seront créer que par l'admin de cet application
+                afin d'assuer l'aspect de sécurité dans notre application . <hr>
+              </div>
+              <h3>Créer un compte pour un superutilisateur :</h3>
+              <ol>
+                <li>Sur la liste des choix selectionner l'option "Gestion des utilisateurs" </li>
+                <li>Sur la partie qui correspond aux superutilisateurs cliquer sur "ajouter" </li>
+                <li>entrez l'adresse E-mail avec laquelle vous voulez utiliser STI , puis enregistrer .</li>
+                <li>Confirmez l'ajout de cet utilisateurs (attention: cet utilisateur aura tous les droits d'accès aux données)</li>
+                <li>un E-mail sera transmis à l'adresse avec laquelle vous avez inscrit, contient : <br>
+                  - nom d'utilisateur de compte créé . <br>
+                  - un mot de passe choisit par l'application .
+                </li> 
+              </ol>
+              Votre nom d'utilisateur va appraitre dans la liste des superutilisateurs . <br>
+              <hr>
+              <h3>Créer un compte pour un utilisateur normal :</h3>
+              <ol>
+                <li>Sur la liste des choix selectionner l'option "Gestion des utilisateurs" .</li>
+                <li>Cliquer sur le boutton "ajouter un utilisateur" .</li>
+                <li>entrez l'adresse E-mail avec laquelle vous voulez utiliser STI .</li>
+                <li>Séléctionner les droits d'accés aux données qui seront attribués à cet utilisateur , puis enregistrer </li>
+                <li>un E-mail sera transmis à l'adresse avec laquelle vous avez inscrit, contient : <br>
+                  - nom d'utilisateur de compte créé . <br>
+                  - un mot de passe choisit par l'application .
+                </li> 
+              </ol>
+              Votre nom d'utilisateur va appraitre dans la liste des utilisateurs avec vos droits d'accès . <br>
+              <hr>
+              Vous êtes fin prêt ! Connectez-vous à tout moment avec cette adresse e-mail et ce mot de passe. <br>
+              <div class="spec"><i class="bi bi-file-check"></i>Pour se connecter avec STI: <br>
+                <ol>
+                  <li>Dans la page d'accueil de notre site cliquez sue "Se connecter".</li>
+                  <li>Saisissez votre adresse E-mail également votre mot de passe</li>
+                  <li>Si l'authentification est requise, vous serez directement redirigé vers votre compte .</li>
+                </ol>
+              </div>
+               <br>
+            </div>
+          </div>
+        </div>
+        <div class="element">
+          <div class="element" id="headingThree">
+            <h5 class="mb-0">
+              <button id="bot" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <span> > </span> Gestion des comptes  
+              </button>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse-show" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+              <div class="special">
+                <i class="bi bi-exclamation-circle">   
+                    <ul>
+                      <li>Toutes ces opérations ne sont valable que pour les utilisateurs normaux de l'application</li>
+                      <li>Vous ne pouvez pas désactiver/réactiver un compte superutilisateur</li>
+                      <li>Si vous réctivez un compte désactivé, ce dernier va récupérer ces droits d'accès avant
+                        la désactivation .
+                      </li>
+                    </ul>
+                </i>
+              </div>
+              <h3>Désactiver un compte :</h3>
+              <ol>
+                <li>Dans le tableau des utilisateurs séléctionnez les comptes que vous voulez désactiver .</li>
+                <li>Au dessus du tableau ,  Cliquez sur le boutton "désactiver" </li>
+              </ol>
+              <br><br>
+              Les comptes désactivés seront mis dans la corbeille .
+              <br><hr>
+              <h3>Ré-activer un compte :</h3>
+              <ol>
+                <li>Consultez la corbeille en cliquant sur "Corbeille" dans la liste des choix secondaire .</li>
+                <li>Cliquer sur le boutton "activer" pour les comptes que vous voulez réactiver </li>
+              </ol>
+              <br><br>
+              Les comptes désactivés seront remis dans le tableau des utilisateurs.
+              <h3>Modifier les droits d'accès d'un compte :</h3>
+              <ol>
+                <li>Dans le tableau des utilisateurs cliquez sur l'icone de crayon qui se trouve dans la cse 
+                  'droit d'accès' .</li>
+                <li>réinitialiser les droits d'accès d'utilisateur . </li>
+              </ol>
+              <br><br>
+              Les nouveaux droits accès séléctionné seront attribués au utilisateur choisis.
+            </div>
+          </div>
+        </div>
+        <div class="element">
+            <div class="element" id="headingThree">
+              <h5 class="mb-0">
+                <button id="bot" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
+                  <span> > </span> Modifier Votre mot de passe / réinitialiser le mot de passe oublié 
+                </button>
+              </h5>
+            </div>
+            <div id="collapseFive" class="collapse-show" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                <h3>Changement de mot de passe :</h3><br>
+              <i class="bi bi-file-check"> Nous vous rappelons que le mot de passe avec lequel vous connectez 
+                est imposé par l'application elle-même initialement, mais vous pouvez le modifier facilement et instantanément. </i><br>
+              <ol>
+                <li>Sur la liste des choix, séléctionner "mon compte" pour consulter la page des informations personnelles.</li>
+                <li>Cliquez sur le boutton ""modifier" à coté de - mot de passe -</li>
+                
+              </ol>
+              <br>
+              Votre mot de passe sera changé instantanément .
+              <hr>
+              <h3>Mot de passe oublié :</h3><br>
+              <i class="bi bi-file-check"> Si vous avez oublié votre mot de passe vous pourrez facilement le réinitialiser . </i><br>
+              <ol>
+                <li>Au moment de connexion avec STI cliquez sur "mot de passe oublié".</li>
+                <li>Saisissez votre adresse e-mail puis cliquez sur "Password reset" .</li>
+                <li>Vous recevrez un message via l'adresse e-mail que vous avez saisis contient un lien, cliquez sur lui .</li>
+                <li>Saisissez un nouveau mot de passe et confirmez-le .</li>
+                <br>Votre mot de passe sera réinitialiser ! vous pouvez donc l'utiliser pour se connecter .
+              </ol>
+              <br>
+              </div>
+            </div>
+          </div>
+          <div class="element" id="password">
+            <div class="element" id="headingThree">
+              <h5 class="mb-0">
+                <button id="bot" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseThree">
+                  <span> > </span> Modifier les paramètres de votre profile  
+                </button>
+              </h5>
+            </div>
+            <div id="collapseSix" class="collapse-show" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                <h3>Changement des informations personnelles :</h3><br>
+              <i class="bi bi-file-check"> Nous vous rappelons que vous pouvez changer le mot de passe choisis par
+               l'application. <br>
+              Vous pouvez également modifier votre informations personnelles (nom d'utilisateur...etc) .</i>
+              <ol>
+                <li>Sur la liste des choix, séléctionner "mon compte" pour consulter la page des informations personnelles.</li>
+                <li>Cliquez sur le boutton ""modifier" au dessous de formulaire .</li>
+                
+              </ol>
+              <br>
+              Comme ça vous aurez la possibilité d'éditer votre profile !.
+               </div>
+            </div>
+          </div>
+      </div>
+      {% endblock %}
+      {% block js%}
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+{% endblock %}

@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+    {% load static %}
+  {% block css %}
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+   <!-- Libraries Stylesheet -->
+   <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+   <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+   <!-- Customized Bootstrap Stylesheet -->
+   <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+   <!-- Template Stylesheet -->
+   <link href="{% static 'css/style1.css' %}" rel="stylesheet">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+   <style>
+     #bot{
+       background-color: lightgray;
+       font-size: 13px;
+     }
+   </style>
+  {% endblock %}
+{% block content %}
+
+    <center><h3 style="padding-top: 2cm;">Centre d'aide > Gestion des Switchs </h3>
+        <div class="service-icon" style="max-width: 60px; background-color: rgb(8, 133, 91); color: white; padding: 5px;">
+            <i class="fab fa-nintendo-switch fa-3x"></i>
+        </div>
+    <br>
+    <h2>Gestion des Switchs </h2>
+    <p>
+        Comprendre comment ajouter un nouveau switch , configurer ,
+         réformer ou changer quelques caractéristiques attribués au switch existant .
+    </p></center>
+    <div id="accordion">
+        <div class="element" id="switchAjout">
+          <div class="element" id="headingOne">
+            <h5  class="mb-0">
+              <button id="bot" class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <span> > </span> L'ajout d'un nouveau Switch :
+              </button>
+            </h5>
+          </div>
+      
+          <div id="collapseOne" class="collapse-show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+              <h3>Insérer un switch :</h3><br>
+              <i class="bi bi-file-check">Ajouter un switch consiste à l'insérer avec juste quelques caractéristiques, mais il sera pas encore actif . </i><br>
+              <div class="special"><i class="bi bi-exclamation-diamond"> Si vous ajoutez un switch, il ne sera inséré qu'avec les infomations 
+                statiques propres à lui , il restera des informations prennent des valeurs par défaut vous ne pouvez les 
+                modifier qu'après la configuration .
+              </i><br>
+              <i class="bi bi-exclamation-diamond">
+                Pour pouvoir saisir les informations restantes de switch, et pour que le switch soit actif vous aurez besoin
+                de le configurer . 
+              </i><br>
+              <i class="bi bi-exclamation-diamond"> Avant d'associer un modèle à un switch, vous devez d'abord assurer que 
+                ce modèle existe dans la table des modèles , sinon vous serez obligés de le créer .</i><br></div>
+              <ol>
+                <li>Dans la liste des choix séléctionner "Switch" .</li>
+                <li>Saisissez les informations de switch . <br>
+                  <i class="bi bi-exclamation-circle-fill">
+                    Assurez bien que vous avez respecter le format requis des données . 
+                  </i><br><i class="bi bi-exclamation-circle-fill">
+                    Vous vous engager à créer le modèle si il n'existe pas dans la table des modèles  . 
+                  </i>
+                </li>
+                <li>Cliquez sur "ajouter" .</li>
+              </ol>
+            Votre switch sera inséré instantanément dans la table mais il y aura des informations restent par défaut jusqu'à la configuration.
+            </div>
+          </div>
+        </div>
+        <div class="element">
+          <div class="element" id="headingTwo">
+            <h5 class="mb-0">
+              <button id="bot" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <span> > </span> Configurer un Switch    
+              </button>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse-show" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+              <h3>Configuration d'un Switch :</h3><br>
+              <i class="bi bi-file-check">Configurer un switch consiste à compléter le saisie des information restante de switch. Le switch devient donc activé </i><br>
+              <ol>
+                <li>Dans la table des switchs, cliquer sur l'icône représentant une roue denté pour aller à la page de configuration .</li>
+                <li>Saisissez les informations de switch . <br>
+                  <i class="bi bi-exclamation-circle-fill">
+                    Assurez bien que vous avez respecter le format requis des données . 
+                  </i><br>
+                </li>
+                <li>Enregistrer les données insérés en cliquant sur "Enregistrer" .</li>
+              </ol>
+            Votre switch sera configuré ayant toutes les caractéristiques . 
+            </div>
+          </div>
+        </div>
+        <div class="element">
+          <div class="element" id="headingThree">
+            <h5 class="mb-0">
+              <button id="bot" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <span> > </span> Réformer un Switch  
+              </button>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse-show" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+              <h3>Désactivation d'un switch :</h3><br>
+              <i class="bi bi-file-check">Réformer un switch consiste à le désactiver. Il garde ques les caractéristiques statiques (adresse Mac, inventaire,..etc), tandis que toutes les
+                autres caractéristiques valent 'réformé'. </i><br>
+              <ol>
+                <li>Dans le tableau des switchs séléctionner les switchs que vous souhaitez les réformer .</li>
+                <li>Cliquer sur le boutton "réformer" au dessus de la table . <br>
+              </ol>
+              Le(s) switchs séléctionnés seront réformés instantanément .
+           </div>
+          </div>
+        </div>
+        <div class="element">
+            <div class="element" id="headingThree">
+              <h5 class="mb-0">
+                <button id="bot" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFor" aria-expanded="false" aria-controls="collapseThree">
+                  <span> > </span> Créer un modèle de switch   
+                </button>
+              </h5>
+            </div>
+            <div id="collapseFor" class="collapse-show" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                <h3>Ajout d'un modèle :</h3><br>
+              <i class="bi bi-file-check">La création des modèles sert à faciliter l'opération d'ajout 
+                des switchs car plusieurs informations reliés au switch seront inséré automatiquement à partir 
+              de la tables des modèles sans avoir besoin de les insérer. </i><br>
+              <ol>
+                <li>Dans la liste des choix séléctionner "Modèle".</li>
+                <li>Cliquer sur le boutton "ajouter" au dessus de la table des modèles .</li>
+                <li>Saisissez les informations de modèles. <br> 
+                  <i class="bi bi-exclamation-circle-fill">
+                    Assurez bien que vous avez respecté le format requis des données . 
+                  </i><br>
+                </li>
+                <li>Cliquez sur le boutton "ajouter"</li> <br>
+              </ol>
+              Le modèle sera créé instantanément et inséré dans la table des modèles .
+              </div>
+            </div>
+        </div>
+       <br><br>
+       <hr>
+    <center>
+        <div class="service-icon" style="max-width: 60px; background-color: rgb(8, 133, 91); color: white; padding: 5px;">
+            <i class="fas fa-ethernet fa-2x"></i>
+        </div>
+        <h2>Gestion des Ports </h2>
+    <p>
+        Comprendre comment Configurer les ports d'un Switch 
+    </p></center>
+    <div id="accordion">
+        <div class="element" id="port">
+          <div class="element" id="headingFive">
+            <h5 class="mb-0">
+              <button id="bot" class="btn btn-link" data-toggle="collapse" data-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                <span> > </span> Configuration d'un port . 
+              </button>
+            </h5>
+          </div>
+      
+          <div id="collapseFive" class="collapse-show" aria-labelledby="headingFive" data-parent="#accordion">
+            <div class="card-body">
+              <h3>Configurer un port d'un switch :</h3><br>
+              <i class="bi bi-file-check">Au préalable tous les ports de switch ne sont pas configurés,
+                pour les rendre utilisable Vous devez les configurer .
+              </i><br>
+              <ol>
+                <li>Dans le tableau des switchs cliquez sur l'icône représentant un petit triangle noir inversé 
+                  pour aller à la table des ports appartenants au switch choisis .
+                </li>
+                <li>Dans la table des ports cliquez sur l'icône représentant une roue denté pour aller à la page 
+                  de configuration .</li>
+                <li>Saisissez les informations de ports. <br> 
+                  <i class="bi bi-exclamation-circle-fill">
+                    Assurez bien que vous avez respecté le format requis des données . 
+                  </i><br>
+                </li>
+                <li>Enregistrer les données insérés en cliquant sur le boutton "Enregistrer" </li> <br>
+              </ol>
+              Le port sera configuré avec succès .
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endblock %}
+{% block js%}
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+{% endblock %}
+

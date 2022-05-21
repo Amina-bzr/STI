@@ -1,4 +1,5 @@
 from base64 import urlsafe_b64encode
+from collections import OrderedDict
 from email import message
 from urllib import request
 from django.contrib.auth.forms import PasswordResetForm
@@ -15,7 +16,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as authlogin
 from django.contrib.auth.forms import UserCreationForm
 from .forms import EditUserPermissionsForm, contactform, suiv_cherche, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform, update
-from .models import switch, vlan, Port, ModeleSwitch, Contact
+from .models import switch, vlan, Port, ModeleSwitch, Contact, Historique
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.contrib.auth import decorators
@@ -68,7 +69,7 @@ def p(request):
 
 # SWITCH------------------------------------------------------------
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="ajouter") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="ajouter") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def ajoutswitch(request):
     form = switchform(request.POST or None)
     if request.method == 'POST':
@@ -85,6 +86,7 @@ def ajoutswitch(request):
                 id = s.id
                 messages.success(
                     request, ('le switch a été creé avec succés!'))
+                Historique.objects.create(username = request.user.username, action = "a ajouté un switch")
                 # return redirect('app_principal:config_switch', id)
 
                 nb_port = modele.nbr_port
@@ -110,7 +112,7 @@ def ajoutswitch(request):
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def plus_info_switch(request, switch_id):
     s = switch.objects.get(id=switch_id)
     context = {'objet': s, }
@@ -118,7 +120,7 @@ def plus_info_switch(request, switch_id):
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="modifier") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="modifier") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def switchConfig(request, switch_id):
     s = get_object_or_404(switch, id=switch_id)
     if request.method == 'POST':  # si le switch d'id = switch_id n'existe pas on renvoie 404
@@ -128,6 +130,8 @@ def switchConfig(request, switch_id):
             form.save()
             s.bloc=s.bloc.upper()
             s.save()
+            messages.success(request,('Port configuré avec succés!'))
+            Historique.objects.create(username = request.user.username, action = "a configuré le switch "+s.nom)
             #if (s.etat == switch.passif):
             #    #s.etat = switch.actif
             #    s.bloc=s.bloc.upper()
@@ -135,6 +139,8 @@ def switchConfig(request, switch_id):
             return redirect('./port_tab/', id)
             # configuration du `switch` existant dans la base de données
             # redirect vers le form de ports---à faire
+        else:
+            messages.warning(request,('Echec.. veuillez réessayer une autre fois.'))
 
     else:
         form = switchConfigForm(instance=s)
@@ -144,7 +150,7 @@ def switchConfig(request, switch_id):
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def switchtab(request):
     if request.method == 'POST':
         ids_selectionnes = [
@@ -158,6 +164,7 @@ def switchtab(request):
             sw.preced = "pas en cascade"
             sw.vlans = "/"
             sw.save()
+            Historique.objects.create(username = request.user.username, action = "a reformé le switch "+sw.nom)
             vls = vlan.objects.all()
             for v in vls :
                 if sw.nom in v.switchs: 
@@ -184,7 +191,7 @@ def switchtab(request):
 
 # Recherch view:
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def recherche_elem_suiv(request):
     if request.method == 'POST':  # si le switch d'id = switch_id n'existe pas on renvoie 404
         form = suiv_cherche(request.POST)
@@ -232,7 +239,7 @@ def recherche_elem_suiv(request):
 
 # MODELE-----------------------------------------------------------
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def modele_tab(request):
     cols_principales = ['nom', 'nbr_port', 'nbr_port_FE',
                         'nbr_port_GE', 'nbr_port_SFP', ' premier_port_FE', 'premier_port_GE', ' premier_port_SFP']
@@ -244,7 +251,7 @@ def modele_tab(request):
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="ajouter") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="ajouter") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def ajout_modele(request):
     form = modeleform(request.POST or None)
 
@@ -252,6 +259,7 @@ def ajout_modele(request):
         if form.is_valid():
             form.save()
             messages.success(request, ('Modèle créé avec succés!'))
+            Historique.objects.create(username = request.user.username, action = 'a ajouté le modèle '+form.cleaned_data['nom'])
             return redirect('app_principal:modele')
         else:
             messages.warning(
@@ -263,10 +271,11 @@ def ajout_modele(request):
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="modifier") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="modifier") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def portConfig(request, switch_id, port_num):
     s = get_object_or_404(switch, id=switch_id)
     p = s.port_set.get(num_port=port_num)
+    old_vlan=p.vlan_associe
     vls = vlan.objects.all()
     if request.method == 'POST':  # si le switch d'id = switch_id n'existe pas on renvoie 404
         form = portform(request.POST)
@@ -286,14 +295,23 @@ def portConfig(request, switch_id, port_num):
                 p.type_suiv = form.cleaned_data["type_suiv"]
                 p.local=form.cleaned_data["local"]
                 p.save()
+                Historique.objects.create(username = request.user.username, action = "a configuré le port numero "+str(p.num_port)+" du switch "+p.switch.nom)
                 list_vlans= s.port_set.values_list('vlan_associe', flat=True).distinct()
                 s.vlans='/ '.join([str(vlan) for vlan in list_vlans if vlan!='/'])
                 s.save()
+                #mattre à jour les switchs associés aux vlans
                 for v in vls : 
-                    if str(v.nom).capitalize() in s.vlans and not s.nom in v.switchs :
-                        v.switchs = v.switchs + s.nom + " / "
+                    print(v.nom)
+                    ports=Port.objects.filter(vlan_associe=v.nom)
+                    print(ports)
+                    if ports.exists():
+                        switchs=list(OrderedDict.fromkeys([p.switch.nom for p in ports]))
+                        print(switchs)
+                        v.switchs='/ '.join(switchs)
                         v.save()
-                        print(s.nom)
+                    else:
+                        v.switchs='/'
+                        v.save()
                 messages.success(request,('port numero '+str(p.num_port)+' configuré avec succés!'))
                 return redirect('../port_tab/', switch_id)
             else:
@@ -307,7 +325,7 @@ def portConfig(request, switch_id, port_num):
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def port_tab(request, switch_id):
     switch_nom = switch.objects.get(id=switch_id).nom
     cols_principales = ['Numero du port', 'Type du port',
@@ -322,7 +340,7 @@ def port_tab(request, switch_id):
 
 # GESTION D'UTILISATEURS----------------------------------------------------------------
 @login_required()
-@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:c')
 def gestion_user(request):
     users = User.objects.all()
     if request.method == 'POST':
@@ -338,7 +356,7 @@ def gestion_user(request):
 
 
 @login_required()
-@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:c')
 def corbeille(request):
     users = User.objects.all()
     context = {'users': users, }
@@ -346,18 +364,18 @@ def corbeille(request):
 
 
 @login_required()
-@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:c')
 def activer_user(request, user_id):
     user = User.objects.get(pk=user_id)
     user.is_active = True
     user.save()
-    messages.success(request, ("l'utilisateur " +
+    messages.success(request, ("L'utilisateur " +
                      user.username+" a été activé avec succés!"))
     return redirect('app_principal:corbeille')
 
 
 @login_required()
-@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:c')
 def register_super_user(request):
     form = CreateSuperUserForm(request.POST or None)
     if request.method == 'POST':  # ladmin a introduit lemail
@@ -369,7 +387,7 @@ def register_super_user(request):
             try:
                 username = form.email_clean()
             except ValidationError:
-                messages.warning(request, ("cet email existe déja"))
+                messages.warning(request, ("Cet email existe déjà."))
             else:
                 form.username = username
                 form.save()
@@ -400,9 +418,9 @@ def register_super_user(request):
                 i = msg.send()  # returns  si l'email a été envoyé, 0 sinon #gaierror exception si pas de cnx
                 if i == 1:
                     messages.success(
-                        request, ('un email de confirmation a été envoyé.'))
+                        request, ('Un email de confirmation a été envoyé.'))
                 if i == 0:
-                    messages.warning(request, ('email pas envoyé.'))
+                    messages.warning(request, ('Email pas envoyé.'))
 
         else:
             messages.warning(
@@ -412,7 +430,7 @@ def register_super_user(request):
 
 
 @login_required()
-@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:c')
 def register_user(request):
     form = CreateUserForm(request.POST or None)
     if request.method == 'POST':  # ladmin a introduit lemail
@@ -424,7 +442,7 @@ def register_user(request):
             try:
                 username = form.email_clean()
             except ValidationError:
-                messages.warning(request, ("cet email existe déja"))
+                messages.warning(request, ("cet email existe déjà."))
             else:
                 form.username = username
                 form.save()
@@ -470,7 +488,7 @@ def register_user(request):
 
 
 @login_required()
-@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: u.is_superuser == True, login_url='app_principal:c')
 def modif_permissions_user(request, user_id):
     form = EditUserPermissionsForm(request.POST or None)
     user = get_object_or_404(User, id=user_id)
@@ -490,7 +508,7 @@ def modif_permissions_user(request, user_id):
 
 
 # AUTHENTIFICATION-------------------------------------------------------------------------
-#@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:profile')
+#@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:c')
 def connecter(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -583,7 +601,7 @@ def contact(request):
 # VLAN----------------------------------------
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def vlan_tab(request):
     cols_principales = ['Vlan ', 'Nom', 'Adresse réseau',
                         'ip', 'Masque Sous Réseau', 'Passerelle', 'Switchs', ' ', ' ']
@@ -595,21 +613,23 @@ def vlan_tab(request):
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="ajouter") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="ajouter") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def ajoutvlan(request):
 
     form = vlanform(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
+            form.nom=form.cleaned_data['nom'].capitalize()
             form.save()
             messages.success(request, 'ce vlan a été ajouté avec succès..!')
+            Historique.objects.create(username = request.user.username, action = "a ajouté le VLAN "+form.cleaned_data['nom'])
             return redirect('/app_principal/vlan')
     context = {'form': form, 'choix': 'vlan', 'operation': 'Ajout', }
     return render(request, 'app_principal/form_validation.html', context)
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="modifier") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="modifier") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def updateVlan(request, id):
     updVlan = get_object_or_404(vlan, id=id)
     initialData = {
@@ -624,16 +644,30 @@ def updateVlan(request, id):
         editForm = vlanform(request.POST, instance=updVlan)
         if editForm.is_valid():
             editForm.save()
-        messages.success(
+            updVlan.nom=editForm.cleaned_data['nom'].capitalize()
+            updVlan.save()
+            messages.success(
             request, 'Les information de ce vlan ont été mis à jour avec succès...!')
-        return redirect('/app_principal/vlan')
+            Historique.objects.create(username = request.user.username, action = "a modifié le VLAN "+editForm.cleaned_data['nom'])
+            #MISE A JOUR DES LISTES DE VLANS DANS TAB SWITCH
+            if initialData['nom'] != editForm.cleaned_data['nom'] :
+                for s in switch.objects.all():
+                    if initialData['nom'] in s.vlans:
+                        for p in s.port_set.all() :
+                            if p.vlan_associe == initialData['nom'] :
+                                p.vlan_associe=editForm.cleaned_data['nom']
+                                p.save()
+                    s.vlans=s.vlans.replace(initialData['nom'],editForm.cleaned_data['nom'])
+                    s.save()
+            #FIN
+            return redirect('/app_principal/vlan')
     editForm = vlanform(initialData)
     context = {'form': editForm, 'choix': 'vlan', 'operation': 'modification'}
     return render(request, 'app_principal/form_validation.html', context)
 
 
 @login_required()
-@user_passes_test(lambda u: (Group.objects.get(name="supprimer") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:profile')
+@user_passes_test(lambda u: (Group.objects.get(name="supprimer") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def deleteVlan(request,id):
         swt = switch.objects.all()
         deletVlan = get_object_or_404(vlan,id=id)
@@ -657,7 +691,8 @@ def deleteVlan(request,id):
                         list_vlans= s.port_set.values_list('vlan_associe', flat=True).distinct()
                         s.vlans='/ '.join([str(vlan) for vlan in list_vlans if vlan!='/'])
                         s.save()
-                messages.success(request,' ce vlan ont été supprimé avec succès...!')
+                messages.success(request,'Le vlan a été supprimé avec succès...!')
+                Historique.objects.create(username = request.user.username, action = 'a supprimé le VLAN "'+initialData['nom']+'"')
                 return redirect("/app_principal/vlan")
         context={
                 'form':form , 'choix':'vlan', 'operation':'supression'
@@ -678,6 +713,7 @@ def remove_duplicates(duplist):
 def statistique(request):
         labels1 = []
         data1 = []
+        historique = [act for act in Historique.objects.all()][-5:]
          
         vlans = vlan.objects.values_list('nom', flat=True)
         for Vlan in vlans:
@@ -742,6 +778,7 @@ def statistique(request):
             'data3': data3,
             'data4': data4,
             'data5': data5,
+            'historique' : historique,
              }
         return render(request, 'app_principal/statistique.html',context)
 
@@ -773,3 +810,30 @@ def profilUpdate(request):
     }
 
     return render(request, 'app_principal/form_validation.html', context)
+
+
+
+#-----------------------------------------
+def help(request):
+    return render(request,'app_principal/aide/help.html')
+
+def compte(request):
+    return render(request,'app_principal/aide/compte.html')
+
+def vln(request):
+    return render(request,'app_principal/aide/vlan.html')
+
+def swt(request):
+    return render(request,'app_principal/aide/switch.html')
+
+def stat(request):
+    return render(request,'app_principal/aide/statis.html')
+statistique
+def faq(request):
+    return render(request,'app_principal/aide/FAQ.html')
+
+def port(request):
+    return render(request,'app_principal/aide/switch.html')
+
+def accueil1(request):
+    return render(request, 'app_principal/accueil.html')
