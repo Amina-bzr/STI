@@ -1,15 +1,16 @@
 {% extends "base.html" %}
-    {% block title %}liste ports{% endblock%}
-    {% block content %}
-    <section class="wrapper">
-        <h2>Resultat de votre requête.. {{len}} ports en tout!</h2>
-        {% for s in switch %}
-    
-                        <a href="{% url 'app_principal:portconfig' s.switch.id s.num_port %}" >Switch: {{s.switch.nom}}  /   Port: {{s.num_port}}  
-                        
-                <br>
-            
-        {% endfor %}                
-    </section>
+{% block title %}liste ports{% endblock%}
+{% block content %}
+<section class="wrapper">
+    <h2>Resultat de votre requête.. {{len}} ports en tout!</h2>
+    {% for p in ports %}
 
-      {% endblock %}
+    <a href="{% url 'app_principal:portconfig' s.switch.id s.num_port %}">Switch: {{p.switch.nom}} / Port:
+        {{p.num_port}}
+
+        <br>
+
+        {% endfor %}
+</section>
+
+{% endblock %}

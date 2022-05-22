@@ -204,10 +204,11 @@ def recherche_elem_suiv(request):
                         request, ("Veuillez n'entrer qu'un seul champ!! si vous conaissez le nom de l'appariel pas la  peine d'entrer son local" ))
             elif n != "":
                 port = Port.objects.filter(nom_suiv__iexact=n)
-                print(port)
                 if port.exists():
                     id = port[:1].get().switch.id
-                    return redirect('app_principal:port', id)
+                    num_port=port[:1].get().num_port
+                    return redirect('app_principal:portconfig', id, num_port)
+                    
                 else:
                     messages.warning(
                         request, ('Le nom de cet élément ne figure dans la listes des appariels suivant veillez verrifier le nom.'))
@@ -223,7 +224,7 @@ def recherche_elem_suiv(request):
 
                 if len(po) > 0:
 
-                    context = {"switch": po, "len": len(po)}
+                    context = {"ports": po, "len": len(po)}
                     return render(request, 'app_principal/recherche.html', context)
                 else:
                     messages.warning(
@@ -324,7 +325,7 @@ def portConfig(request, switch_id, port_num):
 
     return render(request,
                   'app_principal/form_validation.html',
-                  {'form': form, 'choix': 'Port', 'switch':s, 'operation': 'Configuration', })
+                  {'form': form, 'choix': 'Port', 'switch':s, 'objet':' du Port '+str(p.num_port)+' du '+s.nom, 'operation': 'Configuration', })
 
 
 @login_required()
