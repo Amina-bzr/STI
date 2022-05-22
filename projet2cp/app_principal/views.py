@@ -199,7 +199,10 @@ def recherche_elem_suiv(request):
         if form.is_valid():
             n = form.cleaned_data["nom_suiv"]
             l = form.cleaned_data["local"]
-            if n != "":
+            if n!="" and  l!="":
+                 messages.warning(
+                        request, ("Veuillez n'entrer qu'un seul champ!! si vous conaissez le nom de l'appariel pas la  peine d'entrer son local" ))
+            elif n != "":
                 port = Port.objects.filter(nom_suiv__iexact=n)
                 print(port)
                 if port.exists():
@@ -508,7 +511,7 @@ def modif_permissions_user(request, user_id):
 
 
 # AUTHENTIFICATION-------------------------------------------------------------------------
-#@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:c')
+@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:accueil1')
 def connecter(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -516,7 +519,7 @@ def connecter(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             authlogin(request, user)
-            return redirect('app_principal:switch')
+            return redirect('app_principal:accueil1')
         else:
             messages.warning(
                 request, ("Mot de passe ou nom d'utilisateur invalide, veuillez réessayer une autre fois."))
