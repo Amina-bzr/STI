@@ -32,7 +32,7 @@ urlpatterns = [
     path('Modele/ajout', views.ajout_modele, name='ajout_modele'),
 
     # ACCUEIL
-    path('Accueil_app', views.PageAccueil, name='home'),
+    path('', views.PageAccueil, name='home'),
      path('nos_Serivces', views.servicepage, name='service'),
    
 
