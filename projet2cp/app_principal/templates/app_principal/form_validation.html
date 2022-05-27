@@ -75,7 +75,15 @@
                       </button>
                     </div>
                     <div class="modal-body text-center">
-                      Voullez vous vraiment effectuer l'operation de {{ operation }}?
+                      Voullez vous vraiment effectuer l'operation de 
+                      {% if operation == 'Configuration' %}
+                        la {{ operation }}
+                      {% elif operation == 'Ajout' %}
+                        l'{{ operation }}
+                      {% else %}
+                        {{ operation }}
+                      {% endif %}
+                      ?
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-theme04" data-dismiss="modal">Fermer</button>

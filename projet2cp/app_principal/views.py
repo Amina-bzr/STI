@@ -624,9 +624,9 @@ def ajoutvlan(request):
             form.nom=form.cleaned_data['nom'].capitalize()
             form.save()
             messages.success(request, 'VLAN ajouté avec succès..!')
-            Historique.objects.create(username = request.user.username, action = "a ajouté le VLAN "+form.cleaned_data['num_Vlan'])
+            Historique.objects.create(username = request.user.username, action = "a ajouté le VLAN "+str(form.cleaned_data['num_Vlan']))
             return redirect('/app_principal/vlan')
-    context = {'form': form, 'choix': 'vlan', 'operation': 'Ajout', }
+    context = {'form': form, 'choix': 'vlan', 'operation': 'Ajout','objet':'VLAN', }
     return render(request, 'app_principal/form_validation.html', context)
 
 
@@ -654,17 +654,17 @@ def updateVlan(request, id):
             #MISE A JOUR DES LISTES DE VLANS DANS TAB SWITCH
             if initialData['num_Vlan'] != editForm.cleaned_data['num_Vlan'] :
                 for s in switch.objects.all():
-                    if initialData['num_Vlan'] in s.vlans:
+                    if str(initialData['num_Vlan']) in s.vlans:
                         for p in s.port_set.all() :
-                            if p.vlan_associe == initialData['num_Vlan'] :
-                                p.vlan_associe=editForm.cleaned_data['num_Vlan']
+                            if str(p.vlan_associe) == str(initialData['num_Vlan']) :
+                                p.vlan_associe=str(editForm.cleaned_data['num_Vlan'])
                                 p.save()
-                    s.vlans=s.vlans.replace(initialData['num_Vlan'],editForm.cleaned_data['num_Vlan'])
+                    s.vlans=s.vlans.replace(str(initialData['num_Vlan']),str(editForm.cleaned_data['num_Vlan']))
                     s.save()
             #FIN
             return redirect('/app_principal/vlan')
     editForm = vlanform(initialData)
-    context = {'form': editForm, 'choix': 'vlan', 'operation': 'modification'}
+    context = {'form': editForm, 'choix': 'vlan', 'operation': 'modification','objet':'VLAN',}
     return render(request, 'app_principal/form_validation.html', context)
 
 
@@ -685,19 +685,22 @@ def deleteVlan(request,id):
         if request.method == 'POST' :
                 deletVlan.delete() 
                 for s in swt :
-                    if str(deletVlan.num_Vlan) in s.vlans:
+                    if str(initialData['num_Vlan']) in s.vlans:
                         for x in s.port_set.all():
-                            if str(deletVlan.num_Vlan) in x.vlan_associe:
+                            if (str(initialData['num_Vlan']) == str(x.vlan_associe)):
                                 x.vlan_associe='/'
                                 x.save()
                         list_vlans= s.port_set.values_list('vlan_associe', flat=True).distinct()
-                        s.vlans='/ '.join([str(vlan) for vlan in list_vlans if vlan!='/'])
+                        if len(list_vlans)!=1:
+                            s.vlans='/ '.join([str(vlan) for vlan in list_vlans if vlan!='/'])
+                        else:
+                            s.vlans='/'
                         s.save()
                 messages.success(request,'VLAN supprimé avec succès...!')
                 Historique.objects.create(username = request.user.username, action = 'a supprimé le VLAN "'+initialData['nom']+'"')
                 return redirect("/app_principal/vlan")
         context={
-                'form':form , 'choix':'vlan', 'operation':'supression'
+                'form':form , 'choix':'vlan', 'operation':'suppression', 'objet':'VLAN',
         }
         return render(request,'app_principal/form_validation.html',context)
 
