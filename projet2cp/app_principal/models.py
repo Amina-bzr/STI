@@ -59,7 +59,7 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
 
 class vlan(models.Model):
     num_Vlan = models.PositiveIntegerField(default=0,unique=True)
-    nom = models.CharField(max_length=50,unique=True)
+    nom = models.CharField(max_length=50)
     ip = models.GenericIPAddressField()
     masque = models.CharField(max_length=50)
     passerelle = models.GenericIPAddressField()

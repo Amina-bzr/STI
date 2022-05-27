@@ -83,6 +83,11 @@ class suiv_cherche(forms.Form):
 
     local = forms.CharField(label='Local auquel le port est relié',required=False)
 
+class rech_avancee(forms.Form):
+    nbr_de = forms.CharField(label="Nombre de : ",max_length=15, required=False)
+
+    par_raport_a = forms.CharField(label='Par raport à : ',required=False)
+
 
 class modeleform(forms.ModelForm):
 
@@ -182,3 +187,4 @@ class update(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email','last_name','first_name']
+

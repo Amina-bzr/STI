@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as authlogin
 from django.contrib.auth.forms import UserCreationForm
-from .forms import EditUserPermissionsForm, contactform, suiv_cherche, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform, update
+from .forms import EditUserPermissionsForm, contactform, rech_avancee, suiv_cherche, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform, update
 from .models import switch, vlan, Port, ModeleSwitch, Contact, Historique
 from django.contrib import messages
 from django.template.loader import render_to_string
@@ -782,6 +782,28 @@ def statistique(request):
              }
         return render(request, 'app_principal/statistique.html',context)
 
+def stat_avancee(request):
+    labels=[]
+    data=[]
+    form=rech_avancee(request.POST or None)
+    champs_switch=['marque','modele','bloc','local','armoire',]
+    champs_vlans=[]
+    champs_modele=[]
+    champ_port=[]
+    if request.method == 'POST':
+        nbr_de=request.POST['nbr_de']
+        if request.POST['nbr_de'] in champs_switch:
+            Blocs = switch.objects.values_list(nbr_de, flat=True)
+            blocs = remove_duplicates(Blocs)
+            for Bloc in blocs:
+
+                queryset = switch.objects.filter(bloc = Bloc).count()
+                
+                labels.append(Bloc)
+                data.append(queryset)  
+    list=zip(labels,data)
+    return render(request,'app_principal/form_validation.html',{'form':form,'list':list,})
+    
 
 def profilUpdate(request):
     if request.method == 'POST':

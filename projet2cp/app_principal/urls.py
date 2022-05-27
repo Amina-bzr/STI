@@ -89,4 +89,6 @@ urlpatterns = [
     path('FAQ',views.faq),
 
      path('accueil', views.accueil1, name='accueil1'),
+
+     path('avance_stat',views.stat_avancee,name='stat+'),
 ]
