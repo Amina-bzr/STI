@@ -22,7 +22,7 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
 
     # les attributs de la table des switchs
 
-    nom = models.CharField(max_length=50)
+    nom = models.CharField(max_length=50,unique=True)
     marque = models.CharField(max_length=50, default='Cisco')
     modele = models.CharField(max_length=50)
     bloc = models.CharField(max_length=25, default="pas configuré")
@@ -60,7 +60,7 @@ class switch(models.Model):  # on peut creer les ports d'un switch a partir d'un
 class vlan(models.Model):
     num_Vlan = models.PositiveIntegerField(default=0,unique=True)
     nom = models.CharField(max_length=50)
-    ip = models.GenericIPAddressField()
+    ip = models.GenericIPAddressField(unique=True)
     masque = models.CharField(max_length=50)
     passerelle = models.GenericIPAddressField()
     adresse_reseau = models.GenericIPAddressField()
@@ -129,9 +129,9 @@ class Port(models.Model):
     vlan_associe = models.CharField(
         'VLAN associé', max_length=50, default= "/")
     nom_suiv = models.CharField(
-        "Nom de l'appareil relié", max_length=100, default="Non relié")
+        "Nom de l'équipement relié", max_length=100, default="Non relié")
     type_suiv = models.CharField(
-        "Type de l'appareil relié ", max_length=15, default="Aucun", choices=choix_type_suiv,)
+        "Type de l'équipement relié ", max_length=15, default="Aucun", choices=choix_type_suiv,)
     # l'elment au quel le port est relié(prise, switch, point d'accès)
 
 

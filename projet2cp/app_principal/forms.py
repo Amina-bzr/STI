@@ -1,7 +1,6 @@
 from unittest.util import _MAX_LENGTH
 from django import forms
 
-#from projet2cp.app_principal.views import contact
 from .models import Contact, switch, vlan, Port, ModeleSwitch
 
 import datetime
@@ -79,14 +78,9 @@ class portform(forms.ModelForm):
 
 
 class suiv_cherche(forms.Form):
-    nom_suiv = forms.CharField(label="Nom de l'appareil (switch, point d'accès...) auquel le port est relié :",max_length=100, required=False)
+    nom_suiv = forms.CharField(label="Nom de l'équipement (switch, point d'accès...) auquel le port est relié :",max_length=100, required=False)
 
     local = forms.CharField(label='Local auquel le port est relié',required=False)
-
-class rech_avancee(forms.Form):
-    nbr_de = forms.CharField(label="Nombre de : ",max_length=15, required=False)
-
-    par_raport_a = forms.CharField(label='Par raport à : ',required=False)
 
 
 class modeleform(forms.ModelForm):

@@ -39,11 +39,8 @@ urlpatterns = [
 
 
     # AUTHENTIFICATION
-    # path('login/',views.login,name='register'),
-    # path("password_reset", views.password_reset_request, name="password_reset") ,
     path('Deconnecter', views.logout_user, name='logout'),
     path('Se Connecter', views.connecter, name="login"),
-    #path('register/', views.register, name='register'),
     path('changer_mot_passe/', views.password_change, name='password_change'),
     path('Recuperer_mot_passe/', views.PasswordReset.as_view(), name='password_reset'),
     path('mot_de_passe_recuperée/', views.PasswordResetDone.as_view(),
@@ -70,8 +67,9 @@ urlpatterns = [
     path('utilisateurs/modifier_permissions/<int:user_id>',
          views.modif_permissions_user, name='modif_permissions_user'),
 
-    # STATISTIQUES
+    # STATISTIQUES ET HISTORIQUE
     path('statistiques/', views.statistique, name='statistique'),
+    path('historique/', views.plus_historique, name='historique'),
     
     
     # PROFIL
@@ -90,5 +88,4 @@ urlpatterns = [
 
      path('accueil', views.accueil1, name='accueil1'),
 
-     path('avance_stat',views.stat_avancee,name='stat+'),
 ]

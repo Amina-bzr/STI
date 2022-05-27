@@ -1,27 +1,18 @@
-from base64 import urlsafe_b64encode
 from collections import OrderedDict
-from email import message
-from urllib import request
-from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.models import User
-from multiprocessing import context
-from django.contrib.sites.shortcuts import get_current_site
 from django.forms import ValidationError
 from django.shortcuts import redirect, render
-from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login as authlogin
-from django.contrib.auth.forms import UserCreationForm
-from .forms import EditUserPermissionsForm, contactform, rech_avancee, suiv_cherche, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform, update
+from .forms import EditUserPermissionsForm, contactform, suiv_cherche, switchform, vlanform, switchConfigForm, modeleform, CreateSuperUserForm, CreateUserForm, modeleform, CreateSuperUserForm, portform, update
 from .models import switch, vlan, Port, ModeleSwitch, Contact, Historique
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.contrib.auth import decorators
-from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth.models import User, Group, Permission
+from django.contrib.auth.models import User, Group
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
@@ -30,8 +21,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib.auth.forms import PasswordResetForm
-from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.core.mail import send_mail
 from django.contrib.auth.forms import PasswordChangeForm
@@ -129,6 +118,10 @@ def switchConfig(request, switch_id):
         if form.is_valid():
             form.save()
             s.bloc=s.bloc.upper()
+            s.local=s.local.capitalize()
+            s.armoire=s.armoire.capitalize()
+            s.nom=s.nom.capitalize()
+            s.preced=s.preced.capitalize()
             s.save()
             messages.success(request,('Port configuré avec succés!'))
             Historique.objects.create(username = request.user.username, action = "a configuré le switch "+s.nom)
@@ -158,9 +151,9 @@ def switchtab(request):
         switchs_selectiones = switch.objects.filter(id__in=ids_selectionnes)
         for sw in switchs_selectiones.all():
             sw.etat = switch.reforme
-            sw.bloc = "reformé"
-            sw.local = "reformé"
-            sw.armoire = "magazin"
+            sw.bloc = "magazin"
+            sw.local = "magazin"
+            sw.armoire = "/"
             sw.preced = "pas en cascade"
             sw.vlans = "/"
             sw.save()
@@ -171,21 +164,21 @@ def switchtab(request):
                     v.switchs= v.switchs.replace(sw.nom,"")
                     v.switchs= v.switchs.replace("/","",1)
                     v.save()
-                    print(v.switchs)
+                    #print(v.switchs)
             for port in sw.port_set.all():
                 port.etat = Port.nonutilise
                 port.vlan_associe = "/"
-                port.local = "magazin"
+                port.local = "/"
                 port.type_suiv = "Aucun"
                 port.nom_suiv = "/"
                 port.save()
     switchs = switch.objects.all()
-    cols_principales = ['nom', 'bloc', 'local',
-                        'armoire', 'Cascade depuis', 'VLANs']
+    cols_principales = ['Nom', 'Etat', 'Modèle', 'Bloc', 'Local',
+                        'Armoire', 'Cascade depuis', 'VLANs']
     cols_detail = ['Adresse MAC', 'Numero de Serie',
-                   "Numero d'inventaire", "Date d'achat", 'Marque', 'Modèle', 'password']
+                   "Numero d'inventaire", "Date d'achat", 'Marque', 'password']
     context = {'objet': 'switchs', 'objets': switchs,
-               'colsp': cols_principales, 'colsd': cols_detail, }
+               'colsp': cols_principales, 'colsd': cols_detail, 'titre':'Switchs', }
     return render(request, 'app_principal/offictable.html', context)
 
 
@@ -193,44 +186,48 @@ def switchtab(request):
 @login_required()
 @user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def recherche_elem_suiv(request):
+    form = suiv_cherche(request.POST or None)
     if request.method == 'POST':  # si le switch d'id = switch_id n'existe pas on renvoie 404
-        form = suiv_cherche(request.POST)
-
         if form.is_valid():
             n = form.cleaned_data["nom_suiv"]
             l = form.cleaned_data["local"]
-            if n != "":
+            if n!="" and  l!="":
+                 messages.warning(
+                        request, ("Veuillez completer qu'un seul champ.. si vous conaissez le nom de l'equipement il n'est pas question d'introduire le local." ))
+            elif n != "":
                 port = Port.objects.filter(nom_suiv__iexact=n)
-                print(port)
+                po=[]
+                i=0
                 if port.exists():
-                    id = port[:1].get().switch.id
-                    return redirect('app_principal:port', id)
+                    for p in port.all():
+                        po.insert(i, p)
+                        i = i+1
+                    context = {"ports": po, "len": len(po)}
+                    return render(request, 'app_principal/recherche.html', context)
+                    
                 else:
                     messages.warning(
-                        request, ('Le nom de cet élément ne figure dans la listes des appariels suivant veillez verrifier le nom.'))
+                        request, ("Cet équipement n'est relié à aucun Port."))
             elif l != "":
                 i = 0
 
                 po = []
                 port = Port.objects.filter(local__iexact=l)
 
-                for p in port.all():
-                    po.insert(i, p)
-                    i = i+1
+                if port.exists():
 
-                if len(po) > 0:
-
-                    context = {"switch": po, "len": len(po)}
+                    for p in port.all():
+                        po.insert(i, p)
+                        i = i+1
+                    context = {"ports": po, "len": len(po)}
                     return render(request, 'app_principal/recherche.html', context)
                 else:
                     messages.warning(
-                        request, ('Le local ne figure dans la listes des appariels suivant veillez verrifier votre saisie.'))
+                        request, ("Aucun port n'est relié à un équipement qui se trouve dans ce local."))
 
         else:
             messages.warning(
-                request, ('Le nom de cet élément ne figure dans la listes des appariels suivant veillez verrifier le nom.'))
-    else:
-        form = suiv_cherche()
+                request, ('Echec.. veuillez réessayer une autre fois.'))
 
     return render(request,
                   'app_principal/form_validation.html',
@@ -241,12 +238,12 @@ def recherche_elem_suiv(request):
 @login_required()
 @user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def modele_tab(request):
-    cols_principales = ['nom', 'nbr_port', 'nbr_port_FE',
-                        'nbr_port_GE', 'nbr_port_SFP', ' premier_port_FE', 'premier_port_GE', ' premier_port_SFP']
+    cols_principales = ['Nom', 'Nombre de Ports', 'Nombre de Ports FE',
+                        'Nombre de Ports GE', 'Nombre de Ports SFP', 'Premier Port FE', 'Premier Port GE', 'Premier Port SFP']
     cols_detail = []
     modeles = ModeleSwitch.objects.all()
     context = {'objet': 'modèles', 'objets': modeles,
-               'colsp': cols_principales, 'colsd': cols_detail, }
+               'colsp': cols_principales, 'colsd': cols_detail,'titre':'Modèles', }
     return render(request, 'app_principal/offictable.html', context)
 
 
@@ -280,29 +277,34 @@ def portConfig(request, switch_id, port_num):
     if request.method == 'POST':  # si le switch d'id = switch_id n'existe pas on renvoie 404
         form = portform(request.POST)
         try: #voir si le VLAN existe dans la table des vlans
-            nom_vlan=request.POST['vlan_associe']
-            if (nom_vlan!='/'):
-                v=vlan.objects.get(nom__iexact=nom_vlan)
+            num_vlan=request.POST['vlan_associe']
+            if (num_vlan!='/'):
+                v=vlan.objects.get(num_Vlan=num_vlan) #le numero est unique
         except ObjectDoesNotExist:
-            messages.warning(request,("Le VLAN que vous avez introduit n'existe pas.. si ce n'est pas une erreur de saisie, veuillez le créer d'habord."))
+            messages.warning(request,("Le VLAN numero "+num_vlan+" n'existe pas.. si ce n'est pas une erreur de saisie, veuillez le créer d'habord."))
+        except ValueError:
+            messages.warning(request,("Erreur dans le champ VLAN associé, veuillez saisir une valeur valide (numéro)."))
         else:
                
             if form.is_valid():
                 p.type_port = form.cleaned_data["type_port"]
                 p.etat = form.cleaned_data["etat"]
-                p.vlan_associe = form.cleaned_data["vlan_associe"].capitalize()
-                p.nom_suiv = form.cleaned_data["nom_suiv"]
+                p.vlan_associe = form.cleaned_data["vlan_associe"]
+                p.nom_suiv = form.cleaned_data["nom_suiv"].capitalize()
                 p.type_suiv = form.cleaned_data["type_suiv"]
-                p.local=form.cleaned_data["local"]
+                p.local=form.cleaned_data["local"].capitalize()
                 p.save()
                 Historique.objects.create(username = request.user.username, action = "a configuré le port numero "+str(p.num_port)+" du switch "+p.switch.nom)
                 list_vlans= s.port_set.values_list('vlan_associe', flat=True).distinct()
-                s.vlans='/ '.join([str(vlan) for vlan in list_vlans if vlan!='/'])
+                if len(list_vlans)!=1:
+                    s.vlans='/ '.join([str(vlan) for vlan in list_vlans if vlan!='/'])
+                else:
+                    s.vlans='/'
                 s.save()
                 #mattre à jour les switchs associés aux vlans
                 for v in vls : 
                     print(v.nom)
-                    ports=Port.objects.filter(vlan_associe=v.nom)
+                    ports=Port.objects.filter(vlan_associe=v.num_Vlan)
                     print(ports)
                     if ports.exists():
                         switchs=list(OrderedDict.fromkeys([p.switch.nom for p in ports]))
@@ -312,29 +314,29 @@ def portConfig(request, switch_id, port_num):
                     else:
                         v.switchs='/'
                         v.save()
-                messages.success(request,('port numero '+str(p.num_port)+' configuré avec succés!'))
+                messages.success(request,('Port numero '+str(p.num_port)+' configuré avec succés!'))
                 return redirect('../port_tab/', switch_id)
             else:
-                messages.warning(request,('echec lors de la configuration, veuillez réessayer une autre fois.'))
+                messages.warning(request,('Échec lors de la configuration, veuillez réessayer une autre fois.'))
     else:
         form = portform(instance=p)
 
     return render(request,
                   'app_principal/form_validation.html',
-                  {'form': form, 'choix': 'Port', 'switch':s, 'operation': 'Configuration', })
+                  {'form': form, 'choix': 'Port', 'switch':s, 'objet':' du Port '+str(p.num_port)+' du '+s.nom, 'operation': 'Configuration', })
 
 
 @login_required()
 @user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def port_tab(request, switch_id):
     switch_nom = switch.objects.get(id=switch_id).nom
-    cols_principales = ['Numero du port', 'Type du port',
-                        'Etat', 'Local', 'Vlan associé', "Type de l'appareil suivante", "nom de l'appareil suivante"]
+    cols_principales = ['Numero', 'Type',
+                        'Etat', 'Local', 'Vlan associé', "Type de l'équipement suivante", "nom de l'équipement suivant"]
     cols_detail = []
     # ports = Port.objects.all()
     Ports = Port.objects.filter(switch=switch_id)
     context = {'objet': 'ports', 'objets': Ports,
-               'colsp': cols_principales, 'colsd': cols_detail, 'switch_nom': switch_nom, }
+               'colsp': cols_principales, 'colsd': cols_detail, 'switch_nom': switch_nom, 'titre':'Ports', }
     return render(request, 'app_principal/offictable.html', context)
 
 
@@ -351,7 +353,7 @@ def gestion_user(request):
             user.is_active = False
             user.save()
 
-    context = {'users': users, }
+    context = {'users': users, 'titre':'Gestion des Comptes' }
     return render(request, 'app_principal/gestionuser.html', context)
 
 
@@ -508,7 +510,7 @@ def modif_permissions_user(request, user_id):
 
 
 # AUTHENTIFICATION-------------------------------------------------------------------------
-#@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:c')
+@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:accueil1')
 def connecter(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -516,7 +518,7 @@ def connecter(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             authlogin(request, user)
-            return redirect('app_principal:switch')
+            return redirect('app_principal:accueil1')
         else:
             messages.warning(
                 request, ("Mot de passe ou nom d'utilisateur invalide, veuillez réessayer une autre fois."))
@@ -603,11 +605,11 @@ def contact(request):
 @login_required()
 @user_passes_test(lambda u: (Group.objects.get(name="voir") in u.groups.all()) or u.is_superuser == True, login_url='app_principal:c')
 def vlan_tab(request):
-    cols_principales = ['Vlan ', 'Nom', 'Adresse réseau',
+    cols_principales = ['Numéro ', 'Nom', 'Adresse réseau',
                         'ip', 'Masque Sous Réseau', 'Passerelle', 'Switchs', ' ', ' ']
     cols_detail = []
     vlans = vlan.objects.all()
-    context = {'objet': 'vlans', 'objets': vlans,
+    context = {'objet': 'vlans', 'objets': vlans,'titre':'VLANs',
                'colsp': cols_principales, 'colsd': cols_detail, }
     return render(request, 'app_principal/offictable.html', context)
 
@@ -621,8 +623,8 @@ def ajoutvlan(request):
         if form.is_valid():
             form.nom=form.cleaned_data['nom'].capitalize()
             form.save()
-            messages.success(request, 'ce vlan a été ajouté avec succès..!')
-            Historique.objects.create(username = request.user.username, action = "a ajouté le VLAN "+form.cleaned_data['nom'])
+            messages.success(request, 'VLAN ajouté avec succès..!')
+            Historique.objects.create(username = request.user.username, action = "a ajouté le VLAN "+form.cleaned_data['num_Vlan'])
             return redirect('/app_principal/vlan')
     context = {'form': form, 'choix': 'vlan', 'operation': 'Ajout', }
     return render(request, 'app_principal/form_validation.html', context)
@@ -647,17 +649,17 @@ def updateVlan(request, id):
             updVlan.nom=editForm.cleaned_data['nom'].capitalize()
             updVlan.save()
             messages.success(
-            request, 'Les information de ce vlan ont été mis à jour avec succès...!')
+            request, 'VLAN mis à jour avec succès...!')
             Historique.objects.create(username = request.user.username, action = "a modifié le VLAN "+editForm.cleaned_data['nom'])
             #MISE A JOUR DES LISTES DE VLANS DANS TAB SWITCH
-            if initialData['nom'] != editForm.cleaned_data['nom'] :
+            if initialData['num_Vlan'] != editForm.cleaned_data['num_Vlan'] :
                 for s in switch.objects.all():
-                    if initialData['nom'] in s.vlans:
+                    if initialData['num_Vlan'] in s.vlans:
                         for p in s.port_set.all() :
-                            if p.vlan_associe == initialData['nom'] :
-                                p.vlan_associe=editForm.cleaned_data['nom']
+                            if p.vlan_associe == initialData['num_Vlan'] :
+                                p.vlan_associe=editForm.cleaned_data['num_Vlan']
                                 p.save()
-                    s.vlans=s.vlans.replace(initialData['nom'],editForm.cleaned_data['nom'])
+                    s.vlans=s.vlans.replace(initialData['num_Vlan'],editForm.cleaned_data['num_Vlan'])
                     s.save()
             #FIN
             return redirect('/app_principal/vlan')
@@ -683,15 +685,15 @@ def deleteVlan(request,id):
         if request.method == 'POST' :
                 deletVlan.delete() 
                 for s in swt :
-                    if str(deletVlan.nom).capitalize() in s.vlans:
+                    if str(deletVlan.num_Vlan) in s.vlans:
                         for x in s.port_set.all():
-                            if str(deletVlan.nom).capitalize() in x.vlan_associe:
+                            if str(deletVlan.num_Vlan) in x.vlan_associe:
                                 x.vlan_associe='/'
                                 x.save()
                         list_vlans= s.port_set.values_list('vlan_associe', flat=True).distinct()
                         s.vlans='/ '.join([str(vlan) for vlan in list_vlans if vlan!='/'])
                         s.save()
-                messages.success(request,'Le vlan a été supprimé avec succès...!')
+                messages.success(request,'VLAN supprimé avec succès...!')
                 Historique.objects.create(username = request.user.username, action = 'a supprimé le VLAN "'+initialData['nom']+'"')
                 return redirect("/app_principal/vlan")
         context={
@@ -715,10 +717,10 @@ def statistique(request):
         data1 = []
         historique = [act for act in Historique.objects.all()][-5:]
          
-        vlans = vlan.objects.values_list('nom', flat=True)
+        vlans = vlan.objects.values_list('num_Vlan', flat=True)
         for Vlan in vlans:
 
-                nb_ports = Port.objects.filter(vlan_associe__iexact= Vlan).count() 
+                nb_ports = Port.objects.filter(vlan_associe= Vlan).count() 
                 
                 labels1.append(Vlan)
                 data1.append(nb_ports)
@@ -782,43 +784,19 @@ def statistique(request):
              }
         return render(request, 'app_principal/statistique.html',context)
 
-def stat_avancee(request):
-    labels=[]
-    data=[]
-    form=rech_avancee(request.POST or None)
-    champs_switch=['marque','modele','bloc','local','armoire',]
-    champs_vlans=[]
-    champs_modele=[]
-    champ_port=[]
-    if request.method == 'POST':
-        nbr_de=request.POST['nbr_de']
-        if request.POST['nbr_de'] in champs_switch:
-            Blocs = switch.objects.values_list(nbr_de, flat=True)
-            blocs = remove_duplicates(Blocs)
-            for Bloc in blocs:
+def plus_historique(request):
+    historique=Historique.objects.all()
+    hist=[h for h in historique][-30:]
+    return render(request,'app_principal/plus_historique.html',{'historique':hist,})
 
-                queryset = switch.objects.filter(bloc = Bloc).count()
-                
-                labels.append(Bloc)
-                data.append(queryset)  
-    list=zip(labels,data)
-    return render(request,'app_principal/form_validation.html',{'form':form,'list':list,})
-    
+
 
 def profilUpdate(request):
     if request.method == 'POST':
         u_form = update(request.POST, instance=request.user)
 
         if u_form.is_valid():
-            #user=request.user
-            #user.username=u_form.cleaned_data['username']
-            #user.email=u_form.cleaned_data['email']
-            #user.last_name=u_form.cleaned_data['last_name']
-            #user.first_name=u_form.cleaned_data['first_name']
-            #user.save()
             u_form.save()
-            messages.success(
-                request, f'Votre info-personnelles sont mis à jour!')
             return redirect('app_principal:c')
 
     else:
@@ -835,7 +813,7 @@ def profilUpdate(request):
 
 
 
-#-----------------------------------------
+#aide-----------------------------------------
 def help(request):
     return render(request,'app_principal/aide/help.html')
 

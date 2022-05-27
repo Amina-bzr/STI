@@ -262,18 +262,20 @@
                 <!-- First Activity -->
                 {% for activité in historique %}
                 <div class="desc">
-                <div class="thumb">
-                    <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
-                </div>
-                <div class="details">
-                    <p>
-                    <span>{{activité.date}}</span>
-                    <br/>
-                    <a href="#">{{activité.username}}</a> {{activité.action}} <br/>
-                    </p>
-                </div>
+                    <div class="thumb">
+                        <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                    </div>
+                    <div class="details">
+                        <p>
+                        <span>{{activité.date}}</span>
+                        <br/>
+                        <a href="#">{{activité.username}}</a> {{activité.action}} <br/>
+                        </p>
+                    </div>
                 </div>
                 {% endfor %}
+
+                <a href="{% url 'app_principal:historique' %}" style="display: flex;align-items:center;justify-content:center;padding:15px;border: 1px solid green;">Voir Plus</a>
               
             </div>
             <!-- /col-lg-3 -->

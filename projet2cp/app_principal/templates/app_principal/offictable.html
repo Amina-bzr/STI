@@ -19,7 +19,7 @@
     Author: TemplateMag.com
     License: https://templatemag.com/license/
   ======================================================= -->
-
+{% block title %} {{titre}} {% endblock %}
  {% block content %}    
  
       
@@ -44,24 +44,14 @@
               
               <div class="chk-all" style="margin-bottom: 10px;">
                 {% if request.user|has_group:"modifier" %} 
-                  <div class="pull-left mail-checkbox">
-                    <input type="checkbox" onClick="toggle(this)">
-                  </div> 
-                  <div class="btn-group">
-                    <a data-toggle="dropdown" href="#" class="btn mini all" style="color:black">
-                      TOUT
-                      
-                      </a>
-                    
-                  </div>                
                   
-                  <button class="btn mini " style="background:#d9534f;color:black;margin-left: 5%;" type="button" data-toggle="modal" data-target="#exampleModal">Réformer</button>
+                  <button class="btn mini " style="background:#d9534f;color:black;margin-left: 1%;" type="button" data-toggle="modal" data-target="#exampleModal">Réformer</button>
                   {% endif %}
 
                 {% if request.user|has_group:"ajouter" %} 
                   <button class="btn mini " style="background:#5a4f4f;" type="button" ><a style="color:white;" href="{% url 'app_principal:add_switch' %}"> + Ajouter</a></button>
                 {% endif %}
-                <button class="btn mini " style="background:#5a4f4f;" type="button" ><a style="color:white;" href="{% url 'app_principal:ele_suiv' %}"> Chercher</a></button>
+                <button class="btn mini " style="background:rgb(25, 185, 145);" type="button" ><a style="color:rgb(255, 255, 255);" href="{% url 'app_principal:ele_suiv' %}"> Chercher</a></button>
               
               </div>
           {% endif %}
@@ -76,7 +66,7 @@
                       {% if objet == 'switchs' %}
                         <th class="inbox-small-cells"></th>
                         {% if request.user|has_group:"modifier" %} 
-                            <th class="inbox-small-cells"></th>
+                            <th class="inbox-small-cells"><input type="checkbox" onClick="toggle(this)" style="margin-left:-2px;"></th>
                         {% endif %}
                       {% endif %}
                       {% for col in colsp %}
@@ -88,12 +78,19 @@
                     {% for s in objets %}
 
                       {% if objet == 'switchs' %}
+                        {% if s.etat == 'Reformé' %}
+                        <tr class="gradeX">
+                        {% else %}
                         <tr class="gradeA">
+                        {% endif %}
+                        
                           <td><a href="{% url 'app_principal:plus_info_switch' s.id %}" style="border:none;padding:0;"><img style="width:18px;margin-left: 5px;" src="{% static 'img/details_open.png' %}" title="plus d'infos" /> </a></td>  
                           {% if request.user|has_group:"modifier" %} 
                             <td><input type="checkbox" name="selection_{{ s.id }}" class="check mail-checkbox"></td>
                           {% endif %}
                           <td>{% if request.user|has_group:"modifier" %} <a href="{% url 'app_principal:config_switch' s.id %}" ><img style="width:17px;margin-left: 5px;" src="{% static 'img/config.png' %}" title="configurer"/> </a>{% endif %}<a href="{% url 'app_principal:port' s.id %}" ><img style="width:17px;margin-left: 5px;" src="{% static 'img/port.png' %}" title="ports"/> </a>{{ s.nom }} </td>  
+                          <td>{{ s.etat }}</td>
+                          <td>{{ s.modele }}</td>
                           <td>{{ s.bloc }}</td>  
                           <td>{{ s.armoire }}</td>  
                           <td>{{ s.local }}</td>  
