@@ -787,13 +787,14 @@ def statistique(request):
              }
         return render(request, 'app_principal/statistique.html',context)
 
+@login_required()
 def plus_historique(request):
     historique=Historique.objects.all()
     hist=[h for h in historique][-30:]
     return render(request,'app_principal/plus_historique.html',{'historique':hist,})
 
 
-
+@login_required()
 def profilUpdate(request):
     if request.method == 'POST':
         u_form = update(request.POST, instance=request.user)
@@ -807,7 +808,7 @@ def profilUpdate(request):
 
     context = {
         'form': u_form,
-        'operation':'Mdifier',
+        'operation':'Modifier',
         'objet':'Infos Personnels',
 
     }
