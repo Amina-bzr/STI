@@ -79,7 +79,7 @@ class portform(forms.ModelForm):
 
 class suiv_cherche(forms.Form):
     nom_suiv = forms.CharField(label="Nom de l'équipement (switch, point d'accès...) auquel le port est relié :",max_length=100, required=False)
-
+    type_suiv=forms.CharField(label="type de l'élément (prise,switch,imprimante...)auquel le port est relié:",max_length=100, required=False)
     local = forms.CharField(label='Local auquel le port est relié',required=False)
 
 
