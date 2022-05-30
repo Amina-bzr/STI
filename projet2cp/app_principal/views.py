@@ -808,8 +808,8 @@ def profilUpdate(request):
 
     context = {
         'form': u_form,
-        'operation':'Modifier',
-        'objet':'Infos Personnels',
+        'operation':'Modification',
+        'objet':'des Informations Personnelles',
 
     }
 
