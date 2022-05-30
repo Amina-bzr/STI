@@ -2,7 +2,7 @@
 {% block title %}liste ports{% endblock%}
 {% block content %}
 <section class="wrapper">
-    <h2>Resultat de votre requête.. {{len}} ports en tout!</h2>
+    <h2>Resultat de votre requête.. {{len}} port(s) en total!</h2>
     {% for p in ports %}
 
         <a href="{% url 'app_principal:portconfig' p.switch.id p.num_port %}">Switch: {{p.switch.nom}} / Port:
