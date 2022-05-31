@@ -55,7 +55,7 @@
           </div>
           <ul>
           
-            <li><h2><a href="{% url 'app_principal:service' %}"> Nos Services</a></h2></li>
+           
             <li><h2><a href="{% url 'app_principal:login' %}" >Se Connecter</a></h2></li>
           </h2>
           </ul>
@@ -73,7 +73,7 @@
         <h1>Bienvenue, <span></span></h1>
         <h1>sur <span></span></h1>
         <h1>STI <span></span></h1>
-        <a href="#projects" type="button" class="cta">Savoir plus Sur STI</a>
+        <a href="{% url 'app_principal:service' %}" type="button" class="cta">Savoir plus Sur STI</a>
       </div>
     </div>
   </section>

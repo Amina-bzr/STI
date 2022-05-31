@@ -63,8 +63,8 @@ class switchConfigForm(forms.ModelForm):
 class vlanform(forms.ModelForm):
 
     class Meta:
-        model = vlan
-        fields = "__all__"
+         model = vlan
+         fields = ['num_Vlan','nom','ip', 'passerelle','adresse_reseau', 'masque']
 
 
 class portform(forms.ModelForm):

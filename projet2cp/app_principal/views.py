@@ -30,12 +30,12 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 from django.core.exceptions import ObjectDoesNotExist
 
 
-
+@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:accueil1')
 def PageAccueil(request):
 	return render(request, 'app_principal/PageAccueil.html')
 
 
-
+@user_passes_test(lambda u: u.is_anonymous == True, login_url='app_principal:accueil1')
 def servicepage(request):
 	return render(request, 'app_principal/service.html')
 
@@ -151,8 +151,8 @@ def switchtab(request):
 		switchs_selectiones = switch.objects.filter(id__in=ids_selectionnes)
 		for sw in switchs_selectiones.all():
 			sw.etat = switch.reforme
-			sw.bloc = "magazin"
-			sw.local = "magazin"
+			sw.bloc = "MAGAZIN"
+			sw.local = "Magazin"
 			sw.armoire = "/"
 			sw.preced = "pas en cascade"
 			sw.vlans = "/"
@@ -204,7 +204,7 @@ def recherche_elem_suiv(request):
 				if port_l.exists():
 					for p in port_l.all():
 						
-					   if p.type_suiv== t:
+					   if p.type_suiv== t.capitalize():
 					  	  po.insert(i, p)
 					  	  i = i+1
 					if (i==0):
@@ -257,7 +257,7 @@ def recherche_elem_suiv(request):
 
 				po = []
 			   
-				port_t= Port.objects.filter(type_suiv__iexact=t)
+				port_t= Port.objects.filter(type_suiv=t.capitalize())
 				if  port_t.exists() :
 
 					for p in port_t.all():
@@ -603,7 +603,7 @@ def password_change(request):
 			form.save()
 			update_session_auth_hash(request, form.user)
 			messages.success(request, "Votre mot de asse a été actualisé.")
-			return redirect('app_principal:switch')
+			return redirect('app_principal:c')
 		else:
 			messages.warning(request, "Echec.. veuillez réessayer.")
 
@@ -619,6 +619,7 @@ def password_change(request):
 
 
 # CONTACT--------------------------------
+@login_required()
 def contact(request):
 	if request.method == "POST":
 
@@ -632,7 +633,7 @@ def contact(request):
 		contact.message = message
 		contact.save()
 		i=send_mail('Contact Form', message, settings.EMAIL_HOST_USER, [
-				  'ka_sebti@esi.dz', 'asma16.sebti@gmail.com'], fail_silently=False)
+				   'suivi.switch.esi@gmail.com'], fail_silently=False)
 		if (i==1):
 			messages.success(request, ("Merci de nous avoir contacté"))
 		else :
@@ -685,6 +686,7 @@ def updateVlan(request, id):
 		'ip': updVlan.ip,
 		'masque': updVlan.masque,
 		'passerelle': updVlan.passerelle,
+		'switchs': updVlan.switchs,
 	}
 	if request.method == "POST":
 		editForm = vlanform(request.POST, instance=updVlan)

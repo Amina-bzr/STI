@@ -4,69 +4,79 @@
 {% block title %} Accueil {% endblock %}
 
 {% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="{% static 'home.css' %}" rel="stylesheet">
 
 <!-- **********************************************************************************************************************************************************
 MAIN CONTENT
 *********************************************************************************************************************************************************** -->
 <!--main content start-->
 
-<section class="wrapper site-min-height" style="font-family:Verdana, Geneva, Tahoma, sans-serif;">
 
-  <div class="row content-panel mt mb" style="background-color: #4ECDC4;">
-    <h1 style="color: rgb(12, 11, 11);display:flex;align-items:center;justify-content:center;">Bienvenue
-      {{user.username}} sur notre Application  <h style="font-size: 40px; color: green; padding-left: 5px; "> "STI" </h>
+
+<section class="wrapper site-min-height" style="font-family: 'Rubik', sans-serif;background-size: cover; ">
+
+ 
+
+  <div class="row content-panel mt mb" style="background-color: #14726c;">
+    <h1 style="color: rgb(253, 253, 253);display:flex;align-items:center;justify-content:center;">Bienvenue
+      {{user.username}} sur notre Application  <h style="font-size: 40px; color: rgb(97, 199, 97); padding-left: 5px;text-align: center; "> "STI" </h>
     </h1>
 
   </div>
+  <div >
+  
+    <div class="col-md- ">
 
-  <div>
-    <div class="col-md-">
 
-
-      <h2 style="color: rgb(12, 11, 11);"> STI : abréviation de
-        <h style="font-size: 35px; color: green; "> S</h>
-        <h style=" color: #777777; ">witch</h>
-        <h style="font-size: 35px; color: green; "> T</h>
-        <h style=" color: #777777; ">racking and</h>
-        <h style="font-size: 35px; color: green; "> I</h>
-        <h style=" color: #777777; ">nventory</h>
-        <h3 style="color: rgb(12, 11, 11);">Une application web développée par des étudiantes de l'école nationale
+      <h2 style="color: rgb(12, 11, 11);text-align: center;font-size: 30px;"> STI : abréviation de
+        <h style="font-size: 35px; color: green;text-align: center;font-size: 30px; "> S</h>
+        <h style=" color: #525050;text-align: center;font-size: 30px; ">witch</h>
+        <h style="font-size: 35px; color: green; text-align: center;font-size: 30px;"> T</h>
+        <h style=" color: #525050; text-align: center;">racking and</h>
+        <h style="font-size: 35px; color: green;text-align: center;font-size: 30px; "> I</h>
+        <h style=" color: #525050;text-align: center; font-size: 30px;">nventory</h>
+        <h3 style="color: rgb(10, 10, 10);text-align: center;font-size: 25px;">Une application web développée par des étudiantes de l'école nationale
           supérieure de l'informatique:</h3>
-        <h4 style="color: rgb(12, 11, 11);">> Semcheddine Ikram</h4>
-        <h4 style="color: rgb(12, 11, 11);">> Benahcene Hadilane</h4>
-        <h4 style="color: rgb(12, 11, 11);">> Bouzar Amina</h4>
-        <h4 style="color: rgb(12, 11, 11);">> Tani Assia</h4>
-        <h4 style="color: rgb(12, 11, 11);">> Bouhadouza Rania</h4>
-        <h4 style="color: #0c0b0b;">> Sebti Asma</h4>
+        <h4 style="color: rgb(10, 10, 10);text-align: center;font-size: 20px;">* Semcheddine Ikram</h4>
+        <h4 style="color: rgb(10, 10, 10);text-align: center;font-size: 20px;">* Benahcene Hadilane</h4>
+        <h4 style="color:rgb(10, 10, 10);text-align: center;font-size: 20px;">* Bouhadouza Rania</h4>
+        <h4 style="color: rgb(10, 10, 10);text-align: center;font-size: 20px;">* Bouzar Amina</h4>
+        <h4 style="color: rgb(10, 10, 10);text-align: center;font-size: 20px;">* Tani Assia</h4>
+        <h4 style="color: rgb(10, 10, 10);text-align: center;font-size: 20px;">* Sebti Asma</h4>
 
 
-        <h3 style="color: rgb(12, 11, 11);">Dans le cadre du projet 2cp, cette application a pour but de faciliter la
+        <h3 style="color: rgb(5, 5, 5);font-size: 25px;"> > Dans le cadre du projet 2cp, cette application a pour but de faciliter la
           tâche du suivi des switchs et de leur configuration de façon instantanée et précise.
 
-          <h3 style="color: rgb(12, 11, 11);"> Cette application vous offre la possibilité d'avoir les informations
+          <h3 icon ="fa fa-angle-right" style="color: rgb(10, 10, 10);font-size: 25px;"> > Cette application vous offre la possibilité d'avoir les informations
             suivantes :</h3>
-          <h4 style="color: rgb(12, 11, 11);">- L'emplacement géographique du switch (dans quel bloc il se trouve, dans
+          <h4 style="color: rgb(10, 10, 10);font-size: 20px;">- L'emplacement géographique du switch (dans quel bloc il se trouve, dans
             quelle armoire réseau, etc.).</h4>
-          <h4 style="color: rgb(12, 11, 11);">- Les différents VLANs utilisés dans les switchs</h4>
-          <h4 style="color: rgb(12, 11, 11);">- Le nombre de ports pour chaque VLAN</h4>
-          <h4 style="color: rgb(12, 11, 11);">- Les ports de cascades</h4>
-          <h4 style="color: rgb(12, 11, 11);">- Les ports reliés à d'autres équipements (imprimantes, points d'accès,
-            etc.)</h4>
-          <h4 style="color: rgb(12, 11, 11);">- Le type de ports (Gigabits Ethernet, Ethernet)</h4>
-          <h4 style="color: rgb(12, 11, 11);">- L'adresse MAC du switch</h4>
-          <h4 style="color: rgb(12, 11, 11);">- Le numéro d'inventaire du switch</h4>
-          <h4 style="color: rgb(12, 11, 11);">Et encore plus!</h4>
+          <h4 style="color: rgb(10, 10, 10);font-size: 20px;">- Les différents VLANs utilisés dans les switchs</h4>
+          <h4 style="color: rgb(10, 10, 10);font-size: 20px;">- Le nombre de ports pour chaque VLAN</h4>
+          <h4 style="color: rgb(10, 10, 10);font-size: 20px;">- Les ports de cascades</h4>
+          <h4 style="color: rgb(10, 10, 10);font-size: 20px;">- Les ports reliés à d'autres équipements (imprimantes, points d'accès,
+            etc...)</h4>
+          <h4 style="color: rgb(10, 10, 10);font-size: 20px;">- Le type de ports (Gigabits Ethernet, Ethernet)</h4>
+          <h4 style="color: rgb(10, 10, 10);font-size: 20px;">- L'adresse MAC du switch</h4>
+          <h4 style="color: rgb(10, 10, 10);font-size: 20px;">- Le numéro d'inventaire du switch</h4>
+          <h4 style="color: rgb(250, 249, 249);font-size: 20px;">Et encore plus!!</h4>
         </h3>
-        <h3 style="color: rgb(12, 11, 11);"> </h3>
+        
 
 
       </h2>
 
     </div>
-
-  </div>
+</div>
 
 </section>
+
+
 <!-- /wrapper -->
 
 <!-- /MAIN CONTENT -->

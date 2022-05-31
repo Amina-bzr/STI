@@ -13,21 +13,19 @@ body{
    background-image: url('https://media.istockphoto.com/photos/group-of-business-people-meeting-discussing-analyzing-graphs-data-picture-id1295309857?b=1&k=20&m=1295309857&s=170667a&w=0&h=kunm63HuraTjURiUBpkfk6mXfQPT6RLcqdBcLVCkCbI=');
   
    background-size: cover;
-   background-position: top center;
-   position: relative;
    z-index: 1;
     font-family: 'Poppins', sans-serif;
 }
 body::after {
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 0;
-	height: 100%;
-	width: 100%;
-	background-color: #048A81;
-	opacity: 0.3;
-	z-index: -1;
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 815px;
+    width: 100%;
+    background-color: #048A81;
+    opacity: 0.3;
+    z-index: -1;
 }
 .services{
     width: 1300px;
@@ -55,17 +53,17 @@ body::after {
 .content{
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    
 }
 .card{
-    width: calc(34% - 20px);
+    width: calc(50% - 20px);
     background-color: #fff;
     color:#048A81;
-    padding: 40px 10px;
+    padding: 40px 20px;
     text-align: center;
     margin: 0 50px;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 9px;
     position: relative;
 }
 .box i{
